@@ -1,11 +1,12 @@
-const express = require('express');
-const cors = require('cors');
 const dotenv = require('dotenv');
 dotenv.config();
+const express = require('express');
+const cors = require('cors');
 const routes = require('./routes/routes')
 const keywords = require('./routes/keywordsRoute')
 const search = require('./routes/searchRoute')
 const genres = require('./routes/genresRoute')
+
 const app = express();
 
 app.use(cors());

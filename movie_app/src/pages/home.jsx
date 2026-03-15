@@ -116,7 +116,7 @@ const MainPage = () => {
                     <button onClick={handlePrevious} className={`absolute top-[50%] left-10 cursor-pointer bg-gray-300/50 hover:bg-gray-300 rounded-lg p-2 transition-opacity duration-75 ${limit?.start === 0 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>{<MdArrowBack size={20}/>}</button>
                     <button onClick={handleNext} className={`absolute top-[50%] right-10 cursor-pointer bg-gray-300/50 hover:bg-gray-300 rounded-lg p-2 transition-opacity duration-75 ${limit?.end === trending?.length ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>{<MdArrowForward size={20}/>}</button>
                     {Slice && (
-                    Slice?.map((t,i)=>(
+                    Slice?.map((t)=>(
                         <MovieCard2 data={t}/>
                     ))
                 )}
