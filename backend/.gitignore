@@ -1,2 +1,2 @@
 #ignore sensitive info
-.env
+*.env
