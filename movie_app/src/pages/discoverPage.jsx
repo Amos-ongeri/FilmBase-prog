@@ -2,9 +2,10 @@ import { useEffect,useState } from "react";
 import axios from "axios";
 import MovieCard from "../components/Cards/MovieCard";
 import MovieCard1 from "../components/Cards/MovieCard1";
-import { MdSearch, MdSort } from "react-icons/md";
+import { MdArrowDownward, MdArrowUpward, MdSearch, MdSort } from "react-icons/md";
 import user_avatar from '../assets/user-avatar.png'
 import { CiFilter } from "react-icons/ci";
+import { useRef } from "react";
 
 const dataMap = new Map();
 const searchResultsMap = new Map()
@@ -14,6 +15,7 @@ const Discover =()=>{
     const [query,setQuery] = useState('')
     const [searchQuery, setSearchQuery] = useState('')
     const [searchData,setSearchData] = useState()
+    const [sortItem, setSortItem] = useState()
 
     useEffect(()=>{
         const getDiscover = async ()=>{
@@ -22,8 +24,9 @@ const Discover =()=>{
                 t2: 'tv'
             }
             try{
-                if(dataMap.has('discover')){
-                    setDiscover(dataMap.get('discover'))
+                if(dataMap.has('movie') && dataMap.has('tv')){
+                    setDiscover(dataMap.get('movie'))
+                    setDiscover(dataMap.get('tv'))
                 }else{
                     const [movie, tv] = await Promise.all([
                         axios.get(`http://localhost:5000/api/discover/${types.t1}`),
@@ -38,9 +41,10 @@ const Discover =()=>{
                         ...t,
                         media_type: 'tv'
                     }))
-                    
-                dataMap.set('discover', [...movies,...Tv])
-                setDiscover([...movies,...Tv])
+
+                dataMap.set('movie', movies)
+                dataMap.set('tv', tv)
+                setDiscover({'movies': movies, 'tv': Tv})
                 }
             }catch(e){
                 console.log('error occurred: ', e.message);
@@ -49,17 +53,19 @@ const Discover =()=>{
         getDiscover()
     },[])
     useEffect(()=>{
-        if(!query || keywords.length === 0) setKeywords('');
+        const not  = ()=>{
+            if(!query || keywords.length === 0) setKeywords('');
+        }
         const getKeywords = async (query)=>{
             try{
-                const { data } = await axios.get(`http://localhost:5000/api/keywords/search?query=${query}`)                
+                const { data } = await axios.get(`http://localhost:5000/api/keywords/search?query=${query}`)
                 setKeywords(data?.results)
             }catch(e){
                 console.log('error occurred: ',e.message);
-                
             }
 
         }
+        not()
         //debouncing - delay until typing stops
         const timeout = setTimeout(()=>{
             getKeywords(query)
@@ -92,7 +98,7 @@ const Discover =()=>{
     }
 
     useEffect(()=>{
-        console.log('discover', discover);        
+        console.log('discover', discover);
     },[discover])
     useEffect(()=>{
         console.log('keywords,',keywords);
@@ -100,6 +106,23 @@ const Discover =()=>{
     useEffect(()=>{
         console.log('search data,',tv_movie_filter);
     },[searchData, tv_movie_filter])
+
+    const sort = [
+        {name: 'popularity', value: 'popularity.asc', icon: <MdArrowUpward/>},
+        {name: 'popularity', value: 'popularity.desc', icon: <MdArrowDownward/>},
+        {name: 'title', value: 'title.asc', icon: <MdArrowUpward/>},
+        {name: 'title', value: 'title.desc', icon: <MdArrowDownward/>},
+        {name: 'release', value: 'primary-release-date.asc', icon: <MdArrowUpward/>},
+        {name: 'release', value: 'primary-release-date.desc', icon: <MdArrowDownward/>}
+    ]
+    const sortList = useRef();
+    const handleSortList = ()=>{
+        if(sortList.current){
+            sortList.current.classList.toggle('hidden')
+        }
+    }
+    console.log(sortItem);
+    
     return(
         <div className="relative w-[95%] min-h-full text-gray-300 pt-1">
             {keywords && keywords?.length > 0 && query !== '' && (
@@ -129,20 +152,35 @@ const Discover =()=>{
             <br />
             {!searchData ? (
                 <div className="min-h-70 w-full">
-                <div className="sticky top-15 z-10 p-1 rounded-sm bg-gray-900 self-start flex justify-between w-full px-8">
+                <div className="sticky top-15 z-10 p-1 rounded-sm bg-gray-900 self-start flex justify-between items-center w-full min-h-10 px-6">
                     <p>Discover</p>
-                    <div className="min-w-25 flex space-x-2 justify-between">
-                        <button className="flex items-center cursor-pointer"><MdSort size={20}/>Sort</button>
+                    <div className="min-w-25 flex space-x-2 justify-between relative">
+                        <div ref={sortList} className="absolute top-10 -left-10 min-h-20 min-w-20 bg-gray-200 text-black rounded-md p-1 hidden">
+                            {sort?.map(s=> <p onClick={()=> setSortItem(s?.value)} className="hover:bg-gray-400 hover:text-white cursor-pointer p-2 rounded-sm flex items-center justify-between w-full">{s?.name}{s?.icon}</p>)}
+                        </div>
+                        <button onClick={handleSortList} className="flex items-center cursor-pointer"><MdSort size={20}/>Sort</button>
                         <button className="flex items-center cursor-pointer"><CiFilter size={20}/>Filter</button>
                     </div>
                 </div>
                 <br />
+                <p className="text-2xl px-6">Movies</p>
+                <br />
                 <div className="grid grid-cols-5 gap-4 w-full px-6">
-                {discover &&(
-                    discover?.map((t,i)=>(
-                        <MovieCard1 Key={i} data={t}/>
-                    ))
-                )}
+                    {discover &&(
+                        discover?.movies?.map((t,i)=>(
+                            <MovieCard1 Key={i} data={t}/>
+                        ))
+                    )}
+                </div>
+                <br />
+                <p className="text-2xl px-6">Tv Series</p>
+                <br />
+                <div className="grid grid-cols-5 gap-4 w-full px-6">
+                    {discover &&(
+                        discover?.tv?.map((t,i)=>(
+                            <MovieCard1 Key={i} data={t}/>
+                        ))
+                    )}
                 </div>
             </div>
             ) : (

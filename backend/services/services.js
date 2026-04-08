@@ -84,9 +84,9 @@ const getTrending = async (media_type,time_window ) =>{
   }
 }
 
-const getDiscover = async (type) => {
+const getDiscover = async (type,sort_value) => {
   try{
-    const { data } = await tmdb.get(`/discover/${type}`)
+    const { data } = await tmdb.get(`/discover/${type}${sort_value ? `?sort_by=${sort_value}`: ''}`)
     return data;
   }catch(e){
     console.log('error :',e.message);

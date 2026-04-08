@@ -117,7 +117,7 @@ const Detail = ()=>{
         console.log('similar updated:',similar);
         console.log('reviews updated:',reviews);
       console.log(location.pathname);
-      
+
     }, [videos,details]);
     let castNullFilter,crewNullFilter,VISIBLE_CAST,VISIBLE_CREW,similarNullFilter = []
     let sliceAmount = 2
@@ -142,6 +142,7 @@ const Detail = ()=>{
             return copy;
         })
     }
+    
     return(
         <div className="min-w-full min-h-full pb-5 px-10 text-gray-300">
             <div className="flex w-full min-h-40">
@@ -233,7 +234,7 @@ const Detail = ()=>{
                     <div className="w-[60%] h-full space-y-4">
                     <p className="text-2xl">{reviews.length} user reviews</p>
                     <ol className="h-full space-y-8">
-                        {reviews.map((r,i) => (
+                        {reviews.map((r) => (
                         <div key={r.id} className="flex space-y-4">
                             <img src={r.author_details.avatar_path !== null ? `https://image.tmdb.org/t/p/w500/${r.author_details.avatar_path}` : avatar} alt="" className="w-10 h-10 rounded-full" />
                             <div className="w-full min-h-fit justify-between px-5 space-y-2">

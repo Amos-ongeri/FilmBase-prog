@@ -91,7 +91,8 @@ const trendingCon = async (req,res)=>{
 const discoverCon = async (req, res) => {
     try{
         const { type } = req.params
-        const data = await getDiscover(type)      
+        const { sort_value } = req.query
+        const data = await getDiscover(type,sort_value)      
         res.json(data);
     }catch(e){
         console.log('error:', e.message);
