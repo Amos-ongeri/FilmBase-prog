@@ -1,5 +1,4 @@
 import { useState,useEffect } from "react";
-import axios from "axios";
 import MovieCard from "../components/Cards/MovieCard";
 
 const tvMap = new Map();
@@ -21,7 +20,9 @@ const TvSeries = ()=>{
                 if(tvMap.has(cat))
                     results.push({category: cat, tv: tvMap.get(cat)});
                 else{
-                const { data } = await axios.get(`http://localhost:5000/api/${media_type}/${cat}/list`)
+                await fetch(`http://localhost:5000/api/${media_type}/${cat}/list`)
+                .then(res => res.json())
+                .then(data => {
                     if(Array.isArray(data.results)){
                         tvData = data.results.map(item=>({
                             ...item,
@@ -33,6 +34,8 @@ const TvSeries = ()=>{
                             media_type: media_type
                         }
                     }
+                })
+                .catch(e => {throw new Error("error: ", e.message);})
                     tvMap.set(cat, tvData);
                     results.push({ category: cat, tv: tvData})
                 }

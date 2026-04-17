@@ -18,9 +18,9 @@ const Navigation1 = ()=>{
         navigator(path)
     }
     return (
-        <div className="sticky top-15 w-[5%] flex flex-col items-center space-y-9 h-full z-50 bg-black">
+        <div className="sticky top-15 min-w-5 flex items-center space-x-5 h-full z-50 bg-black">
             {navigationData.map((l,i)=>(
-                <div key={i} onClick={()=> navigateTo(l.path)} className="flex flex-col items-center cursor-pointer">
+                <div key={i} onClick={()=> navigateTo(l.path)} className="flex items-center cursor-pointer">
                     <p>{l.icon}</p>
                     <p className="text-sm text-white">{l.name}</p>
                 </div>

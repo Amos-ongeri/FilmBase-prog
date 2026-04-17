@@ -23,9 +23,6 @@ function App() {
       <div className='w-full h-screen overflow-auto mask-l-from-99%'>
         <TopBar/>
         <div className="flex">
-          {!location.pathname.match('/details') && (
-            <Navigation1/>
-          )}
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path='/details/:tmdb_id/:media_type' element={<Detail/>}/>

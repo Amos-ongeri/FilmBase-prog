@@ -1,5 +1,4 @@
 import { useEffect,useState } from "react";
-import axios from "axios";
 import MovieCard from "../components/Cards/MovieCard";
 import MovieCard1 from "../components/Cards/MovieCard1";
 import { MdArrowDownward, MdArrowUpward, MdSearch, MdSort } from "react-icons/md";
@@ -29,22 +28,26 @@ const Discover =()=>{
                     setDiscover(dataMap.get('tv'))
                 }else{
                     const [movie, tv] = await Promise.all([
-                        axios.get(`http://localhost:5000/api/discover/${types.t1}`),
-                        axios.get(`http://localhost:5000/api/discover/${types.t2}`)
+                        fetch(`http://localhost:5000/api/discover/${types.t1}`),
+                        fetch(`http://localhost:5000/api/discover/${types.t2}`)
                     ])
-                    console.log('movie:', movie);
-                    const movies = movie?.data?.results.map(m=>({
+
+                    const movies = await movie.json()
+                    console.log('movie:', movies);
+                    
+                    movies.results.map(m=>({
                         ...m,
                         media_type: 'movie'
                     }))
-                    const Tv = tv?.data?.results.map(t=>({
+                    const Tv = await tv.json()
+                    Tv.results.map(t=>({
                         ...t,
                         media_type: 'tv'
                     }))
 
-                dataMap.set('movie', movies)
-                dataMap.set('tv', tv)
-                setDiscover({'movies': movies, 'tv': Tv})
+                dataMap.set('movie', movies.results)
+                dataMap.set('tv', Tv.results)
+                setDiscover({'movies': movies.results, 'tv': Tv.results})
                 }
             }catch(e){
                 console.log('error occurred: ', e.message);
@@ -58,7 +61,8 @@ const Discover =()=>{
         }
         const getKeywords = async (query)=>{
             try{
-                const { data } = await axios.get(`http://localhost:5000/api/keywords/search?query=${query}`)
+                const res = await fetch(`http://localhost:5000/api/keywords/search?query=${query}`)
+                const data = await res.json();
                 setKeywords(data?.results)
             }catch(e){
                 console.log('error occurred: ',e.message);
@@ -80,7 +84,9 @@ const Discover =()=>{
                 setSearchData(searchResultsMap.get(queryParam))
             }else{
             try{
-                const { data } = await axios.get(`http://localhost:5000/api/query/search/multi?query=${queryParam}`)
+                const res = await fetch(`http://localhost:5000/api/query/search/multi?query=${queryParam}`)
+                const data = await res.json();
+                console.log(data);
                 searchResultsMap.set('search', data.results)
                 setSearchData(data.results)
             }catch(e){

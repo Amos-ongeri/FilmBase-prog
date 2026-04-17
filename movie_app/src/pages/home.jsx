@@ -1,7 +1,6 @@
 import Satoru from "../assets/satoru.png"
-import Carousel from "../components/carousel";
+import CarouselComponent from "../components/carousel";
 // import { movies } from "../data/testMovies";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import MovieCard2 from "../components/Cards/MovieCard2";
 import MovieCard from "../components/Cards/MovieCard";
@@ -25,9 +24,14 @@ const MainPage = () => {
                 if(dataMap.has('trending')){
                     setTrending(dataMap.get('trending'))
                 }else{
-                const { data } = await axios.get(`http://localhost:5000/api/${media_type}/${time_window}/trending`)
-                dataMap.set('trending', data.results)
-                setTrending(data.results)
+                    await fetch(`http://localhost:5000/api/${media_type}/${time_window}/trending`)
+                    .then(res => res.json())
+                    .then(data => {
+                        dataMap.set('trending', data.results)
+                        setTrending(data.results)
+                    })
+                    .catch(e => {throw new Error("error: ", e.message);
+                    })
                 }
             }catch(e){
                 console.log('error occured: ', e.message);
@@ -74,11 +78,13 @@ const MainPage = () => {
                     setGenres(genresMap.get('genres'))
                 }else{
                     const [ movies, tv ] = await Promise.all([
-                         axios.get(`http://localhost:5000/api/movies/${types.t1}/genres`),
-                         axios.get(`http://localhost:5000/api/movies/${types.t2}/genres`)
+                         fetch(`http://localhost:5000/api/${types.t1}/genres`),
+                         fetch(`http://localhost:5000/api/${types.t2}/genres`)
                     ])
-                    genresMap.set('genres', [...movies.data.genres, ...tv.data.genres])
-                    setGenres([...movies.data.genres, ...tv.data.genres])
+                    const moviesData = await movies.json();
+                    const tvData = await tv.json();                    
+                    genresMap.set('genres', [...moviesData.genres, ...tvData.genres])
+                    setGenres([...moviesData.genres, ...tvData.genres])
                 }
             }catch(e){
                 console.log('error: ',e.message);
@@ -97,33 +103,8 @@ const MainPage = () => {
     },[trending])
 
     return(
-        <div className="w-[95%] h-full">
-            <Carousel data={trending}/>
-            {/* <Banner data={trending} genres={genres}/> */}
-            <div className="">
-                <div className="w-[95%] min-h-80 mx-6  rounded-2xl bg-black/30">
-                <br />
-                <div className="flex justify-between mx-10 p-1  border border-gray-300/10 rounded-lg min-w-40 max-w-55">
-                    <p className="text-white text-lg w-[40%] ">Trending</p>
-                    <div className="flex text-white text-lg justify-evenly w-50 ">
-                        <p className="px-5 rounded-sm text-black bg-amber-100">day</p>
-                        <p className="">week</p>
-                    </div>
-                </div>
-                <br />
-                {/*many problems here */}
-                <div className="relative flex justify-center space-x-5">
-                    <button onClick={handlePrevious} className={`absolute top-[50%] left-10 cursor-pointer bg-gray-300/50 hover:bg-gray-300 rounded-lg p-2 transition-opacity duration-75 ${limit?.start === 0 ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>{<MdArrowBack size={20}/>}</button>
-                    <button onClick={handleNext} className={`absolute top-[50%] right-10 cursor-pointer bg-gray-300/50 hover:bg-gray-300 rounded-lg p-2 transition-opacity duration-75 ${limit?.end === trending?.length ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>{<MdArrowForward size={20}/>}</button>
-                    {Slice && (
-                    Slice?.map((t)=>(
-                        <MovieCard2 data={t}/>
-                    ))
-                )}
-                </div>
-                <br />
-                </div>
-            </div>
+        <div className="w-full max-h-full border-red-700">
+            <CarouselComponent data={trending}/>
         </div>
     )
 }

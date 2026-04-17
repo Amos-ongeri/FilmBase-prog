@@ -1,5 +1,4 @@
 import { useEffect,useState } from "react";
-import axios from "axios";
 import MovieCard from "../components/Cards/MovieCard";
 
 const movieMap = new Map();
@@ -22,8 +21,10 @@ const Movies = ()=>{
                 if(movieMap.has(cat))
                     results.push({category: cat, movies: movieMap.get(cat)});
                 else{
-                const { data } = await axios.get(`http://localhost:5000/api/${media_type}/${cat}/list`)
-                    if(Array.isArray(data.results)){
+                    await fetch(`http://localhost:5000/api/${media_type}/${cat}/list`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if(Array.isArray(data.results)){
                         moviesData = data.results.map(item=>({
                             ...item,
                             media_type: media_type
@@ -34,6 +35,9 @@ const Movies = ()=>{
                             media_type: media_type
                         }
                     }
+                    })
+                    .catch(e => {throw new Error("error: ", e.message);
+                    })
                     movieMap.set(cat, moviesData);
                     results.push({ category: cat, movies: moviesData})
                 }

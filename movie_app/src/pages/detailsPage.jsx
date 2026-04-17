@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 // import { movies } from "../../data/testMovies";
 import MovieCard1 from "../components/Cards/MovieCard1";
 import avatar from '../assets/user-avatar.png'
@@ -30,8 +29,9 @@ const Detail = ()=>{
             if(detailsMap.has(tmdb_id)){
                 setDetails(detailsMap.get(tmdb_id))
             }else{
-                const details = await axios.get(`http://localhost:5000/api/${tmdb_id}/${media_type}/details`)
-                Details = details.data;
+                const details = await fetch(`http://localhost:5000/api/${tmdb_id}/${media_type}/details`)
+                Details = await details?.json();
+
                 detailsMap.set(tmdb_id,Details);
                 setDetails(Details);
             }
@@ -48,8 +48,9 @@ const Detail = ()=>{
             if(videosMap.has(tmdb_id)){
                 setVideos(videosMap.get(tmdb_id))
             }else{
-                const videos = await axios.get(`http://localhost:5000/api/${tmdb_id}/${media_type}/videos`)
-                Videos = videos.data.results;
+                const videos = await fetch(`http://localhost:5000/api/${tmdb_id}/${media_type}/videos`)
+                const videosData = await videos.json();
+                Videos = videosData.results;
                 trailer = Videos.filter(d=> d.type === 'Trailer')
                 videosMap.set(tmdb_id ,trailer);
                 setVideos(trailer)
@@ -64,9 +65,10 @@ const Detail = ()=>{
                 if(creditsMap.has(tmdb_id)){
                     setCredits(creditsMap.get(tmdb_id))
                 }else{
-                    const {data} = await axios.get(`http://localhost:5000/api/${tmdb_id}/${media_type}/credits`)
-                    creditsMap.set(tmdb_id,data)
-                    setCredits(data)
+                    const credits = await fetch(`http://localhost:5000/api/${tmdb_id}/${media_type}/credits`)
+                    const creditsData = await credits.json();
+                    creditsMap.set(tmdb_id,creditsData)
+                    setCredits(creditsData)
                 }
             }catch(e){
                 console.log(e.message);
@@ -78,13 +80,15 @@ const Detail = ()=>{
                 if(similarMap.has(tmdb_id)){
                     setSimilar(similarMap.get(tmdb_id))
                 }else{
-                    const { data } = await axios.get(`http://localhost:5000/api/${tmdb_id}/${media_type}/similar`)
-                    const similarData = data.results.map(item=>({
+                    const similar = await fetch(`http://localhost:5000/api/${tmdb_id}/${media_type}/similar`)
+                    const similarData = await similar.json();
+                    console.log(similarData);
+                    similarData.results = similarData.results.map(item=>({
                         ...item,
                         media_type: media_type
                     }))
                     similarMap.set(tmdb_id,similarData)
-                    setSimilar(similarData)
+                    setSimilar(similarData.results)
                 }
             }catch(e){
                 console.log('error occured: ',e.message);
@@ -95,9 +99,10 @@ const Detail = ()=>{
                 if(reviewsMap.has(tmdb_id)){
                     setReviews(reviewsMap.get(tmdb_id))
                 }else{
-                    const{ data } = await axios.get(`http://localhost:5000/api/${tmdb_id}/${media_type}/reviews`)
-                    reviewsMap.set(tmdb_id,data.results)
-                    setReviews(data.results)
+                    const reviews = await fetch(`http://localhost:5000/api/${tmdb_id}/${media_type}/reviews`)
+                    const reviewsData = await reviews.json();
+                    reviewsMap.set(tmdb_id,reviewsData)
+                    setReviews(reviewsData.results)
                 }
             }catch(e){
                 console.log('error occured: ',e.message);
@@ -126,7 +131,7 @@ const Detail = ()=>{
     if(credits){
         castNullFilter = credits?.cast?.filter(c=> c.profile_path !== null)
         crewNullFilter = credits?.crew?.filter(c=> c.profile_path !== null)
-        sliceAmount = Math.min(castNullFilter.length, sliceAmount)
+        sliceAmount = Math.min(castNullFilter?.length, sliceAmount)
         VISIBLE_CAST  = castShowMore ? castNullFilter : castNullFilter.slice(0,sliceAmount)
         VISIBLE_CREW  = crewShowMore ? crewNullFilter : crewNullFilter.slice(0,sliceAmount)
     }

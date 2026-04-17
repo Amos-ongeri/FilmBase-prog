@@ -1,98 +1,49 @@
-const axios = require('axios');
-const dotenv = require('dotenv');
-dotenv.config();
-
-const tmdb = axios.create({
-        baseURL : 'https://api.themoviedb.org/3',
-        headers : {
-            Authorization : `Bearer ${process.env.TMDB_BEARER_TOKEN}`,
-            'content-type': 'application/json',
-        }
-});
+const { tmdbClient } = require('../api/client');
+const client = new tmdbClient();
 
 const getMovies = async (media_type,category)=>{
-    try {
-    const { data } = await tmdb.get(`/${media_type}/${category}`);
-    return data;
-  } catch (e) {
-    throw e;
-  }    
+    const movies = await client.request(`/${media_type}/${category}`);
+    return movies;
 }
 
 const getDetails = async (tmdb_id,media_type)=>{
-    try{
-    const {data} = await tmdb.get(`/${media_type}/${tmdb_id}`) 
-    return data;
-    }catch(e){
-        throw e;
-    }
+    const details = await client.request(`/${media_type}/${tmdb_id}`) 
+    return details;
 }
 
 const getVideos = async (id,media_type)=>{
-  try{
-    const {data} = await tmdb.get(`/${media_type}/${id}/videos`)
-    return data;
-  }catch(e){
-    throw e;
-  }
+    const videos = await client.request(`/${media_type}/${id}/videos`)
+    return videos;
 }
 
 const getCredits = async (id,media_type)=>{
-  try{
-    const { data } = await tmdb.get(`/${media_type}/${id}/credits`)
-    return data;
-  }catch(e){
-    throw e;
-  }
+    const credits = await client.request(`/${media_type}/${id}/credits`)
+    return credits;
 }
 
 const getSimilar = async (id,media_type)=>{
-  try{
-    const { data } = await tmdb.get(`/${media_type}/${id}/similar`)
-    return data;
-  }catch(e){
-    throw e;
-  }
+    const recommended = await client.request(`/${media_type}/${id}/similar`)
+    return recommended;
 }
 
 const getGenres = async (type)=>{
-  try{
-    const { data } = await tmdb.get(`/genre/${type}/list`);
-    return data
-  }catch(e){
-    throw e;
-  }
+    const genres = await client.request(`/genre/${type}/list`);
+    return genres
 }
 
 const getReviews = async (id,media_type)=>{
-  try{
-    const { data } = await tmdb.get(`/${media_type}/${id}/reviews`)
-    return data;
-  }catch(e){
-    throw e;
-  }
+    const reviews = await client.request(`/${media_type}/${id}/reviews`)
+    return reviews;
 }
 
 const getTrending = async (media_type,time_window ) =>{
-  try{
-    const { data } = await tmdb.get(`/trending/${media_type}/${time_window}`)
-    return data;
-  }catch(e){
-    console.log('error :',e.message);
-    
-    throw e;
-  }
+    const trending = await client.request(`/trending/${media_type}/${time_window}`)
+    return trending;
 }
 
 const getDiscover = async (type,sort_value) => {
-  try{
-    const { data } = await tmdb.get(`/discover/${type}${sort_value ? `?sort_by=${sort_value}`: ''}`)
-    return data;
-  }catch(e){
-    console.log('error :',e.message);
-    
-    throw e;
-  }
+    const discover = await client.request(`/discover/${type}${sort_value ? `?sort_by=${sort_value}`: ''}`)
+    return discover;
 }
 
 module.exports = { getMovies, getDetails, getVideos, getCredits, getSimilar, getGenres, getReviews, getTrending, getDiscover };
