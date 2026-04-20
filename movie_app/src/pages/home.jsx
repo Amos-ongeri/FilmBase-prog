@@ -34,7 +34,7 @@ const MainPage = () => {
                     })
                 }
             }catch(e){
-                console.log('error occured: ', e.message);
+                console.log('error occurred: ', e.message);
             }
         }
         getTrending()
@@ -44,27 +44,6 @@ const MainPage = () => {
     let Slice;
     if(trending){
         Slice = trending?.slice(limit?.start,limit?.end)
-    }
-
-    const handlePrevious = ()=>{
-        SetLimit(prev=>{
-            const newStart = Math.max(prev.start - 3, 0)
-            const newEnd = Math.min(newStart + 3, trending.length)
-            return {start: newStart,end: newEnd}
-        })
-    }
-
-    const handleNext = ()=>{
-        SetLimit(prev=>{
-            const newEnd = Math.min(prev.end + 3, trending.length)
-            const newStart = Math.max(newEnd - 3, 0)
-            return {start: newStart,end: newEnd}
-        })
-    }
-
-    const filter = (arr,genre)=>{
-        const filtered = arr?.filter(g => g.name === genre)
-        return filtered?.[0]?.id
     }
 
     useEffect(()=>{
@@ -82,24 +61,25 @@ const MainPage = () => {
                          fetch(`http://localhost:5000/api/${types.t2}/genres`)
                     ])
                     const moviesData = await movies.json();
-                    const tvData = await tv.json();                    
+                    
+                    const tvData = await tv.json();
                     genresMap.set('genres', [...moviesData.genres, ...tvData.genres])
                     setGenres([...moviesData.genres, ...tvData.genres])
                 }
             }catch(e){
                 console.log('error: ',e.message);
-                
+
             }
         }
         getGenres()
         console.log('component mounted');
-        
+
     },[])
     useEffect(()=>{
-        console.log('genres', genres);        
+        console.log('genres', genres);
     },[genres])
     useEffect(()=>{
-        console.log('trending', trending);        
+        console.log('trending', trending);
     },[trending])
 
     return(

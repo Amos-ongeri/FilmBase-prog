@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 // import { movies } from "../../data/testMovies";
 import MovieCard1 from "../components/Cards/MovieCard1";
@@ -51,7 +51,7 @@ const Detail = ()=>{
                 const videos = await fetch(`http://localhost:5000/api/${tmdb_id}/${media_type}/videos`)
                 const videosData = await videos.json();
                 Videos = videosData.results;
-                trailer = Videos.filter(d=> d.type === 'Trailer')
+                trailer = Videos?.filter(d=> d.type === 'Trailer')
                 videosMap.set(tmdb_id ,trailer);
                 setVideos(trailer)
             }
@@ -83,7 +83,7 @@ const Detail = ()=>{
                     const similar = await fetch(`http://localhost:5000/api/${tmdb_id}/${media_type}/similar`)
                     const similarData = await similar.json();
                     console.log(similarData);
-                    similarData.results = similarData.results.map(item=>({
+                    similarData.results = similarData?.results?.map(item=>({
                         ...item,
                         media_type: media_type
                     }))
@@ -91,7 +91,7 @@ const Detail = ()=>{
                     setSimilar(similarData.results)
                 }
             }catch(e){
-                console.log('error occured: ',e.message);
+                console.log('error occurred: ',e.message);
             }
         }
         const getReviews = async ()=>{
@@ -105,7 +105,7 @@ const Detail = ()=>{
                     setReviews(reviewsData.results)
                 }
             }catch(e){
-                console.log('error occured: ',e.message);
+                console.log('error occurred: ',e.message);
             }
         }
 
@@ -114,7 +114,7 @@ const Detail = ()=>{
         getCredits()
         getVideos()
         getDetails();
-    },[tmdb_id])
+    },[media_type, tmdb_id])
     useEffect(() => {
       console.log("details updated:", details);
       console.log('videos updated:',videos);
@@ -123,7 +123,7 @@ const Detail = ()=>{
         console.log('reviews updated:',reviews);
       console.log(location.pathname);
 
-    }, [videos,details]);
+    }, [videos, details, credits, similar, reviews]);
     let castNullFilter,crewNullFilter,VISIBLE_CAST,VISIBLE_CREW,similarNullFilter = []
     let sliceAmount = 2
     const [castShowMore, setCastShowMore] = useState(false)
@@ -132,12 +132,12 @@ const Detail = ()=>{
         castNullFilter = credits?.cast?.filter(c=> c.profile_path !== null)
         crewNullFilter = credits?.crew?.filter(c=> c.profile_path !== null)
         sliceAmount = Math.min(castNullFilter?.length, sliceAmount)
-        VISIBLE_CAST  = castShowMore ? castNullFilter : castNullFilter.slice(0,sliceAmount)
-        VISIBLE_CREW  = crewShowMore ? crewNullFilter : crewNullFilter.slice(0,sliceAmount)
+        VISIBLE_CAST  = castShowMore ? castNullFilter : castNullFilter?.slice(0,sliceAmount)
+        VISIBLE_CREW  = crewShowMore ? crewNullFilter : crewNullFilter?.slice(0,sliceAmount)
     }
 
     if(similar){
-        similarNullFilter = similar.filter(m=> m.poster_path !== null)
+        similarNullFilter = similar?.filter(m=> m.poster_path !== null)
     }
     
     const toggleExpand = (id)=>{
@@ -147,27 +147,33 @@ const Detail = ()=>{
             return copy;
         })
     }
+    const reviewsRef = useRef()
+    const [reviewsToggled, setReviewsToggled] = useState(false)
+    const toggle = () => {
+        reviewsRef?.current?.classList?.toggle("hidden");
+        setReviewsToggled(prev => !prev);
+    }
     
     return(
-        <div className="min-w-full min-h-full pb-5 px-10 text-gray-300">
-            <div className="flex w-full min-h-40">
-                <div className="w-[77%] h-fit">
-                    <div className="flex gap-3 h-fit w-[95%]">
-                    {videos.length > 0 && (
+        <div className="min-w-full min-h-full pb-5 text-gray-300">
+            <div className="w-full h-fit">
+                    <div className="flex gap-3 h-fit w-full">
+                    {videos?.length > 0 && (
                     <iframe 
                     width={1000}
                     height={500}
+                    title={videos?.[0]?.name}
                     key={videos?.[0]?.key}
                     src={`https://www.youtube.com/embed/${videos?.[0]?.key}?rel=0` }
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
-                    className="object-cover w-full h-120 object-center mask-b-from-85% rounded-lg">
+                    className="object-cover w-full h-96 object-center mask-b-from-85%">
                     </iframe>
                     )}
                 </div>
                 {details && (
                     <div className="">
-                        <p>{details?.title || details?.name}</p>
+                        <p className="text-2xl">{details?.title || details?.name}</p>
                         <br />
                         <div className="flex space-x-2 min-h-7 w-70 flex-wrap space-y-2 mask-b-from-70%">
                             {details?.genres?.map(element => (
@@ -182,6 +188,7 @@ const Detail = ()=>{
                     <hr className="border-gray-700"/>
                 </div>
                 </div>
+            <div className="hidden flex w-full min-h-40">
                 {credits && (
                 <div className="min-h-40 w-[23%] space-y-2">
                 <div className="w-full h-[50%]">
@@ -189,7 +196,7 @@ const Detail = ()=>{
                         <p className="text-2xl z-20">top cast ({castNullFilter?.length})</p>
                         {
                         credits && (
-                            castNullFilter.length > sliceAmount && (
+                            castNullFilter?.length > sliceAmount && (
                                 <button onClick={()=> setCastShowMore(!castShowMore)} className="rounded-lg bg-gray-700/50 p-1 cursor-pointer flex items-center">{castShowMore ? 'less' : 'more' } {<MdArrowForward/>}</button>
                             )
                         )
@@ -212,7 +219,7 @@ const Detail = ()=>{
                         <p className="text-2xl ">crew ({crewNullFilter?.length})</p>
                         {
                         credits && (
-                            crewNullFilter.length > sliceAmount && (
+                            crewNullFilter?.length > sliceAmount && (
                                 <button className="rounded-lg bg-gray-700/50 p-1 cursor-pointer flex items-center" onClick={()=>setCrewShowMore(!crewShowMore)}>{crewShowMore ? 'less':'more'}{<MdArrowForward/>}</button>
                             )
                         )
@@ -234,9 +241,9 @@ const Detail = ()=>{
             )}
             </div>
             <br />
-            <div className="flex space-x-2 w-full min-h-70">
+            <div ref={reviewsRef} className="hidden w-full min-h-70">
                 {reviews && (
-                    <div className="w-[60%] h-full space-y-4">
+                    <div className="w-full h-full space-y-4">
                     <p className="text-2xl">{reviews.length} user reviews</p>
                     <ol className="h-full space-y-8">
                         {reviews.map((r) => (
@@ -245,17 +252,20 @@ const Detail = ()=>{
                             <div className="w-full min-h-fit justify-between px-5 space-y-2">
                                 <p>{r.author_details.name || r.author}</p>
                                 <p className={`pl-2 rounded-tl-xs rounded-bl-xs transition-height duration-75 ease-in ${expand.has(r.id) ? '' : 'line-clamp-3'}`}>{r.content}</p>
-                                <button onClick={() => toggleExpand(r.id)} className="flex space-x-1 p-1 bg-gray-700 rounded-lg items-center transition-all duration-200 cursor-pointer hover:bg-gray-500/20"><p className="">{expand.has(r.id) ? 'show less' : 'show more'}</p></button>
+                                <button onClick={() => toggleExpand(r.id)} className="flex space-x-1 p-1 rounded-lg items-center transition-all duration-200 cursor-pointer float-right group">...<p className="group-hover:underline">{expand.has(r.id) ? 'show less' : 'show more'}</p></button>
                             </div>
                         </div>
                         ))}
                     </ol>
                 </div>
                 )}
-                {similar && (
-                    <div className="space-y-4 w-[40%] items-center">
-                    <p className="text-2xl z-20">{similarNullFilter.length} Similar Titles</p>
-                    <div className="w-full place-items-center min-h-50 grid grid-cols-2 gap-2">
+            </div>
+            <br />
+            {similar && (
+                    <div className="relative space-y-4 w-full items-center">
+                    <p className="text-2xl z-20 ml-2">{similarNullFilter.length} Similar Titles</p>
+                    {(reviews && reviews?.length !== 0) && (<button onClick={toggle} className="absolute right-0 top-0 border border-slate-800 rounded-lg p-2 mr-2 hover:bg-[#FF3C00] hover:text-slate-900 hover:border-0 transition-colors     duration-150">{reviewsToggled ? "Close Reviews" : "See Reviews"}</button>)}
+                    <div className="w-full place-items-center min-h-50 grid grid-cols-5 gap-2">
                         {
                             similar && (
                                 similarNullFilter.map(s=>(
@@ -266,7 +276,6 @@ const Detail = ()=>{
                     </div>
                     </div>
                 )}
-            </div>
         </div>
     )
 }

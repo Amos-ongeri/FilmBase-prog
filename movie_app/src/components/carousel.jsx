@@ -1,22 +1,15 @@
-import { useEffect, useRef, useState } from "react";
 import { MdPlayArrow } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import Carousel from "react-bootstrap/Carousel"
-import 'bootstrap/dist/css/bootstrap.min.css';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import Autoplay from "embla-carousel-autoplay"
 
 const CarouselComponent = ({data,genres})=>{
-    
-    const carouselRef = useRef();
-    const [index, setIndex] = useState(0);
-    
-    useEffect(()=>{
-        if(!carouselRef?.current) return;
-        const interval = setInterval(()=>{
-            setIndex(prev=> (prev + 1) % carouselRef?.current?.children.length)
-        },5000)
-
-        return ()=> clearInterval(interval)
-    },[])
 
     const navigate = useNavigate()
 
@@ -25,22 +18,44 @@ const CarouselComponent = ({data,genres})=>{
     }
 
     return(
-        <Carousel>
-            {data?.map((d,i) => (
-                <Carousel.Item key={i} interval={8000} className="relative">
+        <Carousel
+            plugins={[
+                Autoplay({
+                    delay: 10000,
+                })
+            ]}
+            opts={{
+                loop: true
+            }}
+        >
+            <CarouselContent>
+                {data?.map((d,i) => (
+                <CarouselItem key={i}>
                     <div className="relative">
-                        <img className="w-full h-[92vh] object-cover" src={d.backdrop_path ? `https://image.tmdb.org/t/p/w1280${d.backdrop_path}` : ""} alt=""/>
-                        <div title={d?.overview} className="absolute bottom-24 left-40  z-20 text-white max-w-100 min-h-40 bg-black/50 rounded-lg p-2">
-                            <p>{d?.name || d?.title}</p>
-                            <p>{d?.overview}</p>
+                        <img loading="lazy" className="w-full h-[89vh] object-cover opacity-60" src={d.backdrop_path ? `https://image.tmdb.org/t/p/w1280${d.backdrop_path}` : ""} alt=""/>
+                        <div className="absolute top-0 left-12 h-full">
+                            <div className="bottom-24 left-40 text-white min-w-100 max-w-100 min-h-40 max-h-full rounded-lg pt-2 space-y-2 cursor-default">
+                                <div className="flex items-center gap-2">
+                                    <div className="text-2xl">Title</div>  
+                                    <p>:</p>
+                                    <div className="underline pl-1 text-2xl">{d?.name || d?.title}</div>
+                                </div>
+                                <p title={d?.overview} className="text-md font-mono line-clamp-6 mt-5">{d?.overview}</p>
+                            </div>
+                            <br />
+                            {genres?.filter(g => d?.genre_ids?.includes(g?.id)).map(g => (
+                                <div key={g.id} className="bg-red-600">{g.name}</div>
+                            ))}
+                            <button onClick={() => navigateTo(d)} className="flex items-center bg-[#FF3C00] min-w-20 h-14 p-2 rounded-xl"><p>watch trailer</p><MdPlayArrow /></button>
                         </div>
-                        <button onClick={() => navigateTo(d)} className="absolute bottom-9 left-40 z-20 bg-[#FF3C00] min-w-20 h-14 p-2"><p>watch trailer</p> <p>hello</p></button>
                     </div>
-                    
-                </Carousel.Item>
+                </CarouselItem>
             ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
         </Carousel>
     )
 }
 
-export default CarouselComponent;    
+export default CarouselComponent;

@@ -34,20 +34,20 @@ const Discover =()=>{
 
                     const movies = await movie.json()
                     console.log('movie:', movies);
-                    
-                    movies.results.map(m=>({
+
+                    const movieWithType = movies?.results?.map(m=>({
                         ...m,
                         media_type: 'movie'
                     }))
                     const Tv = await tv.json()
-                    Tv.results.map(t=>({
+                    const tvWithType = Tv?.results?.map(t=>({
                         ...t,
                         media_type: 'tv'
                     }))
 
                 dataMap.set('movie', movies.results)
                 dataMap.set('tv', Tv.results)
-                setDiscover({'movies': movies.results, 'tv': Tv.results})
+                setDiscover({'movies': movieWithType, 'tv': tvWithType})
                 }
             }catch(e){
                 console.log('error occurred: ', e.message);
@@ -57,7 +57,7 @@ const Discover =()=>{
     },[])
     useEffect(()=>{
         const not  = ()=>{
-            if(!query || keywords.length === 0) setKeywords('');
+            if(!query || keywords?.length === 0) setKeywords('');
         }
         const getKeywords = async (query)=>{
             try{
@@ -130,7 +130,7 @@ const Discover =()=>{
     console.log(sortItem);
     
     return(
-        <div className="relative w-[95%] min-h-full text-gray-300 pt-1">
+        <div className="relative w-full min-h-full text-gray-300 pt-1">
             {keywords && keywords?.length > 0 && query !== '' && (
                 <div className="absolute left-6 top-12 rounded-lg bg-gray-200 transition-all duration-300 z-20 w-110 min-h-20 max-h-110 overflow-auto p-3 space-y-1 no-scrollbar">
                 {
@@ -146,7 +146,7 @@ const Discover =()=>{
                 }
             </div>
             )}
-            <div className="w-110 relative h-10 mx-6">
+            <div className="w-110 relative h-10 mx-6 mt-3">
                 <input onChange={(e)=> setQuery(e.target.value)} type="text" autoComplete="off" name="text" placeholder="search film..." className="w-full h-full outline-none bg-gray-200 rounded-lg text-black p-2" />
                 <button onClick={()=>{
                     setSearchQuery(query)
@@ -158,7 +158,7 @@ const Discover =()=>{
             <br />
             {!searchData ? (
                 <div className="min-h-70 w-full">
-                <div className="sticky top-15 z-10 p-1 rounded-sm bg-gray-900 self-start flex justify-between items-center w-full min-h-10 px-6">
+                <div className="sticky top-[11%] z-10 p-1 bg-gray-900 self-start flex justify-between items-center w-full min-h-10 px-6">
                     <p>Discover</p>
                     <div className="min-w-25 flex space-x-2 justify-between relative">
                         <div ref={sortList} className="absolute top-10 -left-10 min-h-20 min-w-20 bg-gray-200 text-black rounded-md p-1 hidden">

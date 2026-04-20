@@ -1,5 +1,5 @@
 import { useEffect,useState } from "react";
-import MovieCard from "../components/Cards/MovieCard";
+import MovieCard1 from "../components/Cards/MovieCard1";
 
 const movieMap = new Map();
 const categories = ['now_playing','popular','top_rated','upcoming'];
@@ -57,7 +57,7 @@ const Movies = ()=>{
     }, [movies]);
 
     return(
-        <div className="w-[95%] min-h-full text-gray-300">
+        <div className="w-full min-h-full text-gray-300">
             {movies && (
                 <>
                 <div className="min-h-0 min-w-full px-10 ">
@@ -66,7 +66,7 @@ const Movies = ()=>{
                 <div className="grid grid-cols-5 space-y-5">
                 {
                     movies['upcoming']?.map((movie,i)=>(
-                        <MovieCard Key={i} data={movie}/>
+                        <MovieCard1 Key={i} data={movie}/>
                     ))
                 }
                 </div>
@@ -77,7 +77,7 @@ const Movies = ()=>{
                 <div className="grid grid-cols-5 space-y-5">
                 {
                     movies['now_playing']?.map((movie,i)=>(
-                        <MovieCard Key={i} data={movie}/>
+                        <MovieCard1 Key={i} data={movie}/>
                     ))
                 }
                 </div>
@@ -89,7 +89,7 @@ const Movies = ()=>{
                 <div className="grid grid-cols-5 space-y-2">
                 {
                     movies['popular']?.map((movie,i)=>(
-                        <MovieCard Key={i} data={movie}/>
+                        <MovieCard1 Key={i} data={movie}/>
                     ))
                 }
                 </div>
@@ -101,7 +101,7 @@ const Movies = ()=>{
                 <div className="grid grid-cols-5 grid-rows-2 space-y-2 ">
                 {
                     movies['top_rated']?.map((movie,i)=>(
-                        <MovieCard Key={i} data={movie}/>
+                        <MovieCard1 Key={i} data={movie}/>
                     ))
                 }
                 </div>

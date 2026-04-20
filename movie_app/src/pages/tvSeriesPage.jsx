@@ -1,5 +1,5 @@
 import { useState,useEffect } from "react";
-import MovieCard from "../components/Cards/MovieCard";
+import MovieCard1 from "../components/Cards/MovieCard1";
 
 const tvMap = new Map();
 const categories = ['airing_today','popular','top_rated','on_the_air'];
@@ -13,7 +13,7 @@ const TvSeries = ()=>{
             })
             const media_type = 'tv'
     useEffect(()=> {
-        const fetchtv = async ()=>{
+        const fetchTv = async ()=>{
             const results = [];
             let tvData;
             for(const cat of categories){
@@ -48,13 +48,13 @@ const TvSeries = ()=>{
             })
         }
             
-        fetchtv()  
+        fetchTv()  
     },[])
     useEffect(() => {
         console.log("tv updated:", tv);
     }, [tv]);
     return(
-        <div className="w-[95%] min-h-full text-gray-300">
+        <div className="w-full min-h-full text-gray-300">
             {tv && (
                 <>
                 <div className="min-h-0 min-w-full px-10 ">
@@ -63,7 +63,7 @@ const TvSeries = ()=>{
                 <div className="grid grid-cols-5 space-y-5">
                 {
                     tv['airing_today']?.map((tv,i)=>(
-                        <MovieCard Key={i} data={tv}/>
+                        <MovieCard1 Key={i} data={tv}/>
                     ))
                 }
             </div>
@@ -75,7 +75,7 @@ const TvSeries = ()=>{
                 <div className="grid grid-cols-5 space-y-2">
                 {
                     tv['popular']?.map((tv,i)=>(
-                        <MovieCard Key={i} data={tv}/>
+                        <MovieCard1 Key={i} data={tv}/>
                     ))
                 }
                 </div>
@@ -86,7 +86,7 @@ const TvSeries = ()=>{
                 <div className="grid grid-cols-5 grid-rows-2 space-y-2 ">
                 {
                     tv['on_the_air']?.map((tv,i)=>(
-                        <MovieCard Key={i} data={tv}/>
+                        <MovieCard1 Key={i} data={tv}/>
                     ))
                 }
                 </div>
@@ -98,7 +98,7 @@ const TvSeries = ()=>{
                 <div className="grid grid-cols-5 grid-rows-2 space-y-2 ">
                 {
                     tv['top_rated']?.map((tv,i)=>(
-                        <MovieCard Key={i} data={tv}/>
+                        <MovieCard1 Key={i} data={tv}/>
                     ))
                 }
                 </div>
