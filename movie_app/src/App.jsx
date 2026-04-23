@@ -16,7 +16,7 @@ function App() {
       <Navigation1/>
       <div className='w-full h-screen overflow-auto'>
         <TopBar/>
-        <div className="flex">
+        <div className="flex h-[89%]">
           <Routes>
             <Route path="/home" element={<MainPage />} />
             <Route path='/details/:tmdb_id/:media_type' element={<Detail/>}/>

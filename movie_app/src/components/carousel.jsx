@@ -34,12 +34,12 @@ const CarouselComponent = ({data,genres})=>{
                     <div className="relative">
                         <img loading="lazy" className="w-full h-[89vh] object-cover opacity-60" src={d.backdrop_path ? `https://image.tmdb.org/t/p/w1280${d.backdrop_path}` : ""} alt=""/>
                         <div className="absolute top-0 left-12 h-full">
-                            <div className="bottom-24 left-40 text-white min-w-100 max-w-100 min-h-40 max-h-full rounded-lg pt-2 space-y-2 cursor-default">
-                                <div className="flex items-center gap-2">
-                                    <div className="text-2xl">Title</div>  
-                                    <p>:</p>
-                                    <div className="underline pl-1 text-2xl">{d?.name || d?.title}</div>
-                                </div>
+                            <div className="flex items-center gap-2 text-white pt-2">
+                                <div className="text-2xl">Title</div>  
+                                <p>:</p>
+                                <div className="underline pl-1 text-2xl">{d?.name || d?.title}</div>
+                            </div>
+                            <div className="text-white min-w-100 max-w-100 min-h-40 max-h-full rounded-lg pt-2 space-y-2 cursor-default">
                                 <p title={d?.overview} className="text-md font-mono line-clamp-6 mt-5">{d?.overview}</p>
                             </div>
                             <br />

@@ -1,5 +1,6 @@
 import { useState,useEffect } from "react";
 import MovieCard1 from "../components/Cards/MovieCard1";
+import CardSkeleton from "@/components/skeletons/cards/cardSkeleton";
 
 const tvMap = new Map();
 const categories = ['airing_today','popular','top_rated','on_the_air'];
@@ -53,9 +54,17 @@ const TvSeries = ()=>{
     useEffect(() => {
         console.log("tv updated:", tv);
     }, [tv]);
+
+    const hasTv = [
+        tv?.airing_today,
+        tv?.on_the_air,
+        tv?.popular,
+        tv?.top_rated
+    ].every(member => member?.length !== 0 && member !== undefined)
+    
     return(
         <div className="w-full min-h-full text-gray-300">
-            {tv && (
+            {hasTv ? (
                 <>
                 <div className="min-h-0 min-w-full px-10 ">
                 <p className="text-white text-2xl">&#128293;airing_today</p>
@@ -104,6 +113,12 @@ const TvSeries = ()=>{
                 </div>
             </div>
             </>
+            ) : (
+                <div className="grid grid-cols-5 place-items-center pt-5">
+                    {Array.from({length:5}).map((_,i) => (
+                        <CardSkeleton key={i} />
+                    ))}
+                </div>
             )}
         </div>
     )

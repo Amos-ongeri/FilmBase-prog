@@ -5,6 +5,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*custom modal background*/ 
+dialog::backdrop {
+  background: rgba(0,0,0,0.5);
+}
+
 /* hide scrollbar but keep scrolling */
 .no-scrollbar {
   -ms-overflow-style: none;  /* IE & Edge */

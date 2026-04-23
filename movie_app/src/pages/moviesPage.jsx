@@ -1,5 +1,6 @@
 import { useEffect,useState } from "react";
 import MovieCard1 from "../components/Cards/MovieCard1";
+import CardSkeleton from "@/components/skeletons/cards/cardSkeleton";
 
 const movieMap = new Map();
 const categories = ['now_playing','popular','top_rated','upcoming'];
@@ -56,9 +57,17 @@ const Movies = ()=>{
       console.log("Movies updated:", movies);
     }, [movies]);
 
+    //handy learn more
+    const hasMovies = [
+        movies?.now_playing,
+        movies?.popular,
+        movies?.top_rated,
+        movies?.upcoming
+    ].every(section => section?.length > 0 && section !== undefined);
+
     return(
         <div className="w-full min-h-full text-gray-300">
-            {movies && (
+            {hasMovies ? (
                 <>
                 <div className="min-h-0 min-w-full px-10 ">
                 <p className="text-white text-2xl">&#128293;upcoming</p>
@@ -107,6 +116,12 @@ const Movies = ()=>{
                 </div>
             </div>
             </>
+            ) : (
+                <div className="grid grid-cols-5 place-items-center pt-5">
+                    {Array.from({length:5}).map((_,i) => (
+                        <CardSkeleton key={i} />
+                    ))}
+                </div>
             )}
         </div>
     )

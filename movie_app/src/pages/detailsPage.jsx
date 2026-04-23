@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import MovieCard1 from "../components/Cards/MovieCard1";
 import avatar from '../assets/user-avatar.png'
 import { MdArrowForward, MdArrowForwardIos } from "react-icons/md";
+import CardSkeleton from "@/components/skeletons/cards/cardSkeleton";
 
 const detailsMap = new Map();
 const videosMap = new Map();
@@ -125,15 +126,10 @@ const Detail = ()=>{
 
     }, [videos, details, credits, similar, reviews]);
     let castNullFilter,crewNullFilter,VISIBLE_CAST,VISIBLE_CREW,similarNullFilter = []
-    let sliceAmount = 2
-    const [castShowMore, setCastShowMore] = useState(false)
-    const [crewShowMore, setCrewShowMore] = useState(false)
+
     if(credits){
         castNullFilter = credits?.cast?.filter(c=> c.profile_path !== null)
         crewNullFilter = credits?.crew?.filter(c=> c.profile_path !== null)
-        sliceAmount = Math.min(castNullFilter?.length, sliceAmount)
-        VISIBLE_CAST  = castShowMore ? castNullFilter : castNullFilter?.slice(0,sliceAmount)
-        VISIBLE_CREW  = crewShowMore ? crewNullFilter : crewNullFilter?.slice(0,sliceAmount)
     }
 
     if(similar){
@@ -153,8 +149,19 @@ const Detail = ()=>{
         reviewsRef?.current?.classList?.toggle("hidden");
         setReviewsToggled(prev => !prev);
     }
-    
+    const modal = useRef();
+
+    const altModalClose = (e) => {
+        const posModal = modal.current.getBoundingClientRect();
+        const outPos = e.clientX < posModal.left || e.clientX > posModal.right || e.clientY < posModal.top || e.clientY > posModal.bottom;
+
+        if(outPos){
+            modal.current.close();
+        }
+    }
+
     return(
+        <>
         <div className="min-w-full min-h-full pb-5 text-gray-300">
             <div className="w-full h-fit">
                     <div className="flex gap-3 h-fit w-full">
@@ -188,58 +195,55 @@ const Detail = ()=>{
                     <hr className="border-gray-700"/>
                 </div>
                 </div>
-            <div className="hidden flex w-full min-h-40">
                 {credits && (
-                <div className="min-h-40 w-[23%] space-y-2">
-                <div className="w-full h-[50%]">
-                    <div className="flex justify-between">
-                        <p className="text-2xl z-20">top cast ({castNullFilter?.length})</p>
-                        {
-                        credits && (
-                            castNullFilter?.length > sliceAmount && (
-                                <button onClick={()=> setCastShowMore(!castShowMore)} className="rounded-lg bg-gray-700/50 p-1 cursor-pointer flex items-center">{castShowMore ? 'less' : 'more' } {<MdArrowForward/>}</button>
-                            )
-                        )
-                        }
+                <dialog onClick={(e) => altModalClose(e)} 
+                className="m-auto w-[60%] h-[80%] rounded-2xl overflow-hidden bg-slate-900 text-white" ref={modal}>
+                    <div className="flex justify-between p-2 h-[7%]">
+                        <div></div>
+                        <a className="pr-3 hover:underline cursor-pointer text-lg text-red-500" onClick={() => modal.current.close()}>close</a>
                     </div>
-                    <br />
-                    <div className="flex justify-center space-x-2 min-h-50 w-full transition-all duration-500">
-                        { credits && (
-                            VISIBLE_CAST?.map((c,i)=>(
-                                <div key={i} className="h-full w-30 rounded-lg">
-                                    <img key={i} src={`https://image.tmdb.org/t/p/w500${c.profile_path}`} alt="" className="h-40 w-30 rounded-lg"/>
-                                    <p>{c.name}</p>
-                                </div>
-                            ))
-                        )}
+                    <div className="flex gap-[2%] h-[91%] w-full p-2">
+                        <div className="w-[49%] h-full">
+                            <div className="">
+                                <p className="text-2xl z-20">Top Cast ({castNullFilter?.length})</p>
+                            </div>
+                            <br />
+                            <div className="h-[90%] max-w-full overflow-auto transition-all duration-500 mask-b-from-90% mask-t-from-90%">
+                                { credits && (
+                                    credits?.cast?.map((c,i)=>(
+                                        <div key={i} className="flex items-center gap-3 h-20 w-full">
+                                            <img key={i} src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar} alt="" className="h-16 w-16 rounded-full object-cover"/>
+                                            <div>
+                                                <p>{c?.name}</p>
+                                                <p>{c?.known_for_department}</p>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+                        <div className="w-[49%] h-full">
+                            <div className="">
+                                <p className="text-2xl ">Crew ({crewNullFilter?.length})</p>
+                            </div>
+                            <br />
+                            <div className="h-[90%] min-w-1/2 overflow-auto transition-all duration-500 mask-b-from-90% mask-t-from-90%">
+                                { credits && (
+                                    credits?.crew?.map((c,i)=>(
+                                        <div key={i} className="flex items-center gap-3 h-20 w-full rounded-lg">
+                                            <img src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar} alt="" className="h-16 w-16 rounded-full object-cover"/>
+                                            <div>
+                                                <p>{c?.name}</p>
+                                                <p>{c?.known_for_department}</p>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className="w-full h-[50%]">
-                    <div className="flex justify-between">
-                        <p className="text-2xl ">crew ({crewNullFilter?.length})</p>
-                        {
-                        credits && (
-                            crewNullFilter?.length > sliceAmount && (
-                                <button className="rounded-lg bg-gray-700/50 p-1 cursor-pointer flex items-center" onClick={()=>setCrewShowMore(!crewShowMore)}>{crewShowMore ? 'less':'more'}{<MdArrowForward/>}</button>
-                            )
-                        )
-                        }
-                    </div>
-                    <br />
-                    <div className="flex justify-center space-x-2 min-h-50 w-full transition-all duration-500 ">
-                        { credits && (
-                            VISIBLE_CREW?.map((c,i)=>(
-                                <div key={i} className="h-full w-30 rounded-lg">
-                                    <img src={`https://image.tmdb.org/t/p/w500${c.profile_path}`} alt="" className="h-40 w-30 rounded-lg"/>
-                                    <p>{c.name}</p>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                </div>
-            </div>
+            </dialog>
             )}
-            </div>
             <br />
             <div ref={reviewsRef} className="hidden w-full min-h-70">
                 {reviews && (
@@ -263,9 +267,12 @@ const Detail = ()=>{
             <br />
             {similar && (
                     <div className="relative space-y-4 w-full items-center">
-                    <p className="text-2xl z-20 ml-2">{similarNullFilter.length} Similar Titles</p>
-                    {(reviews && reviews?.length !== 0) && (<button onClick={toggle} className="absolute right-0 top-0 border border-slate-800 rounded-lg p-2 mr-2 hover:bg-[#FF3C00] hover:text-slate-900 hover:border-0 transition-colors     duration-150">{reviewsToggled ? "Close Reviews" : "See Reviews"}</button>)}
-                    <div className="w-full place-items-center min-h-50 grid grid-cols-5 gap-2">
+                        <div className="flex justify-between">
+                            <p className="text-2xl z-20 ml-2">{similarNullFilter.length} Similar Titles</p>
+                            <button onClick={() => modal.current.showModal()} data-open-modal className="border border-slate-800 rounded-lg p-2">cast&crew</button>
+                            {(reviews && reviews?.length !== 0) && (<button onClick={toggle} className="border border-slate-800 rounded-lg p-2 mr-2 hover:bg-[#FF3C00] hover:text-slate-900 hover:border-0 transition-colors     duration-150">{reviewsToggled ? "Close Reviews" : "See Reviews"}</button>)}
+                        </div>
+                    <div className="w-full place-items-center min-h-50 grid lg:grid-cols-5 sm:grid-cols-3 sm:gap-4 lg:gap-2">
                         {
                             similar && (
                                 similarNullFilter.map(s=>(
@@ -277,6 +284,7 @@ const Detail = ()=>{
                     </div>
                 )}
         </div>
+        </>
     )
 }
 

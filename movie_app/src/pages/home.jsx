@@ -7,6 +7,7 @@ import MovieCard from "../components/Cards/MovieCard";
 import MovieCard1 from "../components/Cards/MovieCard1";
 import Banner from "../components/Banner";
 import { MdArrowBack, MdArrowForward } from "react-icons/md";
+import HomeSkeleton from "@/components/skeletons/home/homeSkeleton";
 
 
 const dataMap = new Map();
@@ -83,8 +84,8 @@ const MainPage = () => {
     },[trending])
 
     return(
-        <div className="w-full max-h-full border-red-700">
-            <CarouselComponent data={trending}/>
+        <div className="relative  w-full min-h-full">
+            {trending !== undefined ? <CarouselComponent data={trending}/> : <HomeSkeleton />}
         </div>
     )
 }

@@ -5,6 +5,7 @@ import { MdArrowDownward, MdArrowUpward, MdSearch, MdSort } from "react-icons/md
 import user_avatar from '../assets/user-avatar.png'
 import { CiFilter } from "react-icons/ci";
 import { useRef } from "react";
+import CardSkeleton from "@/components/skeletons/cards/cardSkeleton";
 
 const dataMap = new Map();
 const searchResultsMap = new Map()
@@ -128,6 +129,8 @@ const Discover =()=>{
         }
     }
     console.log(sortItem);
+
+    const hasDiscovery = [discover?.movies, discover?.tv].every(item => item?.length !== 0 & item !==undefined)
     
     return(
         <div className="relative w-full min-h-full text-gray-300 pt-1">
@@ -146,49 +149,61 @@ const Discover =()=>{
                 }
             </div>
             )}
-            <div className="w-110 relative h-10 mx-6 mt-3">
-                <input onChange={(e)=> setQuery(e.target.value)} type="text" autoComplete="off" name="text" placeholder="search film..." className="w-full h-full outline-none bg-gray-200 rounded-lg text-black p-2" />
-                <button onClick={()=>{
+            {hasDiscovery && (
+                <>
+                <div className="w-110 relative h-10 mx-6 mt-3">
+                    <input onChange={(e)=> setQuery(e.target.value)} type="text" autoComplete="off" name="text" placeholder="search film..." className="w-full h-full outline-none bg-gray-200 rounded-lg text-black p-2" />
+                    <button onClick={()=>{
                     setSearchQuery(query)
                     setQuery('')
                     }} title="search" className="absolute right-1 bottom-1 bg-gray-800/50 h-[80%] w-8 flex items-center justify-center rounded-lg cursor-pointer">
-                    <MdSearch size={20}/>
-                </button>
-            </div>
-            <br />
+                        <MdSearch size={20}/>
+                    </button>
+                </div>
+                <br />
+                </>
+            )}
             {!searchData ? (
-                <div className="min-h-70 w-full">
-                <div className="sticky top-[11%] z-10 p-1 bg-gray-900 self-start flex justify-between items-center w-full min-h-10 px-6">
-                    <p>Discover</p>
-                    <div className="min-w-25 flex space-x-2 justify-between relative">
-                        <div ref={sortList} className="absolute top-10 -left-10 min-h-20 min-w-20 bg-gray-200 text-black rounded-md p-1 hidden">
-                            {sort?.map(s=> <p onClick={()=> setSortItem(s?.value)} className="hover:bg-gray-400 hover:text-white cursor-pointer p-2 rounded-sm flex items-center justify-between w-full">{s?.name}{s?.icon}</p>)}
+                (hasDiscovery ? (
+                    <div className="min-h-70 w-full">
+                        <div className="sticky top-[11%] z-10 p-1 bg-gray-900 self-start flex justify-between items-center w-full min-h-10 px-6">
+                            <p>Discover</p>
+                            <div className="min-w-25 flex space-x-2 justify-between relative">
+                                <div ref={sortList} className="absolute top-10 -left-10 min-h-20 min-w-20 bg-gray-200 text-black rounded-md p-1 hidden">
+                                    {sort?.map(s=> <p onClick={()=> setSortItem(s?.value)} className="hover:bg-gray-400 hover:text-white cursor-pointer p-2 rounded-sm flex items-center justify-between w-full">{s?.name}{s?.icon}</p>)}
+                                </div>
+                                <button onClick={handleSortList} className="flex items-center cursor-pointer"><MdSort size={20}/>Sort</button>
+                                <button className="flex items-center cursor-pointer"><CiFilter size={20}/>Filter</button>
+                            </div>
                         </div>
-                        <button onClick={handleSortList} className="flex items-center cursor-pointer"><MdSort size={20}/>Sort</button>
-                        <button className="flex items-center cursor-pointer"><CiFilter size={20}/>Filter</button>
+                        <br />
+                        <p className="text-2xl px-6">Movies</p>
+                        <br />
+                        <div className="grid grid-cols-5 gap-4 w-full px-6">
+                            {discover &&(
+                                discover?.movies?.map((t,i)=>(
+                                    <MovieCard1 Key={i} data={t}/>
+                                ))
+                            )}
+                        </div>
+                        <br />
+                        <p className="text-2xl px-6">Tv Series</p>
+                        <br />
+                        <div className="grid grid-cols-5 gap-4 w-full px-6">
+                            {discover &&(
+                                discover?.tv?.map((t,i)=>(
+                                    <MovieCard1 Key={i} data={t}/>
+                                ))
+                            )}
+                        </div>
                     </div>
-                </div>
-                <br />
-                <p className="text-2xl px-6">Movies</p>
-                <br />
-                <div className="grid grid-cols-5 gap-4 w-full px-6">
-                    {discover &&(
-                        discover?.movies?.map((t,i)=>(
-                            <MovieCard1 Key={i} data={t}/>
-                        ))
-                    )}
-                </div>
-                <br />
-                <p className="text-2xl px-6">Tv Series</p>
-                <br />
-                <div className="grid grid-cols-5 gap-4 w-full px-6">
-                    {discover &&(
-                        discover?.tv?.map((t,i)=>(
-                            <MovieCard1 Key={i} data={t}/>
-                        ))
-                    )}
-                </div>
-            </div>
+                ) : (
+                    <div className="grid grid-cols-5 pt-5 place-items-center">
+                        {Array.from({length:5}).map((_,i) => (
+                            <CardSkeleton key={i} />
+                        ))}
+                    </div>
+                ))
             ) : (
                 <div className="px-6">
                     <p>results for : "{searchQuery}"</p>
