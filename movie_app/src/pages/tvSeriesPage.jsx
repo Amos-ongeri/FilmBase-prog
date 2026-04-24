@@ -1,5 +1,5 @@
 import { useState,useEffect } from "react";
-import MovieCard1 from "../components/Cards/MovieCard1";
+import MovieCard1 from "../components/cards/MovieCard1";
 import CardSkeleton from "@/components/skeletons/cards/cardSkeleton";
 
 const tvMap = new Map();

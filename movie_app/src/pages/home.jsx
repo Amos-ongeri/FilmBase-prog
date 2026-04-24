@@ -2,11 +2,7 @@ import Satoru from "../assets/satoru.png"
 import CarouselComponent from "../components/carousel";
 // import { movies } from "../data/testMovies";
 import { useEffect, useState } from "react";
-import MovieCard2 from "../components/Cards/MovieCard2";
-import MovieCard from "../components/Cards/MovieCard";
-import MovieCard1 from "../components/Cards/MovieCard1";
 import Banner from "../components/Banner";
-import { MdArrowBack, MdArrowForward } from "react-icons/md";
 import HomeSkeleton from "@/components/skeletons/home/homeSkeleton";
 
 

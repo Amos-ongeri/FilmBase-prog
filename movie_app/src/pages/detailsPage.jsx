@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 // import { movies } from "../../data/testMovies";
-import MovieCard1 from "../components/Cards/MovieCard1";
+import MovieCard1 from "../components/cards/MovieCard1";
 import avatar from '../assets/user-avatar.png'
 import { MdArrowForward, MdArrowForwardIos } from "react-icons/md";
 import CardSkeleton from "@/components/skeletons/cards/cardSkeleton";
@@ -125,12 +125,8 @@ const Detail = ()=>{
       console.log(location.pathname);
 
     }, [videos, details, credits, similar, reviews]);
-    let castNullFilter,crewNullFilter,VISIBLE_CAST,VISIBLE_CREW,similarNullFilter = []
+    let similarNullFilter = []
 
-    if(credits){
-        castNullFilter = credits?.cast?.filter(c=> c.profile_path !== null)
-        crewNullFilter = credits?.crew?.filter(c=> c.profile_path !== null)
-    }
 
     if(similar){
         similarNullFilter = similar?.filter(m=> m.poster_path !== null)
@@ -143,15 +139,15 @@ const Detail = ()=>{
             return copy;
         })
     }
-    const reviewsRef = useRef()
-    const [reviewsToggled, setReviewsToggled] = useState(false)
-    const toggle = () => {
-        reviewsRef?.current?.classList?.toggle("hidden");
-        setReviewsToggled(prev => !prev);
-    }
-    const modal = useRef();
+    const reviewsModal = useRef()
+    // const [reviewsToggled, setReviewsToggled] = useState(false)
+    // const toggle = () => {
+    //     reviewsRef?.current?.classList?.toggle("hidden");
+    //     setReviewsToggled(prev => !prev);
+    // }
+    const creditsModal = useRef();
 
-    const altModalClose = (e) => {
+    const altModalClose = (e,modal) => {
         const posModal = modal.current.getBoundingClientRect();
         const outPos = e.clientX < posModal.left || e.clientX > posModal.right || e.clientY < posModal.top || e.clientY > posModal.bottom;
 
@@ -179,7 +175,7 @@ const Detail = ()=>{
                     )}
                 </div>
                 {details && (
-                    <div className="">
+                    <div className="pb-5">
                         <p className="text-2xl">{details?.title || details?.name}</p>
                         <br />
                         <div className="flex space-x-2 min-h-7 w-70 flex-wrap space-y-2 mask-b-from-70%">
@@ -190,22 +186,24 @@ const Detail = ()=>{
                         <p className="text-sm">{details.overview}</p>
                     </div>
                 )}
-                <br />
-                <div className="px-10">
-                    <hr className="border-gray-700"/>
                 </div>
+                <div className="px-2 z-10">
+                    <div className="flex space-x-5">
+                        <button onClick={() => creditsModal.current.showModal()} className="border border-slate-800 rounded-lg p-2">Credits</button>
+                        {(reviews && reviews?.length !== 0) && (<button onClick={() => reviewsModal.current.showModal()} className="border border-slate-800 rounded-lg p-2 mr-2 hover:bg-[#FF3C00] hover:text-slate-900 hover:border-0 transition-colors     duration-150">Reviews</button>)}
+                    </div>
                 </div>
                 {credits && (
-                <dialog onClick={(e) => altModalClose(e)} 
-                className="m-auto w-[60%] h-[80%] rounded-2xl overflow-hidden bg-slate-900 text-white" ref={modal}>
+                <dialog onClick={(e) => altModalClose(e,creditsModal)} 
+                className="m-auto w-[60%] h-[80%] rounded-2xl overflow-hidden bg-slate-900 text-white" ref={creditsModal}>
                     <div className="flex justify-between p-2 h-[7%]">
                         <div></div>
-                        <a className="pr-3 hover:underline cursor-pointer text-lg text-red-500" onClick={() => modal.current.close()}>close</a>
+                        <a className="pr-3 hover:underline cursor-pointer text-lg text-red-500" onClick={() => creditsModal.current.close()}>close</a>
                     </div>
                     <div className="flex gap-[2%] h-[91%] w-full p-2">
                         <div className="w-[49%] h-full">
                             <div className="">
-                                <p className="text-2xl z-20">Top Cast ({castNullFilter?.length})</p>
+                                <p className="text-2xl z-20">Top Cast ({credits?.cast?.length})</p>
                             </div>
                             <br />
                             <div className="h-[90%] max-w-full overflow-auto transition-all duration-500 mask-b-from-90% mask-t-from-90%">
@@ -224,7 +222,7 @@ const Detail = ()=>{
                         </div>
                         <div className="w-[49%] h-full">
                             <div className="">
-                                <p className="text-2xl ">Crew ({crewNullFilter?.length})</p>
+                                <p className="text-2xl ">Crew ({credits?.crew?.length})</p>
                             </div>
                             <br />
                             <div className="h-[90%] min-w-1/2 overflow-auto transition-all duration-500 mask-b-from-90% mask-t-from-90%">
@@ -245,32 +243,30 @@ const Detail = ()=>{
             </dialog>
             )}
             <br />
-            <div ref={reviewsRef} className="hidden w-full min-h-70">
+            <dialog onClick={(e) => altModalClose(e,reviewsModal)} ref={reviewsModal} className="w-[60%] h-[80%] rounded-2xl overflow-auto bg-slate-900 p-5 text-white m-auto">
                 {reviews && (
                     <div className="w-full h-full space-y-4">
                     <p className="text-2xl">{reviews.length} user reviews</p>
-                    <ol className="h-full space-y-8">
+                    <ol className="h-full space-y-1">
                         {reviews.map((r) => (
-                        <div key={r.id} className="flex space-y-4">
+                        <div key={r.id} className="flex">
                             <img src={r.author_details.avatar_path !== null ? `https://image.tmdb.org/t/p/w500/${r.author_details.avatar_path}` : avatar} alt="" className="w-10 h-10 rounded-full" />
                             <div className="w-full min-h-fit justify-between px-5 space-y-2">
                                 <p>{r.author_details.name || r.author}</p>
                                 <p className={`pl-2 rounded-tl-xs rounded-bl-xs transition-height duration-75 ease-in ${expand.has(r.id) ? '' : 'line-clamp-3'}`}>{r.content}</p>
-                                <button onClick={() => toggleExpand(r.id)} className="flex space-x-1 p-1 rounded-lg items-center transition-all duration-200 cursor-pointer float-right group">...<p className="group-hover:underline">{expand.has(r.id) ? 'show less' : 'show more'}</p></button>
+                                <button onClick={() => toggleExpand(r.id)} className="flex space-x-1 p-1 rounded-lg items-center transition-all duration-200 cursor-pointer float-right group">...<p className="group-hover:underline font-extralight ">{expand.has(r.id) ? 'show less' : 'show more'}</p></button>
                             </div>
                         </div>
                         ))}
                     </ol>
                 </div>
                 )}
-            </div>
+            </dialog>
             <br />
             {similar && (
                     <div className="relative space-y-4 w-full items-center">
                         <div className="flex justify-between">
-                            <p className="text-2xl z-20 ml-2">{similarNullFilter.length} Similar Titles</p>
-                            <button onClick={() => modal.current.showModal()} data-open-modal className="border border-slate-800 rounded-lg p-2">cast&crew</button>
-                            {(reviews && reviews?.length !== 0) && (<button onClick={toggle} className="border border-slate-800 rounded-lg p-2 mr-2 hover:bg-[#FF3C00] hover:text-slate-900 hover:border-0 transition-colors     duration-150">{reviewsToggled ? "Close Reviews" : "See Reviews"}</button>)}
+                            <p className="text-2xl z-10 ml-2">{similarNullFilter.length} Similar Titles</p>
                         </div>
                     <div className="w-full place-items-center min-h-50 grid lg:grid-cols-5 sm:grid-cols-3 sm:gap-4 lg:gap-2">
                         {

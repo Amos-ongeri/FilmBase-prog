@@ -1,6 +1,6 @@
 import { useEffect,useState } from "react";
-import MovieCard from "../components/Cards/MovieCard";
-import MovieCard1 from "../components/Cards/MovieCard1";
+import MovieCard from "../components/cards/MovieCard";
+import MovieCard1 from "../components/cards/MovieCard1";
 import { MdArrowDownward, MdArrowUpward, MdSearch, MdSort } from "react-icons/md";
 import user_avatar from '../assets/user-avatar.png'
 import { CiFilter } from "react-icons/ci";
@@ -156,7 +156,7 @@ const Discover =()=>{
                     <button onClick={()=>{
                     setSearchQuery(query)
                     setQuery('')
-                    }} title="search" className="absolute right-1 bottom-1 bg-gray-800/50 h-[80%] w-8 flex items-center justify-center rounded-lg cursor-pointer">
+                    }} title="search" className="absolute right-1 bottom-1 bg-slate-700 h-[80%] w-10 flex items-center justify-center rounded-lg cursor-pointer">
                         <MdSearch size={20}/>
                     </button>
                 </div>

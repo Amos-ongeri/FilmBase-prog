@@ -12,7 +12,7 @@ const Navigation1 = ()=>{
         {path: '/home', name: 'Home', icon: <GoHome className="text-white" size={20}/>},
         {path: '/discover',name:'Discover',icon: <CiCompass1 className="text-white" size={20}/>},
         {path: '/movies', name: 'Movies', icon: <PiFilmSlateLight className="text-white" size={20}/>},
-        {path: '/tv', name: 'Tv-series', icon: <MdLiveTv className="text-white" size={20}/>}
+        {path: '/tv', name: 'Tv-Series', icon: <MdLiveTv className="text-white" size={20}/>}
     ]
 
     const location = useLocation();
