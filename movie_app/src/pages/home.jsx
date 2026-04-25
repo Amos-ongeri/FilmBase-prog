@@ -3,7 +3,7 @@ import CarouselComponent from "../components/carousel";
 // import { movies } from "../data/testMovies";
 import { useEffect, useState } from "react";
 import Banner from "../components/Banner";
-import HomeSkeleton from "@/components/skeletons/home/homeSkeleton";
+import HomeSkeleton from "@/components/skeletons/homeSkeleton";
 
 
 const dataMap = new Map();

@@ -5,7 +5,7 @@ import { MdArrowDownward, MdArrowUpward, MdSearch, MdSort } from "react-icons/md
 import user_avatar from '../assets/user-avatar.png'
 import { CiFilter } from "react-icons/ci";
 import { useRef } from "react";
-import CardSkeleton from "@/components/skeletons/cards/cardSkeleton";
+import CardSkeleton from "@/components/skeletons/cardSkeleton";
 
 const dataMap = new Map();
 const searchResultsMap = new Map()
@@ -151,16 +151,16 @@ const Discover =()=>{
             )}
             {hasDiscovery && (
                 <>
-                <div className="w-110 relative h-10 mx-6 mt-3">
-                    <input onChange={(e)=> setQuery(e.target.value)} type="text" autoComplete="off" name="text" placeholder="search film..." className="w-full h-full outline-none bg-gray-200 rounded-lg text-black p-2" />
-                    <button onClick={()=>{
-                    setSearchQuery(query)
-                    setQuery('')
-                    }} title="search" className="absolute right-1 bottom-1 bg-slate-700 h-[80%] w-10 flex items-center justify-center rounded-lg cursor-pointer">
-                        <MdSearch size={20}/>
-                    </button>
-                </div>
-                <br />
+                    <div className="w-110 relative h-10 mx-6 mt-3">
+                        <input onChange={(e)=> setQuery(e.target.value)} type="text" autoComplete="off" name="text" placeholder="search film..." className="w-full h-full outline-none bg-gray-200 rounded-lg text-black p-2" />
+                        <button onClick={()=>{
+                        setSearchQuery(query)
+                        setQuery('')
+                        }} title="search" className="absolute right-1 bottom-1 bg-slate-700 h-[80%] w-10 flex items-center justify-center rounded-lg cursor-pointer">
+                            <MdSearch size={20}/>
+                        </button>
+                    </div>
+                    <br />
                 </>
             )}
             {!searchData ? (
@@ -212,15 +212,15 @@ const Discover =()=>{
                         <div className="">
                         <p>people</p>
                         <br />
-                        <div className="flex space-x-2 overflow-auto">
-                            {person_filter?.map((p,i)=>(
-                                <div className="w-30 h-fit cursor-pointer shrink-0">
-                                    <img key={i} src={person_filter.profile_path ? `https://image.tmdb.org/t/p/w500${p.profile_path}` : user_avatar} alt="" className="w-20  rounded-full"/>
-                                    <p>{p.name}</p>
-                                </div>
-                            ))}
+                            <div className="flex space-x-2 overflow-auto">
+                                {person_filter?.map((p,i)=>(
+                                    <div className="w-30 h-fit cursor-pointer shrink-0">
+                                        <img key={i} src={person_filter.profile_path ? `https://image.tmdb.org/t/p/w500${p.profile_path}` : user_avatar} alt="" className="w-20  rounded-full"/>
+                                        <p>{p.name}</p>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div>
                     )}
                     <br />
                     <hr className="border-0.5 border-gray-800 mx-4"/>

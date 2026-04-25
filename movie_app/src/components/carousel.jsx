@@ -32,7 +32,7 @@ const CarouselComponent = ({data,genres})=>{
                 {data?.map((d,i) => (
                 <CarouselItem key={i}>
                     <div className="relative">
-                        <img loading="lazy" className="w-full h-[89vh] object-cover opacity-60" src={d.backdrop_path ? `https://image.tmdb.org/t/p/w1280${d.backdrop_path}` : ""} alt=""/>
+                        <img loading="lazy" className="w-full h-[94vh] rounded-xs object-cover opacity-60" src={d.backdrop_path ? `https://image.tmdb.org/t/p/w1280${d.backdrop_path}` : ""} alt=""/>
                         <div className="absolute top-0 left-12 h-full">
                             <div className="flex items-center gap-2 text-white pt-2">
                                 <div className="text-2xl">Title</div>  
@@ -43,9 +43,13 @@ const CarouselComponent = ({data,genres})=>{
                                 <p title={d?.overview} className="text-md font-mono line-clamp-6 mt-5">{d?.overview}</p>
                             </div>
                             <br />
-                            {genres?.filter(g => d?.genre_ids?.includes(g?.id)).map(g => (
-                                <div key={g.id} className="bg-red-600">{g.name}</div>
-                            ))}
+                            <div className="flex gap-2 flex-wrap w-100">
+                                {d?.genre_ids?.map(g => {
+                                    const name = genres?.find(G => G?.id === g);
+                                    if(!name) return null;
+                                    return <p key={g} className="text-white bg-gray-500/75 rounded-md px-2 w-fit">{name?.name}</p>;
+                                })}
+                            </div>
                             <button onClick={() => navigateTo(d)} className="flex items-center bg-[#FF3C00] min-w-20 h-14 p-2 rounded-xl"><p>watch trailer</p><MdPlayArrow /></button>
                         </div>
                     </div>

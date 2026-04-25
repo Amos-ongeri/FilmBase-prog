@@ -4,7 +4,9 @@ import { useParams } from "react-router-dom";
 import MovieCard1 from "../components/cards/MovieCard1";
 import avatar from '../assets/user-avatar.png'
 import { MdArrowForward, MdArrowForwardIos } from "react-icons/md";
-import CardSkeleton from "@/components/skeletons/cards/cardSkeleton";
+import CardSkeleton from "@/components/skeletons/cardSkeleton";
+import VideoSkeleton from "@/components/skeletons/videoSkeleton";
+import ScrollToTop from "@/components/scroll_to_top";
 
 const detailsMap = new Map();
 const videosMap = new Map();
@@ -159,40 +161,50 @@ const Detail = ()=>{
     return(
         <>
         <div className="min-w-full min-h-full pb-5 text-gray-300">
-            <div className="w-full h-fit">
-                    <div className="flex gap-3 h-fit w-full">
-                    {videos?.length > 0 && (
-                    <iframe 
-                    width={1000}
-                    height={500}
-                    title={videos?.[0]?.name}
-                    key={videos?.[0]?.key}
-                    src={`https://www.youtube.com/embed/${videos?.[0]?.key}?rel=0` }
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="object-cover w-full h-96 object-center mask-b-from-85%">
-                    </iframe>
-                    )}
-                </div>
-                {details && (
-                    <div className="pb-5">
-                        <p className="text-2xl">{details?.title || details?.name}</p>
-                        <br />
-                        <div className="flex space-x-2 min-h-7 w-70 flex-wrap space-y-2 mask-b-from-70%">
-                            {details?.genres?.map(element => (
-                                <p key={element.id} className="text-white h-full min-w-20 flex items-center justify-center rounded-lg bg-gray-700/50">{element.name}</p>
-                            ))}
+            {!videos ? (
+                <VideoSkeleton />
+            ) : (
+                <div className={`w-full h-fit ${videos?.length == 0 && "flex"}`}>
+                    {videos?.length > 0 ? (
+                    <div className="h-fit w-full">
+                        <iframe 
+                        width={560}
+                        height={315}
+                        title={videos?.[0]?.name}
+                        key={videos?.[0]?.key}
+                        src={`https://www.youtube.com/embed/${videos?.[0]?.key}?rel=0` }
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="object-cover w-full h-96 object-center mask-b-from-85%">
+                        </iframe>
+                    </div>
+                ) : (
+                        <div className="p-2">
+                            <img className="rounded-lg" src={`https://image.tmdb.org/t/p/w1280${details?.backdrop_path}`} alt="" />
                         </div>
-                        <p className="text-sm">{details.overview}</p>
+                    )}
+                {details && (
+                    <div className={videos?.length === 0 ? "py-2 pr-2" : "pb-5"}>
+                        <div>
+                            <div className="px-2 z-10 flex justify-between w-full">
+                                <p className="text-2xl">{details?.title || details?.name}</p>
+                                <div className="flex space-x-2 perspective-distant">
+                                    <button onClick={() => creditsModal.current.showModal()} className="bg-[#121212] active:-translate-z-30 transition-all duration-150 rounded-lg p-2 shadow-sm shadow-slate-800">Credits</button>
+                                    {(reviews && reviews?.length !== 0) && (<button onClick={() => reviewsModal.current.showModal()} className="bg-[#121212] shadow-sm shadow-slate-800 active:-translate-z-30 rounded-lg p-2 mr-2 transition-all duration-150">Reviews</button>)}
+                                </div>
+                            </div>
+                            <br />
+                            <div className="flex space-x-2 min-h-7 w-70 flex-wrap space-y-2 mask-b-from-70%">
+                                {details?.genres?.map(element => (
+                                    <p key={element.id} className="text-white h-full min-w-20 flex items-center justify-center rounded-lg bg-gray-700/50">{element.name}</p>
+                                ))}
+                            </div>
+                            <p className="text-sm">{details.overview}</p>
+                        </div>
                     </div>
                 )}
                 </div>
-                <div className="px-2 z-10">
-                    <div className="flex space-x-5">
-                        <button onClick={() => creditsModal.current.showModal()} className="border border-slate-800 rounded-lg p-2">Credits</button>
-                        {(reviews && reviews?.length !== 0) && (<button onClick={() => reviewsModal.current.showModal()} className="border border-slate-800 rounded-lg p-2 mr-2 hover:bg-[#FF3C00] hover:text-slate-900 hover:border-0 transition-colors     duration-150">Reviews</button>)}
-                    </div>
-                </div>
+            )}
                 {credits && (
                 <dialog onClick={(e) => altModalClose(e,creditsModal)} 
                 className="m-auto w-[60%] h-[80%] rounded-2xl overflow-hidden bg-slate-900 text-white" ref={creditsModal}>
@@ -201,48 +213,51 @@ const Detail = ()=>{
                         <a className="pr-3 hover:underline cursor-pointer text-lg text-red-500" onClick={() => creditsModal.current.close()}>close</a>
                     </div>
                     <div className="flex gap-[2%] h-[91%] w-full p-2">
-                        <div className="w-[49%] h-full">
-                            <div className="">
-                                <p className="text-2xl z-20">Top Cast ({credits?.cast?.length})</p>
-                            </div>
-                            <br />
-                            <div className="h-[90%] max-w-full overflow-auto transition-all duration-500 mask-b-from-90% mask-t-from-90%">
-                                { credits && (
-                                    credits?.cast?.map((c,i)=>(
-                                        <div key={i} className="flex items-center gap-3 h-20 w-full">
-                                            <img key={i} src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar} alt="" className="h-16 w-16 rounded-full object-cover"/>
-                                            <div>
-                                                <p>{c?.name}</p>
-                                                <p>{c?.known_for_department}</p>
+                        {credits?.cast?.length !== 0 && (
+                            <div className="w-[49%] h-full">
+                                <div className="">
+                                    <p className="text-2xl z-20">Top Cast ({credits?.cast?.length})</p>
+                                </div>
+                                <br />
+                                <div className="h-[90%] max-w-full overflow-auto transition-all duration-500 mask-b-from-90% mask-t-from-90%">
+                                    { credits && (
+                                        credits?.cast?.map((c,i)=>(
+                                            <div key={i} className="flex items-center gap-3 h-20 w-full">
+                                                <img key={i} src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar} alt="" className="h-16 w-16 rounded-full object-cover"/>
+                                                <div>
+                                                    <p>{c?.name}</p>
+                                                    <p>{c?.known_for_department}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))
-                                )}
+                                        ))
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                        <div className="w-[49%] h-full">
-                            <div className="">
-                                <p className="text-2xl ">Crew ({credits?.crew?.length})</p>
-                            </div>
-                            <br />
-                            <div className="h-[90%] min-w-1/2 overflow-auto transition-all duration-500 mask-b-from-90% mask-t-from-90%">
-                                { credits && (
-                                    credits?.crew?.map((c,i)=>(
-                                        <div key={i} className="flex items-center gap-3 h-20 w-full rounded-lg">
-                                            <img src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar} alt="" className="h-16 w-16 rounded-full object-cover"/>
-                                            <div>
-                                                <p>{c?.name}</p>
-                                                <p>{c?.known_for_department}</p>
+                        )}
+                        {credits?.crew?.length !== 0 && (
+                            <div className="w-[49%] h-full">
+                                <div className="">
+                                    <p className="text-2xl ">Crew ({credits?.crew?.length})</p>
+                                </div>
+                                <br />
+                                <div className="h-[90%] min-w-1/2 overflow-auto transition-all duration-500 mask-b-from-90% mask-t-from-90%">
+                                    { credits && (
+                                        credits?.crew?.map((c,i)=>(
+                                            <div key={i} className="flex items-center gap-3 h-20 w-full rounded-lg">
+                                                <img src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar} alt="" className="h-16 w-16 rounded-full object-cover"/>
+                                                <div>
+                                                    <p>{c?.name}</p>
+                                                    <p>{c?.known_for_department}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))
-                                )}
+                                        ))
+                                    )}
+                                </div>
                             </div>
-                        </div>
+                        )}
                     </div>
             </dialog>
             )}
-            <br />
             <dialog onClick={(e) => altModalClose(e,reviewsModal)} ref={reviewsModal} className="w-[60%] h-[80%] rounded-2xl overflow-auto bg-slate-900 p-5 text-white m-auto">
                 {reviews && (
                     <div className="w-full h-full space-y-4">
@@ -262,21 +277,26 @@ const Detail = ()=>{
                 </div>
                 )}
             </dialog>
-            <br />
-            {similar && (
+            {similar?.length > 0 && similar ? (
                     <div className="relative space-y-4 w-full items-center">
                         <div className="flex justify-between">
                             <p className="text-2xl z-10 ml-2">{similarNullFilter.length} Similar Titles</p>
                         </div>
-                    <div className="w-full place-items-center min-h-50 grid lg:grid-cols-5 sm:grid-cols-3 sm:gap-4 lg:gap-2">
-                        {
-                            similar && (
-                                similarNullFilter.map(s=>(
-                                    <MovieCard1 data={s}/>
-                                ))
-                            )
-                        }
+                        <div className="w-full place-items-center min-h-50 grid lg:grid-cols-5 sm:grid-cols-3 sm:gap-4 lg:gap-2">
+                            {
+                                similar && (
+                                    similarNullFilter.map(s=>(
+                                        <MovieCard1 data={s}/>
+                                    ))
+                                )
+                            }
+                        </div>
                     </div>
+                ) : (
+                    <div className="grid grid-cols-1 lg:grid-cols-5 place-items-center pt-5">
+                        {Array.from({length:5}).map((_,i) => (
+                            <CardSkeleton key={i} />
+                        ))}
                     </div>
                 )}
         </div>

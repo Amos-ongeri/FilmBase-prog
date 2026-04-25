@@ -1,6 +1,6 @@
 import { useState,useEffect } from "react";
 import MovieCard1 from "../components/cards/MovieCard1";
-import CardSkeleton from "@/components/skeletons/cards/cardSkeleton";
+import CardSkeleton from "@/components/skeletons/cardSkeleton";
 
 const tvMap = new Map();
 const categories = ['airing_today','popular','top_rated','on_the_air'];
@@ -66,52 +66,52 @@ const TvSeries = ()=>{
         <div className="w-full min-h-full text-gray-300">
             {hasTv ? (
                 <>
-                <div className="min-h-0 min-w-full px-10 ">
-                <p className="text-white text-2xl">&#128293;airing_today</p>
-                <br />
-                <div className="grid grid-cols-5 space-y-5">
-                {
-                    tv['airing_today']?.map((tv,i)=>(
-                        <MovieCard1 Key={i} data={tv}/>
-                    ))
-                }
-            </div>
-            </div>
-            <br />
-            <div className="min-h-0 min-w-full px-10">
-                <p className="text-white text-2xl">&#128293;Popular</p>
-                <br />
-                <div className="grid grid-cols-5 space-y-2">
-                {
-                    tv['popular']?.map((tv,i)=>(
-                        <MovieCard1 Key={i} data={tv}/>
-                    ))
-                }
-                </div>
-            </div>
-            <div className="min-h-0 min-w-full px-10">
-                <p className="text-white text-2xl">&#128293;on_the_air</p>
-                <br />
-                <div className="grid grid-cols-5 grid-rows-2 space-y-2 ">
-                {
-                    tv['on_the_air']?.map((tv,i)=>(
-                        <MovieCard1 Key={i} data={tv}/>
-                    ))
-                }
-                </div>
-            </div>
-            <br />
-            <div className="min-h-0 min-w-full px-10">
-                <p className="text-white text-2xl">&#128293;top rated</p>
-                <br />
-                <div className="grid grid-cols-5 grid-rows-2 space-y-2 ">
-                {
-                    tv['top_rated']?.map((tv,i)=>(
-                        <MovieCard1 Key={i} data={tv}/>
-                    ))
-                }
-                </div>
-            </div>
+                    <div className="min-h-0 min-w-full px-10 ">
+                        <p className="text-white text-2xl">&#128293;airing_today</p>
+                        <br />
+                        <div className="grid grid-cols-5 space-y-5">
+                            {
+                                tv['airing_today']?.map((tv,i)=>(
+                                    <MovieCard1 Key={i} data={tv}/>
+                                ))
+                            }
+                        </div>
+                    </div>
+                    <br />
+                    <div className="min-h-0 min-w-full px-10">
+                        <p className="text-white text-2xl">&#128293;Popular</p>
+                        <br />
+                        <div className="grid grid-cols-5 space-y-2">
+                            {
+                                tv['popular']?.map((tv,i)=>(
+                                    <MovieCard1 Key={i} data={tv}/>
+                                ))
+                            }
+                        </div>
+                    </div>
+                    <div className="min-h-0 min-w-full px-10">
+                        <p className="text-white text-2xl">&#128293;on_the_air</p>
+                        <br />
+                        <div className="grid grid-cols-5 grid-rows-2 space-y-2 ">
+                            {
+                                tv['on_the_air']?.map((tv,i)=>(
+                                    <MovieCard1 Key={i} data={tv}/>
+                                ))
+                            }
+                        </div>
+                    </div>
+                    <br />
+                    <div className="min-h-0 min-w-full px-10">
+                        <p className="text-white text-2xl">&#128293;top rated</p>
+                        <br />
+                        <div className="grid grid-cols-5 grid-rows-2 space-y-2 ">
+                            {
+                                tv['top_rated']?.map((tv,i)=>(
+                                    <MovieCard1 Key={i} data={tv}/>
+                                ))
+                            }
+                        </div>
+                    </div>
             </>
             ) : (
                 <div className="grid grid-cols-5 place-items-center pt-5">

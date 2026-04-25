@@ -14,9 +14,9 @@ function App() {
     <div className='flex w-full h-screen bg-black'>
       <ScrollToTop />
       <Navigation1/>
-      <div className='w-full h-screen overflow-auto'>
+      <div className='w-[85%] h-screen overflow-auto'>
         <TopBar/>
-        <div className="flex h-[89%]">
+        <div className="flex h-[89%] px-5 md:p-0 lg:p-0">
           <Routes>
             <Route path="/home" element={<MainPage />} />
             <Route path='/details/:tmdb_id/:media_type' element={<Detail/>}/>
