@@ -133,25 +133,10 @@ const Discover =()=>{
     const hasDiscovery = [discover?.movies, discover?.tv].every(item => item?.length !== 0 & item !==undefined)
     
     return(
-        <div className="relative w-full min-h-full text-gray-300 pt-1">
-            {keywords && keywords?.length > 0 && query !== '' && (
-                <div className="absolute left-6 top-12 rounded-lg bg-gray-200 transition-all duration-300 z-20 w-110 min-h-20 max-h-110 overflow-auto p-3 space-y-1 no-scrollbar">
-                {
-                    keywords.map((k,i)=>(
-                        <div onClick={()=> {
-                            setSearchQuery(k.name)
-                            setQuery('')
-                        }} key={i} className="h-fit hover:bg-gray-400 hover:text-white rounded-md p-1 flex items-center space-x-2 text-black cursor-pointer">
-                            <MdSearch size={20}/>
-                            <p>{k.name}</p>
-                        </div>
-                    ))
-                }
-            </div>
-            )}
+        <div className="relative w-full min-h-50 text-gray-300 pt-1">
             {hasDiscovery && (
                 <>
-                    <div className="w-110 relative h-10 mx-6 mt-3">
+                    <div className="lg:w-110 relative h-10 mx-6 mt-3">
                         <input onChange={(e)=> setQuery(e.target.value)} type="text" autoComplete="off" name="text" placeholder="search film..." className="w-full h-full outline-none bg-gray-200 rounded-lg text-black p-2" />
                         <button onClick={()=>{
                         setSearchQuery(query)
@@ -159,6 +144,21 @@ const Discover =()=>{
                         }} title="search" className="absolute right-1 bottom-1 bg-slate-700 h-[80%] w-10 flex items-center justify-center rounded-lg cursor-pointer">
                             <MdSearch size={20}/>
                         </button>
+                        {keywords && keywords?.length > 0 && query !== '' && (
+                            <div className="absolute left-0 top-12 rounded-lg bg-gray-200 transition-all duration-300 z-20 w-110 min-h-20 max-h-110 overflow-auto p-3 space-y-1 no-scrollbar">
+                                {
+                                    keywords.map((k,i)=>(
+                                        <div onClick={()=> {
+                                            setSearchQuery(k.name)
+                                            setQuery('')
+                                        }} key={i} className="h-fit hover:bg-gray-400 hover:text-white rounded-md p-1 flex items-center space-x-2 text-black cursor-pointer">
+                                            <MdSearch size={20}/>
+                                            <p>{k.name}</p>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        )}
                     </div>
                     <br />
                 </>
@@ -166,7 +166,7 @@ const Discover =()=>{
             {!searchData ? (
                 (hasDiscovery ? (
                     <div className="min-h-70 w-full">
-                        <div className="sticky top-[11%] z-10 p-1 bg-gray-900 self-start flex justify-between items-center w-full min-h-10 px-6">
+                        <div className="sticky top-[6%] z-10 p-1 bg-gray-900 self-start flex justify-between items-center w-full min-h-10 px-6">
                             <p>Discover</p>
                             <div className="min-w-25 flex space-x-2 justify-between relative">
                                 <div ref={sortList} className="absolute top-10 -left-10 min-h-20 min-w-20 bg-gray-200 text-black rounded-md p-1 hidden">
@@ -179,7 +179,7 @@ const Discover =()=>{
                         <br />
                         <p className="text-2xl px-6">Movies</p>
                         <br />
-                        <div className="grid grid-cols-5 gap-4 w-full px-6">
+                        <div className="grid lg:grid-cols-5 grid-cols-2 gap-4 w-full px-6">
                             {discover &&(
                                 discover?.movies?.map((t,i)=>(
                                     <MovieCard1 Key={i} data={t}/>
@@ -189,7 +189,7 @@ const Discover =()=>{
                         <br />
                         <p className="text-2xl px-6">Tv Series</p>
                         <br />
-                        <div className="grid grid-cols-5 gap-4 w-full px-6">
+                        <div className="grid lg:grid-cols-5 grid-cols-2 gap-4 w-full px-6">
                             {discover &&(
                                 discover?.tv?.map((t,i)=>(
                                     <MovieCard1 Key={i} data={t}/>

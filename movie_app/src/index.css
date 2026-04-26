@@ -64,21 +64,37 @@ dialog::backdrop {
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
+  --background: hsl(0 0% 4%);
+    --foreground: hsl(0 0% 98%);
+
+    --card: hsl(0 0% 8%);
+    --card-foreground: hsl(0 0% 98%);
+
+    --popover: 0 0% 8%;
+    --popover-foreground: hsl(0 0% 98%);
+
+    --primary: hsl(16 100% 50%);
+    --primary-foreground: hsl(0 0% 100%);
+    --primary-glow: hsl(16 100% 60%);
+
+    --secondary: hsl(0 0% 12%);
+    --secondary-foreground: hsl(0 0% 98%);
+
+    --muted: hsl(0 0% 14%);
+    --muted-foreground: hsl(0 0% 60%);
+
+    --accent: hsl(16 100% 50%);
+    --accent-foreground: hsl(0 0% 100%);
+
+    --destructive: hsl(0 84% 60%);
+    --destructive-foreground: hsl(0 0% 98%);
+
+    --border: hsl(0 0% 16%);
+    --input: hsl(0 0% 16%);
+    --ring: hsl(16 100% 50%);
+
+    --surface: hsl(0 0% 7%);
+    --surface-elevated: hsl(0 0% 10%);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
@@ -89,14 +105,51 @@ dialog::backdrop {
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+      --sidebar-background: hsl(0 0% 98%);
+    --sidebar-foreground: hsl(240 5.3% 26.1%);
+    --sidebar-primary: hsl(240 5.9% 10%);
+    --sidebar-primary-foreground: hsl(0 0% 98%);
+    --sidebar-accent: hsl(240 4.8% 95.9%);
+    --sidebar-accent-foreground: hsl(240 5.9% 10%);
+    --sidebar-border: hsl(220 13% 91%);
+    --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  --gradient-card: linear-gradient(180deg, hsl(0 0% 0% / 0) 50%, hsl(0 0% 0% / 0.95) 100%);
+  --card: 0 0% 8%;
+  --gradient-hero: linear-gradient(180deg, hsl(0 0% 4% / 0) 0%, hsl(0 0% 4% / 0.6) 50%, hsl(0 0% 4%) 100%);
+  --gradient-hero-side: linear-gradient(90deg, hsl(0 0% 4%) 0%, hsl(0 0% 4% / 0.7) 40%, hsl(0 0% 4% / 0) 100%);
+  --gradient-orange: linear-gradient(135deg, hsl(16 100% 50%), hsl(20 100% 55%));
+  --shadow-glow: 0 0 60px hsl(16 100% 50% / 0.35);
+  --shadow-card: 0 30px 60px -20px hsl(0 0% 0% / 0.7);
 }
+
+@layer utilities {
+  .glass {
+    background: hsl(0 0% 100% / 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(0 0% 100% / 0.08);
+  }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  .text-gradient-orange {
+    background: var(--gradient-orange);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .bg-gradient-orange {
+    background: var(--gradient-orange);
+  }
+  .bg-gradient-hero{
+    background: var(--gradient-hero);
+  }
+  .bg-gradient-hero-side{
+    background: var(--gradient-hero-side);
+  }
+  
+}
+
+
 
 .dark {
   --background: oklch(0.145 0 0);
@@ -132,14 +185,20 @@ dialog::backdrop {
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
+  @layer base {
+    * {
+      @apply border-border outline-ring/50;
+    }
+    body {
+      @apply bg-background text-foreground antialiased;
+      font-family: 'Inter', system-ui, sans-serif;
+    }
+    html {
+      @apply font-sans;
+      color-scheme: dark;
+    }
+    h1, h2, h3, h4 {
+      font-family: 'Sora', system-ui, sans-serif;
+      letter-spacing: -0.02em;
+    }
   }
-  body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
-  }
-}

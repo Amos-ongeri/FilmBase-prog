@@ -156,7 +156,7 @@ function CarouselPrevious({
       size={size}
       title="previous"
       className={cn("absolute touch-manipulation rounded-full w-10 h-10 bg-slate-900/50 text-white", orientation === "horizontal"
-        ? "top-1/8 right-24 -translate-y-1/2"
+        ? "lg:top-1/8 bottom-3 right-24 -translate-y-1/2"
         : "-top-12 left-1/2 -translate-x-1/2 rotate-90", className)}
       disabled={!canScrollPrev}
       onClick={scrollPrev}
@@ -182,7 +182,7 @@ function CarouselNext({
       size={size}
       title="next"
       className={cn("absolute touch-manipulation rounded-full w-10 h-10 bg-slate-900/50 text-white", orientation === "horizontal"
-        ? "top-1/8 right-12 -translate-y-1/2"
+        ? "lg:top-1/8 bottom-3 right-12 -translate-y-1/2"
         : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90", className)}
       disabled={!canScrollNext}
       onClick={scrollNext}

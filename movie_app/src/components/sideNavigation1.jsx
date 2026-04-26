@@ -8,7 +8,7 @@ import { BiDetail } from "react-icons/bi";
 
 const Navigation1 = ()=>{
     const navigationData = [
-        {path: '/home', name: 'Home', icon: <GoHome className="text-white" size={25}/>},
+        {path: '/', name: 'Home', icon: <GoHome className="text-white" size={25}/>},
         {path: '/discover',name:'Discover',icon: <CiCompass1 className="text-white" size={25}/>},
         {path: '/movies', name: 'Movies', icon: <PiFilmSlateLight className="text-white" size={25}/>},
         {path: '/tv', name: 'Tv-Series', icon: <MdLiveTv className="text-white" size={25}/>}
@@ -48,7 +48,7 @@ const Navigation1 = ()=>{
                 <div className="bg-[#FF3C00] w-1 h-[70%] rounded-tr-lg rounded-br-lg"></div>
                 <div className="flex items-center pl-1">
                     <MdOutlineWatchLater className="text-white" size={25}/>
-                    <p className="text-sm text-white group-hover:underline ml-4">Watch Later</p>
+                    <p className="text-sm text-white group-hover:underline ml-4">Watch List</p>
                 </div>
             </div>
             <br />

@@ -1,4 +1,3 @@
-import { MdPlayArrow } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import {
   Carousel,
@@ -39,7 +38,7 @@ const CarouselComponent = ({data,genres})=>{
                                 <p>:</p>
                                 <div className="underline pl-1 text-2xl">{d?.name || d?.title}</div>
                             </div>
-                            <div className="text-white min-w-100 max-w-100 min-h-40 max-h-full rounded-lg pt-2 space-y-2 cursor-default">
+                            <div className="text-white lg:w-100 w-70 min-h-40 max-h-full rounded-lg pt-2 space-y-2 cursor-default">
                                 <p title={d?.overview} className="text-md font-mono line-clamp-6 mt-5">{d?.overview}</p>
                             </div>
                             <br />
@@ -50,7 +49,8 @@ const CarouselComponent = ({data,genres})=>{
                                     return <p key={g} className="text-white bg-gray-500/75 rounded-md px-2 w-fit">{name?.name}</p>;
                                 })}
                             </div>
-                            <button onClick={() => navigateTo(d)} className="flex items-center bg-[#FF3C00] min-w-20 h-14 p-2 rounded-xl"><p>watch trailer</p><MdPlayArrow /></button>
+                            <br />
+                            <button onClick={() => navigateTo(d)} className="bg-[#FF3C00] min-w-20 h-14 p-2 rounded-lg text-white">Details</button>
                         </div>
                     </div>
                 </CarouselItem>

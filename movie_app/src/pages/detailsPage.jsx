@@ -15,7 +15,7 @@ const similarMap = new Map();
 const reviewsMap = new Map();
 
 const Detail = ()=>{
-    const {tmdb_id, media_type} = useParams()
+    const {tmdb_id, media_type} = useParams();
     console.log(tmdb_id);
 
     const [details, setDetails] = useState();
@@ -148,6 +148,7 @@ const Detail = ()=>{
     //     setReviewsToggled(prev => !prev);
     // }
     const creditsModal = useRef();
+    const movieModal = useRef();
 
     const altModalClose = (e,modal) => {
         const posModal = modal.current.getBoundingClientRect();
@@ -160,46 +161,54 @@ const Detail = ()=>{
 
     return(
         <>
-        <div className="min-w-full min-h-full pb-5 text-gray-300">
+        <div className="min-w-full min-h-50 pb-5 text-gray-300">
             {!videos ? (
                 <VideoSkeleton />
             ) : (
-                <div className={`w-full h-fit ${videos?.length == 0 && "flex"}`}>
-                    {videos?.length > 0 ? (
-                    <div className="h-fit w-full">
+                <div className="w-full min-h-50 lg:flex ">
+                    {videos?.length > 0 && (
+                    <dialog onClick={(e) => altModalClose(e,movieModal)} ref={movieModal} className="h-[90%] w-[75%] m-auto border border-slate-800 rounded-xs">
                         <iframe 
                         width={560}
-                        height={315}
+                        height={915}
                         title={videos?.[0]?.name}
                         key={videos?.[0]?.key}
                         src={`https://www.youtube.com/embed/${videos?.[0]?.key}?rel=0` }
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
-                        className="object-cover w-full h-96 object-center mask-b-from-85%">
+                        className="object-cover w-full h-full object-center">
                         </iframe>
-                    </div>
-                ) : (
-                        <div className="p-2">
-                            <img className="rounded-lg" src={`https://image.tmdb.org/t/p/w1280${details?.backdrop_path}`} alt="" />
-                        </div>
+                    </dialog>
                     )}
+                        <div className="p-2 lg:w-[50%]">
+                            <img className="rounded-lg h-full w-full" src={`https://image.tmdb.org/t/p/w1280${details?.backdrop_path}`} alt="" />
+                        </div>
                 {details && (
-                    <div className={videos?.length === 0 ? "py-2 pr-2" : "pb-5"}>
+                    <div className="pb-5 px-2 lg:w-[50%]">
                         <div>
-                            <div className="px-2 z-10 flex justify-between w-full">
-                                <p className="text-2xl">{details?.title || details?.name}</p>
+                            <div className="px-2 z-10 w-full">
+                                <p className="lg:text-2xl">{details?.title || details?.name}</p>
+                            </div>
+                            <br />
+                            <div className="flex min-h-7 items-start justify-between px-2">
+                                <div className="flex space-x-2 h-full lg:w-[50%] flex-wrap space-y-2 mask-b-from-70%">
+                                    {details?.genres?.map(element => (
+                                        <p key={element.id} className="text-white h-full min-w-20 flex items-center justify-center rounded-lg bg-gray-700/50 px-1">{element.name}</p>
+                                    ))}
+                                </div>
+                            </div>
+                            <p className="text-sm mt-5">{details.overview}</p>
+                            <br />
+                            <div className="flex justify-between">
+                                {videos?.length !== 0 && (
+                                    <button className="border border-slate-700 lg:p-3 hover:text-white cursor-pointer relative z-10 text-[#FF3C00] transition-colors duration-300 overflow-hidden before:absolute before:inset-0 before:bg-[#FF3C00] before:-z-10 before:scale-x-0 before:transition-transform before:duration-300 hover:before:scale-x-100 before:origin-left rounded-md" onClick={() => movieModal.current.showModal()}>Watch Trailer</button>
+                                )}
                                 <div className="flex space-x-2 perspective-distant">
-                                    <button onClick={() => creditsModal.current.showModal()} className="bg-[#121212] active:-translate-z-30 transition-all duration-150 rounded-lg p-2 shadow-sm shadow-slate-800">Credits</button>
-                                    {(reviews && reviews?.length !== 0) && (<button onClick={() => reviewsModal.current.showModal()} className="bg-[#121212] shadow-sm shadow-slate-800 active:-translate-z-30 rounded-lg p-2 mr-2 transition-all duration-150">Reviews</button>)}
+                                    <button onClick={() => creditsModal.current.showModal()} className="bg-[#121212] active:-translate-z-30 transition-all duration-150 p-2 z-10 overflow-hidden cursor-pointer hover:-translate-y-1 rounded-md">Credits</button>
+                                    {(reviews && reviews?.length !== 0) && (<button onClick={() => reviewsModal.current.showModal()} className="bg-[#121212] active:-translate-z-30 p-2 mr-2 transition-all duration-150 cursor-pointer hover:-translate-y-1 rounded-md">Reviews</button>)}
                                 </div>
                             </div>
                             <br />
-                            <div className="flex space-x-2 min-h-7 w-70 flex-wrap space-y-2 mask-b-from-70%">
-                                {details?.genres?.map(element => (
-                                    <p key={element.id} className="text-white h-full min-w-20 flex items-center justify-center rounded-lg bg-gray-700/50">{element.name}</p>
-                                ))}
-                            </div>
-                            <p className="text-sm">{details.overview}</p>
                         </div>
                     </div>
                 )}
@@ -207,14 +216,14 @@ const Detail = ()=>{
             )}
                 {credits && (
                 <dialog onClick={(e) => altModalClose(e,creditsModal)} 
-                className="m-auto w-[60%] h-[80%] rounded-2xl overflow-hidden bg-slate-900 text-white" ref={creditsModal}>
-                    <div className="flex justify-between p-2 h-[7%]">
+                className="m-auto lg:w-[60%] lg:h-[80%] rounded-2xl lg:overflow-hidden bg-slate-900 text-white" ref={creditsModal}>
+                    <div className="sticky top-0 flex justify-between p-2 h-[7%]">
                         <div></div>
                         <a className="pr-3 hover:underline cursor-pointer text-lg text-red-500" onClick={() => creditsModal.current.close()}>close</a>
                     </div>
-                    <div className="flex gap-[2%] h-[91%] w-full p-2">
+                    <div className="lg:flex gap-[2%] h-[91%] w-full p-2">
                         {credits?.cast?.length !== 0 && (
-                            <div className="w-[49%] h-full">
+                            <div className="lg:w-[49%] lg:h-full">
                                 <div className="">
                                     <p className="text-2xl z-20">Top Cast ({credits?.cast?.length})</p>
                                 </div>
@@ -235,7 +244,7 @@ const Detail = ()=>{
                             </div>
                         )}
                         {credits?.crew?.length !== 0 && (
-                            <div className="w-[49%] h-full">
+                            <div className="lg:w-[49%] h-full">
                                 <div className="">
                                     <p className="text-2xl ">Crew ({credits?.crew?.length})</p>
                                 </div>
@@ -277,12 +286,12 @@ const Detail = ()=>{
                 </div>
                 )}
             </dialog>
-            {similar?.length > 0 && similar ? (
-                    <div className="relative space-y-4 w-full items-center">
+            {similar ? (
+                    <div className="w-full">
                         <div className="flex justify-between">
-                            <p className="text-2xl z-10 ml-2">{similarNullFilter.length} Similar Titles</p>
+                            <p className="lg:text-2xl z-10 ml-2">{similarNullFilter.length} Similar Titles</p>
                         </div>
-                        <div className="w-full place-items-center min-h-50 grid lg:grid-cols-5 sm:grid-cols-3 sm:gap-4 lg:gap-2">
+                        <div className="w-full min-h-50 lg:columns-5 columns-2">
                             {
                                 similar && (
                                     similarNullFilter.map(s=>(

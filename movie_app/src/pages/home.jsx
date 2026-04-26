@@ -4,15 +4,14 @@ import CarouselComponent from "../components/carousel";
 import { useEffect, useState } from "react";
 import Banner from "../components/Banner";
 import HomeSkeleton from "@/components/skeletons/homeSkeleton";
+import { getGenres } from "@/services/api";
 
 
 const dataMap = new Map();
-const genresMap = new Map();
 
 const MainPage = () => {
     const [trending, setTrending] = useState()
     const [genres,setGenres] = useState()
-    const [limit,SetLimit] = useState({start: 0, end: 3})
     const media_type = 'all';
     const time_window = 'week'
     useEffect(()=>{
@@ -38,40 +37,18 @@ const MainPage = () => {
     },[])
 
     {/*many problems here */}
-    let Slice;
-    if(trending){
-        Slice = trending?.slice(limit?.start,limit?.end)
-    }
+    // let Slice;
+    // if(trending){
+    //     Slice = trending?.slice(limit?.start,limit?.end)
+    // }
 
     useEffect(()=>{
-        const getGenres = async ()=>{
-            const types = {
-                t1: 'movie',
-                t2: 'tv'
-            }
-            try{
-                if(genresMap.has('genres')){
-                    setGenres(genresMap.get('genres'))
-                }else{
-                    const [ movies, tv ] = await Promise.all([
-                         fetch(`http://localhost:5000/api/${types.t1}/genres`),
-                         fetch(`http://localhost:5000/api/${types.t2}/genres`)
-                    ])
-                    const moviesData = await movies.json();
-                    
-                    const tvData = await tv.json();
-                    genresMap.set('genres', [...moviesData.genres, ...tvData.genres])
-                    setGenres([...moviesData.genres, ...tvData.genres])
-                }
-            }catch(e){
-                console.log('error: ',e.message);
-
-            }
+        const initGenres = async () => {
+            const gs = await getGenres()
+            setGenres(gs)
         }
-        getGenres()
-        console.log('component mounted');
-
-    },[])
+        initGenres()
+     },[])
     useEffect(()=>{
         console.log('genres', genres);
     },[genres])
@@ -81,7 +58,7 @@ const MainPage = () => {
 
     return(
         <div className="relative  w-full min-h-full">
-            {trending !== undefined ? <CarouselComponent data={trending}/> : <HomeSkeleton />}
+            {trending !== undefined ? <CarouselComponent data={trending} genres={genres}/> : <HomeSkeleton />}
         </div>
     )
 }
