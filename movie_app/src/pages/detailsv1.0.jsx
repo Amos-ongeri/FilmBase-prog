@@ -11,7 +11,7 @@ const videosMap = new Map();
 const creditsMap = new Map();
 const similarMap = new Map();
 const reviewsMap = new Map();
-const Index = () => {
+const Details = () => {
     const {tmdb_id, media_type} = useParams();
 
     const [details, setDetails] = useState();
@@ -161,8 +161,8 @@ const Index = () => {
             setTimeout(() => {
                 setIndex((prev) => (prev + 1) % lines.length);
                 setVisible(true);
-            }, 500); // time for fade out
-            }, 8000); // change every 4s
+            }, 500);
+            }, 8000);
 
             return () => clearInterval(interval);
         }, [lines.length]);
@@ -411,4 +411,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Details;

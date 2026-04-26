@@ -7,7 +7,7 @@ import Navigation1 from './components/sideNavigation1.jsx';
 import Discover from './pages/discoverPage.jsx';
 import Detail from './pages/detailsPage.jsx';
 import Movies from './pages/moviesPage.jsx';
-import Index from './pages/details2';
+import Details from './pages/detailsv1.0';
 
 function App() {
   // const location = useLocation();
@@ -26,7 +26,7 @@ function App() {
         <div className="flex lg:h-[94%]">
           <Routes>
             <Route path="/" element={<MainPage />} />
-            <Route path='/details/:tmdb_id/:media_type' element={<Index/>}/>
+            <Route path='/details/:tmdb_id/:media_type' element={<Details/>}/>
             <Route path="/tv" element={<TvSeries />} />
             <Route path="/movies" element={<Movies />} />
             <Route path="/discover" element={<Discover />} />
