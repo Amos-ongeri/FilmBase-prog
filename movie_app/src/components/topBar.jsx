@@ -12,7 +12,7 @@ const TopBar = () => {
     // }
 
     return (
-        <div className='flex items-center justify-between text-gray-200 font-sans font-extralight bg-black sticky top-0 z-30 min-w-full h-[6%] pl-3 pr-3'>
+        <div className='flex items-center justify-between text-gray-200 font-sans font-extralight bg-black sticky top-0 z-30 min-w-full h-[8%] pl-3 pr-3'>
             {/* <div className="flex items-center space-x-3">
                 <HiBars3 size={30}/>
                 <div className="flex items-center justify-between w-full text-2xl h-[10%]">

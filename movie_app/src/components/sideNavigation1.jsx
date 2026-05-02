@@ -7,11 +7,14 @@ import { CiPlay1 } from "react-icons/ci";
 import { BiDetail } from "react-icons/bi";
 
 const Navigation1 = ()=>{
-    const navigationData = [
+    const mainNavigationData = [
         {path: '/', name: 'Home', icon: <GoHome className="text-white" size={25}/>},
-        {path: '/discover',name:'Discover',icon: <CiCompass1 className="text-white" size={25}/>},
         {path: '/movies', name: 'Movies', icon: <PiFilmSlateLight className="text-white" size={25}/>},
-        {path: '/tv', name: 'Tv-Series', icon: <MdLiveTv className="text-white" size={25}/>}
+        {path: '/tv', name: 'Tv-Series', icon: <MdLiveTv className="text-white" size={25}/>},
+    ]
+    const otherNavigationData = [
+        {path: '/discover',name:'Discover',icon: <CiCompass1 className="text-white" size={25}/>},
+        {path: '/watch-list', name: 'Watch List', icon: <MdOutlineWatchLater className="text-white" size={25}/>}
     ]
 
     const location = useLocation();
@@ -31,7 +34,7 @@ const Navigation1 = ()=>{
             </div>
             <div className="h-[2%] flex items-center justify-center w-full"><hr className="border w-[90%] border-slate-800"/></div>
             <div className="pt-3 space-y-3 pb-3 w-full">
-                {navigationData.map((l,i)=>(
+                {mainNavigationData.map((l,i)=>(
                 <div key={i} onClick={()=> navigateTo(l.path)} className={`flex items-center w-[95%] h-10 cursor-pointer group ${location.pathname === l.path ? "border border-slate-800 rounded-tr-sm rounded-br-sm" : ""}`}>
                     {location.pathname === l.path && (
                         <div className="bg-[#FF3C00] w-1 h-[70%] rounded-tr-lg rounded-br-lg"></div>
@@ -44,14 +47,19 @@ const Navigation1 = ()=>{
                 ))}
             </div>
             <div className="h-[2%] flex items-center justify-center w-full"><hr className="border w-[90%] border-slate-800"/></div>
-            <div className="flex items-center w-[95%] h-10 cursor-pointer group border border-slate-800 rounded-tr-sm rounded-br-sm">
-                <div className="bg-[#FF3C00] w-1 h-[70%] rounded-tr-lg rounded-br-lg"></div>
-                <div className="flex items-center pl-1">
-                    <MdOutlineWatchLater className="text-white" size={25}/>
-                    <p className="text-sm text-white group-hover:underline ml-4">Watch List</p>
+            <div className="pt-3 space-y-3 pb-3 w-full">
+                {otherNavigationData.map((l,i)=>(
+                <div key={i} onClick={()=> navigateTo(l.path)} className={`flex items-center w-[95%] h-10 cursor-pointer group ${location.pathname === l.path ? "border border-slate-800 rounded-tr-sm rounded-br-sm" : ""}`}>
+                    {location.pathname === l.path && (
+                        <div className="bg-[#FF3C00] w-1 h-[70%] rounded-tr-lg rounded-br-lg"></div>
+                    )}
+                    <div className="flex items-center pl-1">
+                        <p>{l.icon}</p>
+                        <p className="text-sm text-white group-hover:underline ml-4">{l.name}</p>
+                    </div>
                 </div>
+                ))}
             </div>
-            <br />
             {location.pathname.match("/details") && (
                 <div className="flex items-center w-[95%] h-10 cursor-pointer group border border-slate-800 rounded-tr-sm rounded-br-sm">
                     <div className="bg-[#FF3C00] w-1 h-[70%] rounded-tr-lg rounded-br-lg"></div>
@@ -61,6 +69,7 @@ const Navigation1 = ()=>{
                     </div>
                 </div>
             )}
+            <br />
         </div>
     )
 }

@@ -70,7 +70,7 @@ dialog::backdrop {
     --card: hsl(0 0% 8%);
     --card-foreground: hsl(0 0% 98%);
 
-    --popover: 0 0% 8%;
+    --popover: hsl(0 0% 8%);
     --popover-foreground: hsl(0 0% 98%);
 
     --primary: hsl(16 100% 50%);
@@ -95,9 +95,6 @@ dialog::backdrop {
 
     --surface: hsl(0 0% 7%);
     --surface-elevated: hsl(0 0% 10%);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);

@@ -1,7 +1,7 @@
 import { Play, Plus, Share2, Heart, Star, Clock, Calendar, ChevronRight, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useLocation, useNavigate, useParams} from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useNavigate, useParams} from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
 import avatar from '../assets/user-avatar.png';
 
 
@@ -20,11 +20,11 @@ const Details = () => {
         const [similar,setSimilar] = useState();
         const [reviews,setReviews] = useState();
         const [YT, setYT] = useState(false);
-    
-        const { pathname } = useLocation();
+        const topRef = useRef();
+
         useEffect(() => {
-            window.scrollTo({ top: 0, behavior: "auto" })
-        },[pathname])
+            topRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+        },[])
         useEffect(()=>{
             const getDetails = async ()=>{
                 try{
@@ -34,17 +34,17 @@ const Details = () => {
                 }else{
                     const details = await fetch(`http://localhost:5000/api/${tmdb_id}/${media_type}/details`)
                     Details = await details?.json();
-    
+
                     detailsMap.set(tmdb_id,Details);
                     setDetails(Details);
                 }
                 }catch(e){
                     console.log(e.message);
-                    
+
                 }
-                
+
             }
-    
+
             const getVideos = async ()=>{
                 try{
                 let Videos,trailer;
@@ -62,7 +62,7 @@ const Details = () => {
                     console.log(e.message);
                 }
             }
-    
+
             const getCredits = async ()=>{
                 try{
                     if(creditsMap.has(tmdb_id)){
@@ -77,7 +77,7 @@ const Details = () => {
                     console.log(e.message);
                 }
             }
-    
+
             const getSimilar = async ()=>{
                 try{
                     if(similarMap.has(tmdb_id)){
@@ -111,7 +111,7 @@ const Details = () => {
                     console.log('error occurred: ',e.message);
                 }
             }
-    
+
             getReviews()
             getSimilar()
             getCredits()
@@ -125,13 +125,13 @@ const Details = () => {
             console.log('similar updated:',similar);
             console.log('reviews updated:',reviews);
           console.log(location.pathname);
-    
+
         }, [videos, details, credits, similar, reviews]);
         let similarNullFilter = []
-    
-    
+
+
         if(similar){
-            similarNullFilter = similar?.filter(m=> m.poster_path !== null)
+            similarNullFilter = (similar || [])?.filter(m=> m.poster_path !== null)
         }
 
         const navigation = useNavigate();
@@ -168,7 +168,7 @@ const Details = () => {
         }, [lines.length]);
 
   return (
-    <main className="min-h-50 min-w-full bg-background text-foreground">
+    <main ref={topRef} className="min-h-50 min-w-full bg-background text-foreground">
 
       {/* HERO */}
       <section className="relative h-[90vh] min-h-160 w-full overflow-hidden">
@@ -205,7 +205,7 @@ const Details = () => {
                     <span>{i < details?.genres?.length - 1 ? "\u00B7" : ""}</span>
                 </>
               ))}
-              
+
             </div>
             <p
             className={`
@@ -332,16 +332,18 @@ const Details = () => {
         <h2 className="text-2xl md:text-3xl font-bold mb-6">Official Trailer</h2>
         <div className={`relative rounded-3xl overflow-hidden shadow-card group cursor-pointer ${videos === undefined || videos?.length === 0 ? "grayscale pointer-events-none" : ""}`}>
             {videos?.length > 0 && (
-                <iframe 
-                width={560}
-                height={915}
-                title={videos?.[0]?.name}
-                key={videos?.[0]?.key}
-                src={`https://www.youtube.com/embed/${videos?.[0]?.key}?rel=0${YT ? "&autoplay=1" : ""}` }
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope picture-in-picture"
-                allowFullScreen
-                className={`absolute inset-0 ${YT ? "z-10" : ""} object-cover w-full h-full object-center rounded-lg`}>
+              (YT && (
+                <iframe
+                  width={560}
+                  height={915}
+                  title={videos?.[0]?.name}
+                  key={videos?.[0]?.key}
+                  src={`https://www.youtube.com/embed/${videos?.[0]?.key}?rel=0${YT ? "&autoplay=1" : ""}` }
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 z-10 object-cover w-full h-full object-center rounded-lg">
                 </iframe>
+              ))
             )}
           <div className="absolute -inset-1 bg-gradient-orange opacity-30 blur-2xl -z-10" />
           <img src={`https://image.tmdb.org/t/p/w1280${details?.backdrop_path}`} alt="Trailer" width={1920} height={1088} loading="lazy" className="w-full aspect-video object-cover brightness-65 group-hover:brightness-80 transition" />

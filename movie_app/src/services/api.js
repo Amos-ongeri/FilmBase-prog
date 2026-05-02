@@ -63,8 +63,46 @@ const results = [];
     return results;
 }
 
-const getDiscover = () => {
+const dataMap = new Map();
+const getDiscover = async () => {
+    const types = {
+        t1: 'movie',
+        t2: 'tv'
+    }
+    let results = {}
+    try{
+        if(dataMap.has('movie') && dataMap.has('tv')){
+            results["movies"] = dataMap.get('movie');
+            results["tv"] = dataMap.get('tv');
+            return results;
+        }else{
+            const [movie, tv] = await Promise.all([
+                fetch(`http://localhost:5000/api/discover/${types.t1}`),
+                fetch(`http://localhost:5000/api/discover/${types.t2}`)
+            ])
 
+            const movies = await movie.json()
+            console.log("M", movies);
+            
+
+            const movieWithType = Array.isArray(movies?.results) ? movies?.results?.map(m=>({
+                ...m,
+                media_type: 'movie'
+            })) : movie?.results === "Object" && {...movies, media_type: "movie"}
+            const Tv = await tv.json()
+            const tvWithType = Array.isArray(Tv?.results) ? Tv?.results?.map(t=>({
+                ...t,
+                media_type: 'tv'
+            })) : Tv?.results === "Object" && {...tv, media_type: "tv"}
+
+        dataMap.set('movie', movies.results)
+        dataMap.set('tv', Tv.results)
+        results = {'movies': movieWithType, 'tv': tvWithType}
+        return results;
+        }
+    }catch(e){
+        console.log('error occurred: ', e.message);
+    }
 }
 
 const getDetails = () => {
@@ -100,4 +138,31 @@ const getGenres = async ()=>{
     }
 }
 
-export {getDetails, getDiscover, getMovies, getTv, getGenres}
+const trendingMap = new Map();
+const getTrending = async (media_type, time_window) => {
+    let results = {}
+    try{
+        if(dataMap.has('trending')){
+            results["trending"] = trendingMap.get('trending');
+            return results;
+        }else{
+            await fetch(`http://localhost:5000/api/${media_type}/${time_window}/trending`)
+            .then(res => res.json())
+            .then(data => {
+                trendingMap.set('trending', data.results)
+                results["trending"] = data.results;
+            })
+            .catch(e => {throw new Error("error: ", e.message);
+            })
+        }
+    }catch(e){
+        console.log('error occurred: ', e.message);
+    }
+    return results;
+}
+
+const getKeywords = async () => {
+
+}
+
+export {getDetails, getDiscover, getMovies, getTv, getGenres, getTrending, getKeywords}
