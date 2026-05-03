@@ -1,11 +1,12 @@
 import { useEffect,useState } from "react";
-import MovieCard from "../components/cards/MovieCard";
-import MovieCard1 from "../components/cards/MovieCard1";
+import MovieCard from "../../components/cards/MovieCard";
+import MovieCard1 from "../../components/cards/MovieCard1";
 import { MdArrowDownward, MdArrowUpward, MdSearch, MdSort } from "react-icons/md";
 import user_avatar from '../assets/user-avatar.png'
 import { CiFilter } from "react-icons/ci";
 import { useRef } from "react";
 import CardSkeleton from "@/components/skeletons/cardSkeleton";
+import { getKeywords } from "@/services/api";
 
 const dataMap = new Map();
 const searchResultsMap = new Map()
@@ -60,20 +61,14 @@ const Discover =()=>{
         const not  = ()=>{
             if(!query || keywords?.length === 0) setKeywords('');
         }
-        const getKeywords = async (query)=>{
-            try{
-                const res = await fetch(`http://localhost:5000/api/keywords/search?query=${query}`)
-                const data = await res.json();
-                setKeywords(data?.results)
-            }catch(e){
-                console.log('error occurred: ',e.message);
-            }
-
+        const initKeywords = async (query)=>{
+            const thisKeywords = await getKeywords(query);
+            setKeywords(thisKeywords)
         }
         not()
         //debouncing - delay until typing stops
         const timeout = setTimeout(()=>{
-            getKeywords(query)
+            initKeywords(query)
         },500)
         return ()=> clearTimeout(timeout)
     },[keywords?.length, query])

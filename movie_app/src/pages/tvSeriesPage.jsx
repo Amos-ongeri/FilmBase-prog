@@ -3,7 +3,6 @@ import MovieCard1 from "../components/cards/MovieCard1";
 import CardSkeleton from "@/components/skeletons/cardSkeleton";
 import MovieCard from "@/components/cards/MovieCard";
 import { getGenres, getTv } from "@/services/api";
-import { cn } from "@/lib/utils";
 
 const TvSeries = ()=>{
     const [tv, setTv] = useState({
@@ -13,6 +12,8 @@ const TvSeries = ()=>{
                 airing_today: []
             })
     const [genres, setGenres] = useState();
+    const [genre, setGenre] = useState("All");
+    const [category, setCategory] = useState("All");    
 
     useEffect(()=> {
         const initTv = async () => {
@@ -40,28 +41,29 @@ const TvSeries = ()=>{
         tv?.popular,
         tv?.top_rated
     ].every(member => member?.length !== 0 && member !== undefined)
-    const allTv = [...tv["airing_today"],...tv["top_rated"],...tv["popular"],...tv["on_the_air"]];
-    const GENRES = ["Sci-Fi", "Drama", "Thriller", "Adventure", "Mystery", "Action"];
+    const allTv = [...(tv?.["airing_today"] || []),...(tv?.["top_rated"] || []),...(tv?.["popular"] || []),...(tv?.["on_the_air"] || [])];
+    const GENRES = ["Science Fiction", "Drama", "Thriller", "Adventure", "Mystery", "Action"];
 
     const topRef = useRef();
         
     useEffect(() => {
         topRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" })
     },[])
-
+    console.log("genre", genre);
+    
 
     return(
-        <div ref={topRef} className="w-full min-h-50 text-gray-300">
+        <div ref={topRef} className="w-full min-h-50 text-gray-300 bg-background">
             <section className="px-6 md:px-12 mt-16 mb-24">
         <div className="flex items-end justify-between mb-6 flex-wrap gap-4">
           <h2 className="text-2xl md:text-3xl font-bold">All Series</h2>
-          <div className="flex items-center gap-2 text-sm">
+          <div className="flex flex-wrap gap-2 text-sm">
+            <span onClick={() => setCategory("All")} className={`glass rounded-full px-3.5 py-1.5 transition hover:-translate-y-1 ${category === "All" ? "bg-primary" : "glass"}`}>All</span>
             {(["airing_today", "top_rated", "popular", "on_the_air"]).map((s) => (
               <button
                 key={s}
-                className={cn(
-                  "glass rounded-full px-3.5 py-1.5 transition",
-                )}
+                onClick={() => setCategory(s)}
+                className={`rounded-full px-3.5 py-1.5 transition hover:-translate-y-1  ${category === s ? "bg-primary" : "glass"}`}
               >
                 {s === "airing_today" ? "Airing Today" : s === "top_rated" ? "Top Rated" : s === "popular" ? "Popular" : "On The Air"}
               </button>
@@ -70,13 +72,11 @@ const TvSeries = ()=>{
         </div>
 
         <div className="flex gap-2 flex-wrap mb-8">
-          {["All", ...GENRES].map((g) => (
+          {["All", ...[...new Set((genres?.map(gen => gen?.name)) || [])]].map((g) => (
             <button
               key={g}
-              className={cn(
-                "rounded-full px-4 py-1.5 text-sm border transition",
-
-              )}
+              onClick={() => setGenre(g)}
+              className={`rounded-full px-4 py-1.5 text-sm border transition ${genre === g && "bg-primary"}`}
             >
               {g}
             </button>
@@ -88,13 +88,28 @@ const TvSeries = ()=>{
                     <div className="min-h-50 min-w-full px-10 ">
                         {/* <p className="text-white text-2xl">&#128293;airing_today</p> */}
                         <br />
-                        <div className="grid lg:grid-cols-5 grid-cols-2 space-y-5">
+                        {genre === "All" ? (
+                            <div className="grid lg:grid-cols-6 grid-cols-2 space-y-5">
                             {
                                 allTv?.map((tv,i)=>(
                                     <MovieCard Key={i} movie={tv} genre={genres} index={i}/>
                                 ))
                             }
+                            </div>
+                        ) : (
+                            <div className="grid lg:grid-cols-6 grid-cols-2 space-y-5">
+                            {
+                                allTv?.map((tv,i)=>{
+                                    const compare = genres?.find(g => g?.name === genre);
+                                    if(tv?.genre_ids?.includes(compare?.id)){
+                                        return <MovieCard Key={i} movie={tv} genre={genres} index={i}/>
+                                    } else {
+                                        return null;
+                                    }
+})
+                            }
                         </div>
+                        )}
                     </div>
                 </>
             ) : (
@@ -104,6 +119,9 @@ const TvSeries = ()=>{
                     ))}
                 </div>
             )}
+            <footer className="border-t border-border py-8 px-6 md:px-12 text-center text-xs text-muted-foreground">
+                © {new Date().getFullYear()} FilmBase · Built for cinema.
+            </footer>
         </div>
     )
 }

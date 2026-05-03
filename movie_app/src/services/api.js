@@ -161,8 +161,37 @@ const getTrending = async (media_type, time_window) => {
     return results;
 }
 
-const getKeywords = async () => {
-
+const getKeywords = async (query) => {
+    try{
+        let results = [];
+        const res = await fetch(`http://localhost:5000/api/keywords/search?query=${query}`)
+        const data = await res.json();
+        results = Array.isArray(data?.results) && data?.results;
+        return results;
+    }catch(e){
+        console.log('error occurred: ',e.message);
+        return null;
+    }
 }
 
-export {getDetails, getDiscover, getMovies, getTv, getGenres, getTrending, getKeywords}
+const searchResultsMap = new Map()
+const getSearchData = async (queryParam) => {
+    let results = [];
+    if(searchResultsMap.has(queryParam)){
+        results = searchResultsMap.get(queryParam);
+        return results;
+    }else{
+        try{
+            const res = await fetch(`http://localhost:5000/api/query/search/multi?query=${queryParam}`)
+            const data = await res.json();
+            console.log(data);
+            searchResultsMap.set('search', data.results)
+            results = data.results;
+            return results;
+        }catch(e){
+            console.log('error occurred: ', e.message);
+        }
+    }
+}
+
+export {getDetails, getDiscover, getMovies, getTv, getGenres, getTrending, getKeywords, getSearchData}

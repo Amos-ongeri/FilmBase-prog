@@ -5,8 +5,12 @@ import { PiFilmSlateLight } from "react-icons/pi";
 import { MdLiveTv, MdOutlineWatchLater } from "react-icons/md";
 import { CiPlay1 } from "react-icons/ci";
 import { BiDetail } from "react-icons/bi";
+import { MoonIcon, SunIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-const Navigation1 = ()=>{
+const Navigation1 = ({isOpenSidebar, toggle})=>{
+    const [theme, setTheme] = useState("dark");
+
     const mainNavigationData = [
         {path: '/', name: 'Home', icon: <GoHome className="text-white" size={25}/>},
         {path: '/movies', name: 'Movies', icon: <PiFilmSlateLight className="text-white" size={25}/>},
@@ -22,10 +26,24 @@ const Navigation1 = ()=>{
     const navigateTo = (path)=>{
         navigator(path)
     }
+    const navRef = useRef()
+    useEffect(() => {
+        const altCloseNav = (e) => {
+            const bound = navRef?.current?.getBoundingClientRect();
+            if(e?.clientX > bound?.right && isOpenSidebar === true){
+                toggle();
+            }
+        }
+
+        document.addEventListener("click", altCloseNav);
+
+        return () => document.removeEventListener("click", altCloseNav)
+    },[isOpenSidebar, toggle])
+
     return (
-        <div className="hidden lg:block sticky top-0 w-[15%] space-x-10 h-full bg-black">
-            <div className="flex items-center justify-between w-full text-2xl pt-2 h-[10%]">
-                <div  onClick={()=> navigateTo('/home')} title="Home" className="flex items-center  justify-center cursor-pointer">
+        <dialog ref={navRef} className={`flex flex-col z-50 fixed top-[9%] md:static md:translate-x-0 ${isOpenSidebar ? "translate-x-0" : "-translate-x-full"} md:w-[10%] space-x-10 h-[91%] md:h-full bg-black overflow-y-auto`}>
+            <div className="hidden md:flex items-center justify-between w-full text-2xl pt-2 h-[10%]">
+                <div  onClick={()=> navigateTo('/')} title="Home" className="flex items-center  justify-center cursor-pointer">
                     <p className="text-white "><span>Film</span>
                         <span className="text-[#FF3C00] drop-shadow-sm">Base</span>
                     </p>
@@ -70,7 +88,23 @@ const Navigation1 = ()=>{
                 </div>
             )}
             <br />
-        </div>
+            <div className="mx-auto mt-auto py-3">
+                <div className="glass rounded-full p-1 flex items-center">
+                    <button
+                        onClick={() => setTheme("dark")}
+                        className={`h-9 w-9 rounded-full flex items-center justify-center transition ${theme === "dark" ? "bg-gradient-orange text-primary-foreground shadow-glow" : "text-muted-foreground hover:text-foreground"}`}
+                    >
+                        <MoonIcon className="w-4 h-4" />
+                    </button>
+                    <button
+                        onClick={() => setTheme("light")}
+                        className={`h-9 w-9 rounded-full flex items-center justify-center transition ${theme === "light" ? "bg-gradient-orange text-primary-foreground shadow-glow" : "text-muted-foreground hover:text-foreground"}`}
+                    >
+                        <SunIcon className="w-4 h-4" />
+                    </button>
+                </div>
+            </div>
+        </dialog>
     )
 }
 export default Navigation1

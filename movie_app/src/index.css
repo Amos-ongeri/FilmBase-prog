@@ -10,16 +10,6 @@ dialog::backdrop {
   background: rgba(0,0,0,0.5);
 }
 
-/* hide scrollbar but keep scrolling */
-.no-scrollbar {
-  -ms-overflow-style: none;  /* IE & Edge */
-  scrollbar-width: none;     /* Firefox */
-}
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;             /* Chrome, Safari */
-}
-
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: 'Geist Variable', sans-serif;
@@ -64,7 +54,7 @@ dialog::backdrop {
 }
 
 :root {
-  --background: hsl(0 0% 4%);
+    --background: hsl(0 0% 4%);
     --foreground: hsl(0 0% 98%);
 
     --card: hsl(0 0% 8%);
@@ -81,7 +71,7 @@ dialog::backdrop {
     --secondary-foreground: hsl(0 0% 98%);
 
     --muted: hsl(0 0% 14%);
-    --muted-foreground: hsl(0 0% 60%);
+    --muted-foreground: hsl(0 0% 80%);
 
     --accent: hsl(16 100% 50%);
     --accent-foreground: hsl(0 0% 100%);
@@ -95,14 +85,14 @@ dialog::backdrop {
 
     --surface: hsl(0 0% 7%);
     --surface-elevated: hsl(0 0% 10%);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-      --sidebar-background: hsl(0 0% 98%);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --radius: 0.625rem;
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-background: hsl(0 0% 98%);
     --sidebar-foreground: hsl(240 5.3% 26.1%);
     --sidebar-primary: hsl(240 5.9% 10%);
     --sidebar-primary-foreground: hsl(0 0% 98%);
@@ -110,13 +100,13 @@ dialog::backdrop {
     --sidebar-accent-foreground: hsl(240 5.9% 10%);
     --sidebar-border: hsl(220 13% 91%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
-  --gradient-card: linear-gradient(180deg, hsl(0 0% 0% / 0) 50%, hsl(0 0% 0% / 0.95) 100%);
-  --card: 0 0% 8%;
-  --gradient-hero: linear-gradient(180deg, hsl(0 0% 4% / 0) 0%, hsl(0 0% 4% / 0.6) 50%, hsl(0 0% 4%) 100%);
-  --gradient-hero-side: linear-gradient(90deg, hsl(0 0% 4%) 0%, hsl(0 0% 4% / 0.7) 40%, hsl(0 0% 4% / 0) 100%);
-  --gradient-orange: linear-gradient(135deg, hsl(16 100% 50%), hsl(20 100% 55%));
-  --shadow-glow: 0 0 60px hsl(16 100% 50% / 0.35);
-  --shadow-card: 0 30px 60px -20px hsl(0 0% 0% / 0.7);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 0% / 0) 50%, hsl(0 0% 0% / 0.95) 100%);
+    --card: 0 0% 8%;
+    --gradient-hero: linear-gradient(180deg, hsl(0 0% 4% / 0) 0%, hsl(0 0% 4% / 0.6) 50%, hsl(0 0% 4%) 100%);
+    --gradient-hero-side: linear-gradient(90deg, hsl(0 0% 4%) 0%, hsl(0 0% 4% / 0.7) 40%, hsl(0 0% 4% / 0) 100%);
+    --gradient-orange: linear-gradient(135deg, hsl(16 100% 50%), hsl(20 100% 55%));
+    --shadow-glow: 0 0 60px hsl(16 100% 50% / 0.35);
+    --shadow-card: 0 30px 60px -20px hsl(0 0% 0% / 0.7);
 }
 
 @layer utilities {

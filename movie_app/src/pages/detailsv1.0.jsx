@@ -24,7 +24,7 @@ const Details = () => {
 
         useEffect(() => {
             topRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" })
-        },[])
+        },[tmdb_id])
         useEffect(()=>{
             const getDetails = async ()=>{
                 try{
@@ -167,6 +167,23 @@ const Details = () => {
             return () => clearInterval(interval);
         }, [lines.length]);
 
+        //removes 0s and replace with letter e.g 20000000 to $20M
+        const formatNumber = (number) => {
+          if(!number || number === 0) return "N/A";
+          const units = ["", "K", "M", "B", "T"];
+          const tier = Math.floor(Math.log10(Math.abs(number)) / 3);
+
+          const suffix = units[tier];
+
+          const scale = Math.pow(10, tier * 3);
+
+          const scaled = number / scale;
+
+          return "$" + scaled.toFixed(1).replace(/\.0$/,"") + suffix;
+        }
+
+        console.log(window.scrollY);
+
   return (
     <main ref={topRef} className="min-h-50 min-w-full bg-background text-foreground">
 
@@ -195,8 +212,8 @@ const Details = () => {
               <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
               <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" />{details?.release_date?.split("-")[0] || details?.first_air_date?.split("-")[0]}</span>
               <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
-              <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {Math.floor((details?.runtime)/60)}hrs {(details?.runtime)%60}mins</span>
-              <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
+              {details?.runtime && (<><span className="flex items-center gap-1.5"><Clock className="w-4 h-4" /> {Math.floor((details?.runtime)/60)}hrs {(details?.runtime)%60}mins</span>
+              <span className="w-1 h-1 rounded-full bg-muted-foreground/50" /></>)}
               <span className="px-2 py-0.5 border border-border rounded text-xs">PG-13</span>
               <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
               {details?.genres?.map((g,i) => (
@@ -261,7 +278,7 @@ const Details = () => {
                 ["Director", `${(credits?.crew?.filter(c => c?.job === 'Director'))?.[0]?.name}`],
                 ["Language", `${details?.original_language}`],
                 ["Status", `${details?.status}`],
-                ["Budget", "$120M"],
+                ["Budget", formatNumber(details?.budget)],
               ].map(([k, v]) => (
                 <div key={k}>
                   <div className="text-xs uppercase tracking-wider text-muted-foreground mb-1.5">{k}</div>
@@ -279,11 +296,11 @@ const Details = () => {
           <h2 className="text-2xl md:text-3xl font-bold">Top Cast</h2>
           <a className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 transition" href="#">Full cast <ChevronRight className="w-4 h-4" /></a>
         </div>
-        <div className="flex gap-5 overflow-x-auto scrollbar-hide pb-2 -mx-6 md:-mx-12 px-6 md:px-12">
+        <div className="flex gap-5 overflow-x-auto scrollbar-hide py-3 -mx-6 md:-mx-12 px-6 md:px-12">
           {credits?.cast?.slice(0,6)?.map((c, i) => (
             <div key={i} className="shrink-0 w-32 text-center group cursor-pointer">
               <div className="relative w-28 h-28 mx-auto mb-3">
-                <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xl transition" />
+                <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xs transition" />
                 <img
                   src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar}
                   alt={c.name}
@@ -306,11 +323,11 @@ const Details = () => {
           <h2 className="text-2xl md:text-3xl font-bold"> Crew </h2>
           <a className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 transition" href="#">Full crew <ChevronRight className="w-4 h-4" /></a>
         </div>
-        <div className="flex gap-5 overflow-x-auto scrollbar-hide pb-2 -mx-6 md:-mx-12 px-6 md:px-12">
+        <div className="flex gap-5 overflow-x-auto scrollbar-hide py-3 -mx-6 md:-mx-12 px-6 md:px-12">
           {credits?.crew?.slice(0,6)?.map((c, i) => (
             <div key={i} className="shrink-0 w-32 text-center group cursor-pointer">
               <div className="relative w-28 h-28 mx-auto mb-3">
-                <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xl transition" />
+                <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xs transition" />
                 <img
                   src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar}
                   alt={c.name}
@@ -330,12 +347,12 @@ const Details = () => {
       {/* TRAILER */}
       <section id="trailer" title={`${videos === undefined || videos?.length === 0 ? "this video is not available" : ""}`} className="relative px-6 md:px-12 mt-24" >
         <h2 className="text-2xl md:text-3xl font-bold mb-6">Official Trailer</h2>
-        <div className={`relative rounded-3xl overflow-hidden shadow-card group cursor-pointer ${videos === undefined || videos?.length === 0 ? "grayscale pointer-events-none" : ""}`}>
+        <div className={`relative rounded-3xl overflow-hidden shadow-card group cursor-pointer h-fit ${videos === undefined || videos?.length === 0 ? "grayscale pointer-events-none" : ""}`}>
             {videos?.length > 0 && (
               (YT && (
                 <iframe
                   width={560}
-                  height={915}
+                  height={315}
                   title={videos?.[0]?.name}
                   key={videos?.[0]?.key}
                   src={`https://www.youtube.com/embed/${videos?.[0]?.key}?rel=0${YT ? "&autoplay=1" : ""}` }
