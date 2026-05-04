@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useParams} from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import avatar from '../assets/user-avatar.png';
+import ISO6391 from "iso-639-1";
 
 
 const platforms = ["Netflix", "Prime Video", "Disney+", "Apple TV+", "Max", "Hulu"];
@@ -274,7 +275,7 @@ const Details = () => {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
               {[
                 ["Director", `${(credits?.crew?.filter(c => c?.job === 'Director'))?.[0]?.name}`],
-                ["Language", `${details?.original_language}`],
+                ["Language", `${ISO6391.getName(details?.original_language)}`],
                 ["Status", `${details?.status}`],
                 ["Budget", formatNumber(details?.budget)],
               ].map(([k, v]) => (
@@ -345,7 +346,7 @@ const Details = () => {
       {/* TRAILER */}
       <section id="trailer" title={`${videos === undefined || videos?.length === 0 ? "this video is not available" : ""}`} className="relative px-6 md:px-12 mt-24" >
         <h2 className="text-2xl md:text-3xl font-bold mb-6">Official Trailer</h2>
-        <div className={`relative rounded-3xl overflow-hidden shadow-card group cursor-pointer max-w-5xl mx-auto ${videos === undefined || videos?.length === 0 ? "grayscale pointer-events-none" : ""}`}>
+        <div className={`relative rounded-3xl overflow-hidden shadow-card group cursor-pointer md:max-w-5xl mx-auto ${videos === undefined || videos?.length === 0 ? "grayscale pointer-events-none" : ""}`}>
             {videos?.length > 0 && (
               (YT && (
                 <iframe

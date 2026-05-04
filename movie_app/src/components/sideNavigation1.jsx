@@ -91,7 +91,7 @@ const Navigation1 = ({isOpenSidebar, toggle})=>{
         </aside>
         {isOpenSidebar && (
                 <div
-                    className="fixed inset-0 z-40 bg-muted/50"
+                    className="fixed inset-0 z-40 bg-muted/50 transition-colors duration-300"
                     onClick={toggle}
                 />
         )}
