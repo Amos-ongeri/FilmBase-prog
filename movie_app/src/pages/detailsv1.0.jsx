@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useParams} from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import avatar from '../assets/user-avatar.png';
+
+//maps language codes to original language e.g en - English
 import ISO6391 from "iso-639-1";
 
 

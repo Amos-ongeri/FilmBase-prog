@@ -26,7 +26,7 @@ const TvSeries = ()=>{
         }
         initTv()
         const initGenres = async () => {
-            const gen = await getGenres();
+            const gen = await getGenres('tv');
             setGenres(gen);
         }
         initGenres()
@@ -42,7 +42,6 @@ const TvSeries = ()=>{
         tv?.top_rated
     ].every(member => member?.length !== 0 && member !== undefined)
     const allTv = [...(tv?.["airing_today"] || []),...(tv?.["top_rated"] || []),...(tv?.["popular"] || []),...(tv?.["on_the_air"] || [])];
-    const GENRES = ["Science Fiction", "Drama", "Thriller", "Adventure", "Mystery", "Action"];
 
     const topRef = useRef();
         
@@ -72,7 +71,7 @@ const TvSeries = ()=>{
         </div>
 
         <div className="flex gap-2 flex-wrap mb-8">
-          {["All", ...[...new Set((genres?.map(gen => gen?.name)) || [])]].map((g) => (
+          {["All", ...(genres?.map(gen => gen?.name)) || []].map((g) => (
             <button
               key={g}
               onClick={() => setGenre(g)}

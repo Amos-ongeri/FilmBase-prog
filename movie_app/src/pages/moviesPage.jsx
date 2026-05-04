@@ -31,7 +31,7 @@ const Movies = ()=>{
         initMovies()
 
         const initGenres = async () => {
-            const gen = await getGenres();
+            const gen = await getGenres('movie');
             setGenres(gen);
         }
         initGenres()
@@ -53,7 +53,6 @@ const Movies = ()=>{
 
     const allMovies = [...(movies?.["upcoming"] || []),...(movies?.["top_rated"] || []),...(movies?.["popular"] || []),...(movies?.["now_playing"] || [])];
 
-    const GENRES = ["Science Fiction", "Drama", "Thriller", "Adventure", "Mystery", "Action"];
     const PLATFORMS = ["Netflix", "Prime Video", "Disney+", "Apple TV+", "Max", "Hulu"];
 
     const topRef = useRef();
@@ -85,7 +84,7 @@ const Movies = ()=>{
 
         <div className="space-y-3 mb-8">
           <div className="flex gap-2 flex-wrap">
-            {["All", ...[...new Set((genres?.map(gen => gen?.name)) || [])]].map((g) => (
+            {["All", ...(genres?.map(gen => gen?.name) || [])].map((g) => (
               <button
                 key={g}
                 onClick={() => setGenre(g)}
@@ -111,8 +110,7 @@ const Movies = ()=>{
       {hasMovies ? (
           <>
               <div className="min-h-0 min-w-full px-10">
-                  {/* <p className="text-white text-2xl">&#128293;upcoming</p> */}
-                  <br />
+                {genre === 'All' ? (
                   <div className="grid lg:grid-cols-7 grid-cols-2 space-y-5">
                       {
                           allMovies?.map((movie,i)=>(
@@ -121,6 +119,18 @@ const Movies = ()=>{
                           ))
                       }
                   </div>
+                ) : (
+                  <div className="grid lg:grid-cols-7 grid-cols-2 space-y-5">
+                    {
+                          allMovies?.map((movie,i)=>{
+                              const id = genres?.find(g => g?.name === genre);
+                              if(movie?.genre_ids?.includes(id?.id)){
+                                return <MovieCard movie={movie} genre={genres} index={i}/>
+                              }
+                          })
+                      }
+                  </div>
+                )}
               </div>
           </>
       ) : (
