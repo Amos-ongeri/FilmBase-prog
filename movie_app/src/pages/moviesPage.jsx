@@ -113,7 +113,7 @@ const Movies = ()=>{
               <div className="min-h-0 min-w-full px-10">
                   {/* <p className="text-white text-2xl">&#128293;upcoming</p> */}
                   <br />
-                  <div className="grid lg:grid-cols-6 grid-cols-2 space-y-5">
+                  <div className="grid lg:grid-cols-7 grid-cols-2 space-y-5">
                       {
                           allMovies?.map((movie,i)=>(
                               // <MovieCard1 Key={i} data={movie}/>

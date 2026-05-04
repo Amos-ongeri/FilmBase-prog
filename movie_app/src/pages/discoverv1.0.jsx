@@ -86,6 +86,8 @@ const Discover = () => {
     document.addEventListener("click",closeElement)
     return () => document.removeEventListener("click", closeElement)
   },[])
+  console.log("films", (((discover?.["movies"] || [])?.concat((discover?.["tv"] || [])))));
+  
 
   return(
     <main ref={topRef} className="min-h-50 min-w-full text-foreground bg-background">

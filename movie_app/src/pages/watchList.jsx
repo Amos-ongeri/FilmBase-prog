@@ -120,7 +120,7 @@ const WatchList = () => {
       </section>
 
       {/* Filters & sort bar */}
-      <section className="px-6 md:px-12 sticky top-18.25 z-20 bg-background/80 backdrop-blur-xl py-4 border-y border-border/50">
+      <section className="px-6 md:px-12 sticky top-0 z-20 bg-background/80 backdrop-blur-xl py-4 border-y border-border/50">
         <div className="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center">
           {/* Search */}
           <div className="relative flex-1 min-w-55">
@@ -239,7 +239,7 @@ const WatchList = () => {
       </section>
 
       <footer className="border-t border-border py-8 px-6 md:px-12 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} FilmBase · made for cinema
+        © {new Date().getFullYear()} FilmBase · made for cinema 
       </footer>
     </main>
   );

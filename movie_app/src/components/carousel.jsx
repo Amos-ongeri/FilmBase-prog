@@ -32,7 +32,7 @@ const CarouselComponent = ({data,genres})=>{
                 {data?.map((d,i) => (
                 <CarouselItem key={i}>
                     <div className="relative">
-                        <img loading="lazy" className="w-full h-[91vh] rounded-xs object-cover opacity-60" src={d.backdrop_path ? `https://image.tmdb.org/t/p/w1280${d.backdrop_path}` : ""} alt=""/>
+                        <img loading="lazy" className="w-full h-screen rounded-xs object-cover" src={d.backdrop_path ? `https://image.tmdb.org/t/p/w1280${d.backdrop_path}` : ""} alt=""/>
                         <div className="absolute inset-0 flex items-end">
                             {/* gradient overlay */}
                             <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
@@ -49,7 +49,7 @@ const CarouselComponent = ({data,genres})=>{
                                 <Star className="h-3 w-3 fill-primary text-primary" />
                                 <span> {d?.vote_average?.toFixed(1)}</span>
                                 <span>•</span>
-                                <span>{d?.release_date?.split("-")[0]}</span>
+                                <span>{d?.release_date?.split("-")[0] || d?.first_air_date?.split("-")[0]}</span>
                                 <span>•</span>
                                 <span className="uppercase">{d?.media_type}</span>
                                 </div>
@@ -96,8 +96,8 @@ const CarouselComponent = ({data,genres})=>{
                 </CarouselItem>
             ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious variant="myvar"/>
+            <CarouselNext variant="myvar"/>
         </Carousel>
     )
 }

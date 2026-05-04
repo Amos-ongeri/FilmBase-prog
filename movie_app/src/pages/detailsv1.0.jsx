@@ -182,8 +182,6 @@ const Details = () => {
           return "$" + scaled.toFixed(1).replace(/\.0$/,"") + suffix;
         }
 
-        console.log(window.scrollY);
-
   return (
     <main ref={topRef} className="min-h-50 min-w-full bg-background text-foreground">
 
@@ -347,7 +345,7 @@ const Details = () => {
       {/* TRAILER */}
       <section id="trailer" title={`${videos === undefined || videos?.length === 0 ? "this video is not available" : ""}`} className="relative px-6 md:px-12 mt-24" >
         <h2 className="text-2xl md:text-3xl font-bold mb-6">Official Trailer</h2>
-        <div className={`relative rounded-3xl overflow-hidden shadow-card group cursor-pointer h-fit ${videos === undefined || videos?.length === 0 ? "grayscale pointer-events-none" : ""}`}>
+        <div className={`relative rounded-3xl overflow-hidden shadow-card group cursor-pointer max-w-5xl mx-auto ${videos === undefined || videos?.length === 0 ? "grayscale pointer-events-none" : ""}`}>
             {videos?.length > 0 && (
               (YT && (
                 <iframe

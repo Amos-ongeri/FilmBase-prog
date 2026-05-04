@@ -194,4 +194,13 @@ const getSearchData = async (queryParam) => {
     }
 }
 
-export {getDetails, getDiscover, getMovies, getTv, getGenres, getTrending, getKeywords, getSearchData}
+export {
+    getDetails,
+    getDiscover,
+    getMovies,
+    getTv,
+    getGenres,
+    getTrending,
+    getKeywords,
+    getSearchData
+}

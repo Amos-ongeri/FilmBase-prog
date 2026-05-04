@@ -101,7 +101,6 @@ dialog::backdrop {
     --sidebar-border: hsl(220 13% 91%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --gradient-card: linear-gradient(180deg, hsl(0 0% 0% / 0) 50%, hsl(0 0% 0% / 0.95) 100%);
-    --card: 0 0% 8%;
     --gradient-hero: linear-gradient(180deg, hsl(0 0% 4% / 0) 0%, hsl(0 0% 4% / 0.6) 50%, hsl(0 0% 4%) 100%);
     --gradient-hero-side: linear-gradient(90deg, hsl(0 0% 4%) 0%, hsl(0 0% 4% / 0.7) 40%, hsl(0 0% 4% / 0) 100%);
     --gradient-orange: linear-gradient(135deg, hsl(16 100% 50%), hsl(20 100% 55%));

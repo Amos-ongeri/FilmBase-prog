@@ -9,18 +9,16 @@ export const useScrollDirection = () => {
         const handleScroll = () => {
             const currentScroll = window.scrollY;
             // always show at top
-      if (currentScroll < 50) {
-        setShow(true);
-        lastScroll.current = currentScroll;
-        return;
-      }
+            if (currentScroll < 50) {
+                setShow(true);
+                lastScroll.current = currentScroll;
+                return;
+            }
 
-      // ignore tiny scrolls (prevents jitter)
-      if (Math.abs(currentScroll - lastScroll.current) < 10) {
-        return;
-      }
-
-      console.log("Scrolled",currentScroll);
+            // ignore tiny scrolls (prevents jitter)
+            if (Math.abs(currentScroll - lastScroll.current) < 10) {
+                return;
+            }
       
             if(currentScroll > lastScroll.current){
                 setShow(false);
@@ -30,6 +28,8 @@ export const useScrollDirection = () => {
 
             lastScroll.current = currentScroll;
         }
+        //once on mount so element doesn't disappear
+        handleScroll();
 
         window.addEventListener("scroll", handleScroll);
 

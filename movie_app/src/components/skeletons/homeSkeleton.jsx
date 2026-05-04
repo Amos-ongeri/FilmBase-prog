@@ -1,7 +1,7 @@
 const HomeSkeleton = () => {
     return (
-        <div className="w-full h-full flex items-center justify-center">
-            <div className="w-[95%] h-[95%] bg-gray-900 rounded-2xl animate-pulse [animation-delay:900ms] animation-duration-[4s]">
+        <div className="w-full h-full flex m-auto items-center justify-center">
+            <div className="w-[95%] h-[95%] bg-gray-900 rounded-2xl animate-pulse [animation-delay:900ms] animation-duration-[4s] mt-20">
                 <div className="w-full min-h-10 p-10 flex">
                     <div className="top-10 left-10 text-white w-[50%]">
                         <p className="bg-gray-800 rounded-2xl w-[30%] h-6 mb-5 animate-pulse [animation-delay:0ms] animation-duration-[1s]"></p>

@@ -22,7 +22,7 @@ function App() {
     <>
     <div className='w-full h-screen bg-black'>
       <ScrollToTop />
-      {/* <Navigation1 isOpenSidebar={isopen} toggle={() => setIsOpen(prev => !prev)}/> */}
+      <Navigation1 isOpenSidebar={isopen} toggle={() => setIsOpen(prev => !prev)}/>
       <div className=' w-full min-h-50'>
         <TopBar toggleSidebar={() => setIsOpen(prev => !prev)}/>
         <div className="lg:min-h-[91%]">

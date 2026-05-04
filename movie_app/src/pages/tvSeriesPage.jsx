@@ -89,15 +89,15 @@ const TvSeries = ()=>{
                         {/* <p className="text-white text-2xl">&#128293;airing_today</p> */}
                         <br />
                         {genre === "All" ? (
-                            <div className="grid lg:grid-cols-6 grid-cols-2 space-y-5">
+                            <div className="grid lg:grid-cols-7 grid-cols-2 space-y-5">
                             {
-                                allTv?.map((tv,i)=>(
+                                [...new Set(allTv)]?.map((tv,i)=>(
                                     <MovieCard Key={i} movie={tv} genre={genres} index={i}/>
                                 ))
                             }
                             </div>
                         ) : (
-                            <div className="grid lg:grid-cols-6 grid-cols-2 space-y-5">
+                            <div className="grid lg:grid-cols-7 grid-cols-2 space-y-5">
                             {
                                 allTv?.map((tv,i)=>{
                                     const compare = genres?.find(g => g?.name === genre);
