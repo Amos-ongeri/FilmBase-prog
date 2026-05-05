@@ -118,13 +118,13 @@ const Discover = () => {
             </button>
           )}
           {keywords && keywords?.length > 0 && temporaryQuery !== '' && (
-            <div ref={keywordsRef} className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+5px)] rounded-lg transition-all duration-300 z-20 w-[95%] min-h-20 max-h-90 overflow-auto p-3 space-y-1 bg-primary">
+            <div ref={keywordsRef} className="absolute left-1/2 -translate-x-1/2 top-[calc(100%+5px)] rounded-lg transition-all duration-300 z-20 w-[95%] min-h-20 max-h-90 overflow-auto p-1 space-y-1 bg-primary">
               {
                 keywords.map((k,i)=>(
                   <div onClick={()=> {
                       setQuery(k.name)
                       setTemporaryQuery('')
-                    }} key={i} className="h-fit hover:bg-popover hover:text-white rounded-md p-3 flex items-center text-foreground cursor-pointer gap-3">
+                    }} key={i} className="h-fit hover:bg-muted hover:text-white rounded-md p-3 flex items-center text-foreground cursor-pointer gap-3">
                     <MdSearch size={20}/>
                     <p>{k.name}</p>
                   </div>

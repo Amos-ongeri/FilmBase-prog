@@ -17,25 +17,27 @@ const Movies = ()=>{
     const [genre, setGenre] = useState("All");
     const [category, setCategory] = useState("All");
     const [platform, setPlatform] = useState("All");
+
+    const initMovies = async () => {
+        const ms = await getMovies();
+        setMovies(() => {
+            const newState = {};
+            ms.forEach(r=> newState[r.category] = r.movies);
+            return newState;
+        })
+    }
+
+    const initGenres = async () => {
+        const gen = await getGenres('movie');
+        setGenres(gen);
+    }
     
     useEffect(()=> {
-
-        const initMovies = async () => {
-            const ms = await getMovies();
-            setMovies(prev=> {
-                const newState = {...prev};
-                ms.forEach(r=> newState[r.category] = r.movies);
-                return newState;
-            })
-        }
-        initMovies()
-
-        const initGenres = async () => {
-            const gen = await getGenres('movie');
-            setGenres(gen);
-        }
-        initGenres()
-},[])
+      const loadData = async () => {
+        await Promise.all([initMovies(),initGenres()])
+      }
+      loadData()
+    },[])
     useEffect(() => {
       console.log("Movies updated:", movies);
     }, [movies]);
@@ -64,7 +66,7 @@ const Movies = ()=>{
 
     return(
         <div ref={topRef} className="w-full min-h-50 text-gray-300 bg-background">
-            <section className="px-6 md:px-12 mt-16 mb-24">
+            <section className="px-6 md:px-12 pt-16 mb-8">
         <div className="flex items-end justify-between mb-6 flex-wrap gap-4">
           <h2 className="text-2xl md:text-3xl font-bold">Browse Movies</h2>
           <div className="flex flex-wrap gap-2 text-sm">
@@ -74,7 +76,7 @@ const Movies = ()=>{
               <button
                 key={s}
                 onClick={() => setCategory(s)}
-                className={`rounded-full px-3.5 py-1.5 transition hover:-translate-y-1  ${s === category ? "bg-primary" : "glass"}`}
+                className={`rounded-full px-3.5 py-1.5 transition duration-75 hover:-translate-y-1  ${s === category ? "bg-primary" : "glass"}`}
               >
                 {s === "now_playing" ? "Now Playing" : s === "upcoming" ? "Upcoming" : s === "top_rated" ? "Top Rated" : "Popular"}
               </button>
@@ -82,13 +84,13 @@ const Movies = ()=>{
           </div>
         </div>
 
-        <div className="space-y-3 mb-8">
+        <div className="space-y-3">
           <div className="flex gap-2 flex-wrap">
             {["All", ...(genres?.map(gen => gen?.name) || [])].map((g) => (
               <button
                 key={g}
                 onClick={() => setGenre(g)}
-                className={`rounded-full px-4 py-1.5 text-sm border transition ${g === genre && "bg-primary"}`}
+                className={`rounded-full px-4 py-1.5 text-sm border transition duration-75 ${g === genre && "bg-primary"}`}
               >
                 {g}
               </button>
@@ -111,7 +113,7 @@ const Movies = ()=>{
           <>
               <div className="min-h-0 min-w-full px-10">
                 {genre === 'All' ? (
-                  <div className="grid lg:grid-cols-7 grid-cols-2 space-y-5">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
                       {
                           allMovies?.map((movie,i)=>(
                               // <MovieCard1 Key={i} data={movie}/>
@@ -120,7 +122,7 @@ const Movies = ()=>{
                       }
                   </div>
                 ) : (
-                  <div className="grid lg:grid-cols-7 grid-cols-2 space-y-5">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
                     {
                           allMovies?.map((movie,i)=>{
                               const id = genres?.find(g => g?.name === genre);

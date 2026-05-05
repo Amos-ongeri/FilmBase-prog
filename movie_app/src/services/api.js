@@ -110,7 +110,7 @@ const getDetails = () => {
 }
 
 const genresMap = new Map();
-const getGenres = async (forMedia = 'all')=>{
+const getGenres = async (forMedia)=>{
     const types = {
         t1: 'movie',
         t2: 'tv'
@@ -128,7 +128,7 @@ const getGenres = async (forMedia = 'all')=>{
             const moviesData = await movies.json();
 
             const tvData = await tv.json();
-            genresMap.set('genres', [...(moviesData.genres && []), ...(tvData.genres && [])])
+            genresMap.set('genres', [...moviesData.genres, ...tvData.genres])
             results =[...moviesData.genres, ...tvData.genres];
 
             if(forMedia === 'movie'){

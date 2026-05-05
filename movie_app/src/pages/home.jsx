@@ -57,7 +57,7 @@ const MainPage = () => {
     },[trending])
 
     return(
-        <div className="relative  w-full min-h-full bg-background text-accent-foreground">
+        <div className="relative w-full min-h-full bg-background text-accent-foreground">
             {trending !== undefined ? <CarouselComponent data={trending} genres={genres}/> : <HomeSkeleton />}
         </div>
     )

@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
     const rating = ((movie.vote_average/10)*5).toFixed(1);
   return (
     <article
-      className="group relative animate-fade-up w-40 h-fit"
+      className="group relative animate-fade-up"
       style={{ animationDelay: `${Math.min(index * 40, 400)}ms` }}
     >
       <div className="relative aspect-2/3 overflow-hidden rounded-2xl bg-surface shadow-card transition-all duration-500 group-hover:scale-[1.04] group-hover:shadow-glow">
@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
           loading="lazy"
           width={512}
           height={768}
-          className="absolute inset-0 w-full h-70 object-cover transition-transform duration-700 group-hover:scale-110"
+          className="absolute inset-0 w-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
 
         {/* Bottom gradient always visible */}
@@ -41,7 +41,7 @@ import { useNavigate } from "react-router-dom";
           aria-label="Save to list"
           className="absolute top-3 right-3 h-8 w-8 grid place-items-center rounded-full glass-card text-muted-foreground hover:text-primary transition-colors"
         >
-          <Bookmark className="h-3.5 w-3.5" />
+          <Bookmark className="h-4.5 w-4.5" />
         </button>
 
         {/* Play overlay on hover */}

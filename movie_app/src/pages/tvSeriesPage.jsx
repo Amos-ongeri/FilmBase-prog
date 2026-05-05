@@ -13,24 +13,29 @@ const TvSeries = ()=>{
             })
     const [genres, setGenres] = useState();
     const [genre, setGenre] = useState("All");
-    const [category, setCategory] = useState("All");    
+    const [category, setCategory] = useState("All");
+
+    const initTv = async () => {
+        const tv = await getTv()
+        setTv(() => {
+            const newState = {};
+            tv?.forEach(t => newState[t.category] = t.tv)
+            return newState
+        })
+    }
+    const initGenres = async () => {
+        const gen = await getGenres('tv');
+        setGenres(gen);
+    }
 
     useEffect(()=> {
-        const initTv = async () => {
-            const tv = await getTv()
-            setTv(prev => {
-                const newState = {...prev};
-                tv?.forEach(t => newState[t.category] = t.tv)
-                return newState
-            })
+        const loadData = async () => {
+            await Promise.all([initTv(),initGenres()])
         }
-        initTv()
-        const initGenres = async () => {
-            const gen = await getGenres('tv');
-            setGenres(gen);
-        }
-        initGenres()
+        loadData();
     },[])
+
+    
     useEffect(() => {
         console.log("tv updated:", tv);
     }, [tv]);
@@ -48,12 +53,12 @@ const TvSeries = ()=>{
     useEffect(() => {
         topRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" })
     },[])
-    console.log("genre", genre);
+    console.log("genres", genres);
     
 
     return(
         <div ref={topRef} className="w-full min-h-50 text-gray-300 bg-background">
-            <section className="px-6 md:px-12 mt-16 mb-24">
+            <section className="px-6 md:px-12 pt-16 mb-5">
         <div className="flex items-end justify-between mb-6 flex-wrap gap-4">
           <h2 className="text-2xl md:text-3xl font-bold">All Series</h2>
           <div className="flex flex-wrap gap-2 text-sm">
@@ -62,7 +67,7 @@ const TvSeries = ()=>{
               <button
                 key={s}
                 onClick={() => setCategory(s)}
-                className={`rounded-full px-3.5 py-1.5 transition hover:-translate-y-1  ${category === s ? "bg-primary" : "glass"}`}
+                className={`rounded-full px-3.5 py-1.5 transition duration-75 hover:-translate-y-1  ${category === s ? "bg-primary" : "glass"}`}
               >
                 {s === "airing_today" ? "Airing Today" : s === "top_rated" ? "Top Rated" : s === "popular" ? "Popular" : "On The Air"}
               </button>
@@ -70,12 +75,12 @@ const TvSeries = ()=>{
           </div>
         </div>
 
-        <div className="flex gap-2 flex-wrap mb-8">
+        <div className="flex gap-2 flex-wrap">
           {["All", ...(genres?.map(gen => gen?.name)) || []].map((g) => (
             <button
               key={g}
               onClick={() => setGenre(g)}
-              className={`rounded-full px-4 py-1.5 text-sm border transition ${genre === g && "bg-primary"}`}
+              className={`rounded-full px-4 py-1.5 text-sm border transition duration-75 ${genre === g && "bg-primary"}`}
             >
               {g}
             </button>
@@ -88,7 +93,7 @@ const TvSeries = ()=>{
                         {/* <p className="text-white text-2xl">&#128293;airing_today</p> */}
                         <br />
                         {genre === "All" ? (
-                            <div className="grid lg:grid-cols-7 grid-cols-2 space-y-5">
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
                             {
                                 [...new Set(allTv)]?.map((tv,i)=>(
                                     <MovieCard Key={i} movie={tv} genre={genres} index={i}/>
@@ -96,7 +101,7 @@ const TvSeries = ()=>{
                             }
                             </div>
                         ) : (
-                            <div className="grid lg:grid-cols-7 grid-cols-2 space-y-5">
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
                             {
                                 allTv?.map((tv,i)=>{
                                     const compare = genres?.find(g => g?.name === genre);
@@ -118,7 +123,7 @@ const TvSeries = ()=>{
                     ))}
                 </div>
             )}
-            <footer className="border-t border-border py-8 px-6 md:px-12 text-center text-xs text-muted-foreground">
+            <footer className="border-t border-border py-8 px-6 md:px-12 mt-5 text-center text-xs text-muted-foreground">
                 © {new Date().getFullYear()} FilmBase · Built for cinema.
             </footer>
         </div>

@@ -239,7 +239,7 @@ const WatchList = () => {
       </section>
 
       <footer className="border-t border-border py-8 px-6 md:px-12 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} FilmBase · made for cinema 
+        © {new Date().getFullYear()} FilmBase · made for cinema
       </footer>
     </main>
   );

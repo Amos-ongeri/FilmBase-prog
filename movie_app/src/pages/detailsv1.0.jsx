@@ -1,4 +1,4 @@
-import { Play, Plus, Share2, Heart, Star, Clock, Calendar, ChevronRight, Volume2 } from "lucide-react";
+import { Play, Plus, Share2, Heart, Star, Clock, Calendar, ChevronRight, Volume2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams} from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
@@ -23,7 +23,10 @@ const Details = () => {
         const [similar,setSimilar] = useState();
         const [reviews,setReviews] = useState();
         const [YT, setYT] = useState(false);
+        const [moreRecommendations, setMoreRecommendations] = useState(false);
         const topRef = useRef();
+        const cast = useRef();
+        const crew = useRef();
 
         useEffect(() => {
             topRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -185,6 +188,15 @@ const Details = () => {
           return "$" + scaled.toFixed(1).replace(/\.0$/,"") + suffix;
         }
 
+        const ModalClose = (e,modal) => {
+            const posModal = modal.current.getBoundingClientRect();
+            const outPos = e.clientX < posModal.left || e.clientX > posModal.right || e.clientY < posModal.top || e.clientY > posModal.bottom;
+
+            if(outPos){
+                modal.current.close();
+            }
+        }
+
   return (
     <main ref={topRef} className="min-h-50 min-w-full bg-background text-foreground">
 
@@ -291,11 +303,36 @@ const Details = () => {
         </div>
       </section>
 
+      <dialog ref={cast} onClick={(e) => {ModalClose(e,cast)}} className="w-full md:w-[70%] h-[80%] m-auto rounded-md p-5">
+        <button className="glass p-2 rounded-full ml-auto flex sticky top-0" onClick={() => cast.current.close()}><X/></button>
+        <div className="grid grid-cols-1 md:grid-cols-2">
+        {credits?.cast?.map(c => (
+          <div key={c?.id} className="flex items-center gap-5">
+            <div className="relative w-20 h-20 md:w-28 md:h-28 mb-3 group">
+              <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xs transition" />
+              <img
+                src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar}
+                 alt={c.name}
+                 width={512}
+                 height={512}
+                 loading="lazy"
+                className="relative w-full h-full rounded-full object-cover border-2 border-border group-hover:border-primary transition"
+               />
+            </div>
+            <div>
+              <p className="md:text-2xl">{c?.name}</p>
+              <p>{c?.known_for_department}</p>
+            </div>
+          </div>
+        ))}
+        </div>
+      </dialog>
+
       {/* CAST */}
       <section className="px-6 md:px-12 mt-24">
         <div className="flex items-end justify-between mb-6">
           <h2 className="text-2xl md:text-3xl font-bold">Top Cast</h2>
-          <a className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 transition" href="#">Full cast <ChevronRight className="w-4 h-4" /></a>
+          {credits?.cast?.length > 6 && (<a className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 transition" onClick={() => cast.current.showModal()}>Full cast <ChevronRight className="w-4 h-4" /></a>)}
         </div>
         <div className="flex gap-5 overflow-x-auto scrollbar-hide py-3 -mx-6 md:-mx-12 px-6 md:px-12">
           {credits?.cast?.slice(0,6)?.map((c, i) => (
@@ -318,11 +355,36 @@ const Details = () => {
         </div>
       </section>
 
+      <dialog ref={crew} onClick={(e) => {ModalClose(e,crew)}} className="w-full md:w-[70%] h-[80%] m-auto rounded-md p-5">
+        <button className="glass p-2 rounded-full ml-auto flex sticky top-0" onClick={() => crew.current.close()}><X/></button>
+        <div className="grid grid-cols-1 md:grid-cols-2">
+        {credits?.crew?.map(c => (
+          <div key={c?.id} className="flex items-center gap-5">
+            <div className="relative w-20 h-20 md:w-28 md:h-28 mb-3 group">
+              <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xs transition" />
+              <img
+                src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar}
+                 alt={c.name}
+                 width={512}
+                 height={512}
+                 loading="lazy"
+                className="relative w-full h-full rounded-full object-cover border-2 border-border group-hover:border-primary transition"
+               />
+            </div>
+            <div>
+              <p className="md:text-2xl">{c?.name}</p>
+              <p>{c?.known_for_department}</p>
+            </div>
+          </div>
+        ))}
+        </div>
+      </dialog>
+
       {/* CREW */}
       <section className="px-6 md:px-12 mt-24">
         <div className="flex items-end justify-between mb-6">
           <h2 className="text-2xl md:text-3xl font-bold"> Crew </h2>
-          <a className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 transition" href="#">Full crew <ChevronRight className="w-4 h-4" /></a>
+          {credits?.crew?.length > 6 && (<a className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 transition" onClick={() => crew.current.showModal()}>Full crew <ChevronRight className="w-4 h-4" /></a>)}
         </div>
         <div className="flex gap-5 overflow-x-auto scrollbar-hide py-3 -mx-6 md:-mx-12 px-6 md:px-12">
           {credits?.crew?.slice(0,6)?.map((c, i) => (
@@ -365,8 +427,8 @@ const Details = () => {
             )}
           <div className="absolute -inset-1 bg-gradient-orange opacity-30 blur-2xl -z-10" />
           <img src={`https://image.tmdb.org/t/p/w1280${details?.backdrop_path}`} alt="Trailer" width={1920} height={1088} loading="lazy" className="w-full aspect-video object-cover brightness-65 group-hover:brightness-80 transition" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div onClick={() => setYT(true)} className="h-20 w-20 rounded-full bg-gradient-orange flex items-center justify-center shadow-glow group-hover:scale-110 transition">
+          <div onClick={() => setYT(true)} className="absolute inset-0 flex items-center justify-center">
+            <div className="h-20 w-20 rounded-full bg-gradient-orange flex items-center justify-center shadow-glow group-hover:scale-110 transition">
               <Play className="w-8 h-8 fill-current text-primary-foreground ml-1" />
             </div>
           </div>
@@ -402,10 +464,10 @@ const Details = () => {
       <section className="px-6 md:px-12 mt-24 mb-24">
         <div className="flex items-end justify-between mb-6">
           <h2 className="text-2xl md:text-3xl font-bold">More Like This</h2>
-          <a className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 transition" href="#">View all <ChevronRight className="w-4 h-4" /></a>
+          {similarNullFilter?.length > 5 && (<a className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 transition" onClick={() => setMoreRecommendations(prev => !prev)}>{moreRecommendations  ? "View less" : "View all"} <ChevronRight className="w-4 h-4" /></a>)}
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
-          {similarNullFilter?.slice(0,5)?.map((r, i) => (
+          {similarNullFilter?.slice(0,moreRecommendations ? similarNullFilter?.length : 5)?.map((r, i) => (
             <div key={i} className="group">
               <div className="relative overflow-hidden rounded-2xl mb-3 shadow-card">
                 <img src={r?.poster_path ? `https://image.tmdb.org/t/p/w500${r?.poster_path}` : ''}  alt={r.title} width={512} height={768} loading="lazy" className="w-full aspect-2/3 object-cover group-hover:scale-105 transition duration-500" />

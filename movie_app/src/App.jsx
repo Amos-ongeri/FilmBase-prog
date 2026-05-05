@@ -3,14 +3,21 @@ import { Route, Routes} from "react-router-dom";
 import TopBar from './components/topBar';
 import ScrollToTop from './components/scroll_to_top.jsx'
 import TvSeries from './pages/tvSeriesPage.jsx';
-import Navigation1 from './components/sideNavigation1.jsx';
+import Navigation from './components/sideNavigation.jsx';
 import Discover from './pages/discoverv1.0.jsx';
 import Movies from './pages/moviesPage.jsx';
 import Details from './pages/detailsv1.0';
 import WatchList from './pages/watchList';
 import { useState } from 'react';
+import { ArrowUp } from 'lucide-react';
+import { useScrollToTopButton } from './hooks/scrollToTop';
 
 function App() {
+  const show = useScrollToTopButton()
+
+  const scrollTop = () => {
+    window.scrollTo({top: 0, behavior: "smooth"})
+  }
   // const location = useLocation();
   // const locations = () => {
   //   let locs = [];
@@ -22,8 +29,8 @@ function App() {
     <>
     <div className='w-full h-screen bg-black'>
       <ScrollToTop />
-      <Navigation1 isOpenSidebar={isopen} toggle={() => setIsOpen(prev => !prev)}/>
-      <div className=' w-full min-h-50'>
+      <Navigation isOpenSidebar={isopen} toggle={() => setIsOpen(prev => !prev)}/>
+      <div className=' w-full min-h-50 overflow-y-auto'>
         <TopBar toggleSidebar={() => setIsOpen(prev => !prev)}/>
         <div className="lg:min-h-[91%]">
           <Routes>
@@ -35,6 +42,7 @@ function App() {
             <Route path='/watch-list' element={<WatchList />} />
           </Routes>
         </div>
+        <div onClick={scrollTop} className={`fixed bottom-5 right-5 z-30 glass p-4 rounded-full transition-all duration-300 ${show ? "opacity-100 scale-100" : "opacity-0 scale-90 pointer-events-none"}`}><ArrowUp /></div>
       </div>
     </div>
     </>

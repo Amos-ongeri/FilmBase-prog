@@ -3,10 +3,10 @@ import { PiFilmReel, PiFilmSlateLight } from "react-icons/pi";
 import { HiBars3 } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import { CiCompass1, CiPlay1 } from "react-icons/ci";
-import Navigation1 from "./sideNavigation1";
+import Navigation1 from "./sideNavigation";
 import { useState } from "react";
 import { MoonIcon, SunIcon } from "lucide-react";
-import { useScrollDirection } from "@/hooks/scrollevent";
+import { useScrollDirection } from "@/hooks/scrollAwareness";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -42,7 +42,7 @@ const TopBar = ({toggleSidebar}) => {
             <div className="flex items-center space-x-3">
                 <div className="md:hidden rounded-md glass p-1 h-[10%]"><HiBars3 onClick={toggleSidebar} size={30}/></div>
                 <div className="flex items-center justify-center rounded-md p-1 w-full text-2xl h-[10%] glass">
-                    <div  onClick={()=> navigateTo('/home')} title="Home" className="flex items-center  justify-center cursor-pointer">
+                    <div  onClick={()=> navigateTo('/')} title="Home" className="flex items-center  justify-center cursor-pointer">
                         <p className="text-white "><span>Film</span>
                             <span className="text-primary drop-shadow-sm font-extrabold">Base</span>
                         </p>

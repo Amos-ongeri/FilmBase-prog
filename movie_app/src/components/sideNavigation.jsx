@@ -35,9 +35,9 @@ const Navigation1 = ({isOpenSidebar, toggle})=>{
 
     return (
         <>
-        <aside ref={navRef} className={`flex flex-col z-50 fixed top-0 transform transition-transform duration-300 ${isOpenSidebar ? "translate-x-0" : "-translate-x-full"} w-[60%] md:hidden space-x-10 h-screen md:h-full bg-muted rounded-tr-md`}>
+        <aside ref={navRef} className={`flex flex-col z-50 fixed top-0 transform transition-transform duration-300 ${isOpenSidebar ? "translate-x-0" : "-translate-x-full"} w-[60%] md:hidden space-x-10 h-screen md:h-full bg-muted`}>
             <div className="flex items-center justify-between px-4 rounded-md p-1 w-full text-2xl h-[10%]">
-                <div  onClick={()=> navigateTo('/home')} title="Home" className="flex items-center  justify-center cursor-pointer">
+                <div  onClick={()=> navigateTo('/')} title="Home" className="flex items-center  justify-center cursor-pointer">
                     <p className="text-white "><span>Film</span>
                         <span className="text-primary drop-shadow-sm font-extrabold">Base</span>
                     </p>
@@ -98,4 +98,4 @@ const Navigation1 = ({isOpenSidebar, toggle})=>{
         </>
     )
 }
-export default Navigation1
+export default Navigation
