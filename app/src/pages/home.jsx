@@ -4,36 +4,30 @@ import CarouselComponent from "../components/carousel";
 import { useEffect, useState } from "react";
 import Banner from "../sandbox/Banner";
 import HomeSkeleton from "@/components/placeholders/homeSkeleton";
-import { getGenres } from "@/services/api";
+import { getGenres, getTrending } from "@/services/api";
 
-
-const dataMap = new Map();
 
 const MainPage = () => {
     const [trending, setTrending] = useState()
     const [genres,setGenres] = useState()
     const media_type = 'all';
     const time_window = 'week'
+
+    const initTrending = async () => {
+        const trends = await getTrending(media_type, time_window);
+
+        setTrending(trends);
+    }
+
+    const initGenres = async () => {
+        const gs = await getGenres()
+        setGenres(gs)
+    }
     useEffect(()=>{
-        const getTrending = async ()=>{
-            try{
-                if(dataMap.has('trending')){
-                    setTrending(dataMap.get('trending'))
-                }else{
-                    await fetch(`http://localhost:5000/api/${media_type}/${time_window}/trending`)
-                    .then(res => res.json())
-                    .then(data => {
-                        dataMap.set('trending', data.results)
-                        setTrending(data.results)
-                    })
-                    .catch(e => {throw new Error("error: ", e.message);
-                    })
-                }
-            }catch(e){
-                console.log('error occurred: ', e.message);
-            }
+        const loadData = async ()=>{
+            await Promise.all([initTrending(), initGenres()])
         }
-        getTrending()
+        loadData()
     },[])
 
     {/*many problems here */}
@@ -42,13 +36,6 @@ const MainPage = () => {
     //     Slice = trending?.slice(limit?.start,limit?.end)
     // }
 
-    useEffect(()=>{
-        const initGenres = async () => {
-            const gs = await getGenres()
-            setGenres(gs)
-        }
-        initGenres()
-     },[])
     useEffect(()=>{
         console.log('genres', genres);
     },[genres])

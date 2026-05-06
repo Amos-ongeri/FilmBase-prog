@@ -1,3 +1,5 @@
+const serverUrl = import.meta.env.VITE_SERVER_URL;
+
 const movieMap = new Map();
 const categories = ['now_playing','popular','top_rated','upcoming'];
 const getMovies = async () => {
@@ -7,7 +9,7 @@ const movies = [];
         if(movieMap.has(cat))
             movies.push({category: cat, movies: movieMap.get(cat)});
         else{
-            await fetch(`http://localhost:5000/api/${"movie"}/${cat}/list`)
+            await fetch(`${serverUrl}/api/${"movie"}/${cat}/list`)
             .then(res => res.json())
             .then(data => {
                 if(Array.isArray(data.results)){
@@ -40,7 +42,7 @@ const getTv = async () => {
         if(tvMap.has(cat))
             tv.push({category: cat, tv: tvMap.get(cat)});
         else{
-        await fetch(`http://localhost:5000/api/${"tv"}/${cat}/list`)
+        await fetch(`${serverUrl}/api/${"tv"}/${cat}/list`)
         .then(res => res.json())
         .then(data => {
             if(Array.isArray(data.results)){
@@ -77,8 +79,8 @@ const getDiscover = async () => {
             return discoverData;
         }else{
             const [movie, tv] = await Promise.all([
-                fetch(`http://localhost:5000/api/discover/${types.t1}`),
-                fetch(`http://localhost:5000/api/discover/${types.t2}`)
+                fetch(`${serverUrl}/api/discover/${types.t1}`),
+                fetch(`${serverUrl}/api/discover/${types.t2}`)
             ])
 
             const movies = await movie.json()
@@ -113,7 +115,7 @@ const getDetails = async (tmdb_id, media_type) => {
             details = detailsMap.get(tmdb_id)
             return details;
         }else{
-        const dets = await fetch(`http://localhost:5000/api/${tmdb_id}/${media_type}/details`)
+        const dets = await fetch(`${serverUrl}/api/${tmdb_id}/${media_type}/details`)
             details = await dets?.json();
 
             detailsMap.set(tmdb_id,details);
@@ -132,7 +134,7 @@ const getMovieGenres = async ()=>{
             genresForMovies = movieGenres.get('genres');
             return genresForMovies;
         }else{
-            const genres = await fetch(`http://localhost:5000/api/movie/genres`);
+            const genres = await fetch(`${serverUrl}/api/movie/genres`);
             const data = await genres.json();
 
             movieGenres.set('genres', data?.genres);
@@ -153,7 +155,7 @@ const getTvGenres = async ()=>{
             genresForTv = tvGenres.get('genres');
             return genresForTv;
         }else{
-            const genres = await fetch(`http://localhost:5000/api/tv/genres`);
+            const genres = await fetch(`${serverUrl}/api/tv/genres`);
             const data = await genres.json();
 
             tvGenres.set('genres', data?.genres);
@@ -178,8 +180,8 @@ const getGenres = async ()=>{
             return allGenres;
         }else{
             const [ movies, tv ] = await Promise.all([
-                    fetch(`http://localhost:5000/api/${types.t1}/genres`),
-                    fetch(`http://localhost:5000/api/${types.t2}/genres`)
+                    fetch(`${serverUrl}/api/${types.t1}/genres`),
+                    fetch(`${serverUrl}/api/${types.t2}/genres`)
             ])
             const moviesData = await movies.json();
 
@@ -201,9 +203,9 @@ const getTrending = async (media_type, time_window) => {
     try{
         if(dataMap.has('trending')){
             trending["trending"] = trendingMap.get('trending');
-            return trending;
+            return trending["trending"];
         }else{
-            await fetch(`http://localhost:5000/api/${media_type}/${time_window}/trending`)
+            await fetch(`${serverUrl}/api/${media_type}/${time_window}/trending`)
             .then(res => res.json())
             .then(data => {
                 trendingMap.set('trending', data.results)
@@ -215,13 +217,13 @@ const getTrending = async (media_type, time_window) => {
     }catch(e){
         console.log('error occurred: ', e.message);
     }
-    return trending;
+    return trending["trending"];
 }
 
 const getKeywords = async (query) => {
     try{
         let keywords = [];
-        const res = await fetch(`http://localhost:5000/api/keywords/search?query=${query}`)
+        const res = await fetch(`${serverUrl}/api/keywords/search?query=${query}`)
         const data = await res.json();
         keywords = Array.isArray(data?.results) && data?.results;
         return keywords;
@@ -239,7 +241,7 @@ const getSearchData = async (queryParam) => {
         return searchData;
     }else{
         try{
-            const res = await fetch(`http://localhost:5000/api/query/search/multi?query=${queryParam}`)
+            const res = await fetch(`${serverUrl}/api/query/search/multi?query=${queryParam}`)
             const data = await res.json();
             console.log(data);
             searchResultsMap.set('search', data.results)
@@ -259,7 +261,7 @@ const getVideos = async (tmdb_id, media_type) => {
             trailer = videosMap.get(tmdb_id);
             return trailer;
         }else{
-            const videos = await fetch(`http://localhost:5000/api/${tmdb_id}/${media_type}/videos`)
+            const videos = await fetch(`${serverUrl}/api/${tmdb_id}/${media_type}/videos`)
             const videosData = await videos.json();
             Videos = videosData.results;
             trailer = Videos?.filter(d=> d.type === 'Trailer');
@@ -280,7 +282,7 @@ const getCredits = async (tmdb_id, media_type)=>{
             credits = creditsMap.get(tmdb_id);
             return credits;
         }else{
-            const creds = await fetch(`http://localhost:5000/api/${tmdb_id}/${media_type}/credits`)
+            const creds = await fetch(`${serverUrl}/api/${tmdb_id}/${media_type}/credits`)
             const creditsData = await creds.json();
             creditsMap.set(tmdb_id,creditsData);
             credits = creditsData;
@@ -300,7 +302,7 @@ const getSimilar = async (tmdb_id, media_type)=>{
             similar = similarMap.get(tmdb_id);
             return similar;
         }else{
-            const ofSimilar = await fetch(`http://localhost:5000/api/${tmdb_id}/${media_type}/similar`)
+            const ofSimilar = await fetch(`${serverUrl}/api/${tmdb_id}/${media_type}/similar`)
             const similarData = await ofSimilar.json();
 
             similarData.results = similarData?.results?.map(item=>({
@@ -325,7 +327,7 @@ const getReviews = async (tmdb_id, media_type)=>{
             reviews = reviewsMap.get(tmdb_id);
             return reviews;
         }else{
-            const revius = await fetch(`http://localhost:5000/api/${tmdb_id}/${media_type}/reviews`)
+            const revius = await fetch(`${serverUrl}/api/${tmdb_id}/${media_type}/reviews`)
             const reviewsData = await revius.json();
             reviewsMap.set(tmdb_id,reviewsData);
             reviews = reviewsData.results;
