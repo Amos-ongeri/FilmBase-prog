@@ -305,12 +305,12 @@ const getSimilar = async (tmdb_id, media_type)=>{
             const ofSimilar = await fetch(`${serverUrl}/api/${tmdb_id}/${media_type}/similar`)
             const similarData = await ofSimilar.json();
 
-            similarData.results = similarData?.results?.map(item=>({
+            const similars = similarData?.results?.map(item=>({
                 ...item,
                 media_type: media_type
             }))
-            similarMap.set(tmdb_id,similarData);
-            similar = similarData.results;
+            similarMap.set(tmdb_id,similars);
+            similar = similars;
 
             return similar;
         }
