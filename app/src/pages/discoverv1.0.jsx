@@ -173,7 +173,7 @@ const Discover = () => {
             </div>
             <div>
               <h2 className="text-sm uppercase tracking-[0.2em] text-background dark:text-muted-foreground mb-4">Popular Right Now</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
                 {genre === "All" && ((discover?.["movies"]?.concat(discover?.["tv"]))?.map((t) => ( <MovieCard3 t={t} k={t.id}/>)))}
               </div>
             </div>
@@ -194,17 +194,17 @@ const Discover = () => {
               )}
             </div>
             {type === "movie" ? (
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
                 {discover?.["movies"]?.map((t) => ( <MovieCard3 t={t} k={t.id}/>))}
               </div>
             ) : (
               (type === "series" && (
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
                   {discover?.["tv"]?.map((t) => ( <MovieCard3 t={t} k={t.id}/>))}
                 </div>
               ))
             )}
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
               {(((discover?.["movies"] || [])?.concat((discover?.["tv"] || [])))?.map((t) => {
                 const id = genres?.find(g => g?.name === genre);
                 if(t?.genre_ids?.includes(id?.id)){
@@ -227,7 +227,7 @@ const Discover = () => {
               {(filmFilter && filmFilter?.length > 0) && (
                 <>
                 <p className="my-5 text-lg md:text-2xl">Film</p>
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
                   {filmFilter?.map((f,i) => (
                     <MovieCard3 t={f} k={i} />
                   ))}
