@@ -36,6 +36,7 @@ const CarouselComponent = ({data,genres})=>{
                         <div className="absolute inset-0 flex items-end">
                             {/* gradient overlay */}
                             <div className="absolute inset-0 bg-gradient-hero" />
+                            <div className="absolute inset-0 bg-gradient-hero-side" />
 
                             <div className="relative z-10 p-6 lg:p-12 max-w-2xl text-white space-y-4">
     

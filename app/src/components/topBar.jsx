@@ -84,7 +84,7 @@ const TopBar = ({toggleSidebar}) => {
                                     <div className="flex items-center w-full h-10 cursor-pointer group ">
                                         <div className="bg-[#FF3C00] w-1 h-[70%] rounded-tr-lg rounded-br-lg"></div>
                                         <div className="flex items-center pl-1">
-                                            <BiDetail className="group-hover:-translate-x-1 ml-2 transform transition-transform duration-300" fill="white" size={25}/>
+                                            <BiDetail className="group-hover:-translate-x-1 ml-2 transform transition-transform duration-300 text-background dark:text-white" size={25}/>
                                             <p className="text-sm text-background dark:text-white ml-2">Details</p>
                                         </div>
                                     </div>
