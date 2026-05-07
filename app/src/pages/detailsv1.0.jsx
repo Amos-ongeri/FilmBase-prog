@@ -228,7 +228,7 @@ const Details = () => {
       <dialog ref={cast} onClick={(e) => {ModalClose(e,cast)}} className="w-full h-full md:w-[70%] md:h-[80%] m-auto rounded-md p-5">
 
         <div className="flex sticky top-0 z-20 mb-5">
-          <p className=" text-lg bg-muted flex items-center rounded-2xl px-3">({credits?.cast?.length}) Cast</p>
+          <p className=" text-lg glass flex items-center rounded-2xl px-3">({credits?.cast?.length}) Cast</p>
           <button className="glass p-2 rounded-full ml-auto flex" onClick={() => cast.current.close()}><X/></button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2">
@@ -283,7 +283,7 @@ const Details = () => {
       {/* CREW */}
       <dialog ref={crew} onClick={(e) => {ModalClose(e,crew)}} className="w-full h-full md:w-[70%] md:h-[80%] m-auto rounded-md p-5">
         <div className="flex sticky top-0 z-20 mb-5">
-          <p className=" text-lg bg-muted flex items-center rounded-2xl px-3">({credits?.crew?.length}) Crew</p>
+          <p className=" text-lg glass flex items-center rounded-2xl px-3">({credits?.crew?.length}) Crew</p>
           <button className="glass p-2 rounded-full ml-auto flex" onClick={() => crew.current.close()}><X/></button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2">
