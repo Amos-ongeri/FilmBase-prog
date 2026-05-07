@@ -11,6 +11,7 @@ import WatchList from './pages/watchList';
 import { useState } from 'react';
 import { ArrowUp } from 'lucide-react';
 import { useScrollToTopButton } from './hooks/scrollToTop';
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   const show = useScrollToTopButton()
@@ -45,6 +46,7 @@ function App() {
         <div onClick={scrollTop} className={`fixed bottom-5 right-5 z-30 bg-primary p-4 rounded-full transition-all duration-300 ${show ? "opacity-100 scale-100" : "opacity-0 scale-90 pointer-events-none"}`}><ArrowUp className='text-foreground'/></div>
       </div>
     </div>
+    <Analytics/>
     </>
 
   )
