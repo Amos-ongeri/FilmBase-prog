@@ -31,7 +31,7 @@ import { useNavigate } from "react-router-dom";
         />
 
         {/* Rating badge */}
-        <div className="absolute top-3 left-3 glass-card rounded-full px-2.5 py-1 flex items-center gap-1">
+        <div className="absolute top-3 left-3 glass rounded-full px-2.5 py-1 flex items-center gap-1">
           <Star className="h-3 w-3 fill-primary text-primary" />
           <span className="text-xs font-semibold">{rating}</span>
         </div>

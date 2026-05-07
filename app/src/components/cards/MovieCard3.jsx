@@ -22,7 +22,7 @@ export const MovieCard3 = ({ t, k}) => {
           <Bookmark className="h-3.5 w-3.5" />
         </button>
       <div className="absolute inset-0 bg-linear-to-t from-background via-background/0 to-background/0 opacity-80" />
-      <div className="absolute top-3 left-3 glass rounded-full px-2.5 py-1 flex items-center gap-1 text-xs">
+      <div className="absolute top-3 left-3 glass dark:text-foreground text-background rounded-full px-2.5 py-1 flex items-center gap-1 text-xs">
         <Star className="w-3 h-3 fill-primary text-primary" /> {((t?.vote_average/10)*5).toFixed(1)}
       </div>
     </div>
