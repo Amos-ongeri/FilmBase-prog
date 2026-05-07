@@ -4,12 +4,7 @@ import MovieCard from "@/components/cards/MovieCard";
 import { getTv, getTvGenres } from "@/services/api";
 
 const TvSeries = ()=>{
-    const [tv, setTv] = useState({
-                popular: [],
-                top_rated: [],
-                on_the_air: [],
-                airing_today: []
-            })
+    const [tv, setTv] = useState({ popular: [], top_rated: [], on_the_air: [], airing_today: [] })
     const [genres, setGenres] = useState();
     const [genre, setGenre] = useState("All");
     const [category, setCategory] = useState("All");
@@ -34,84 +29,73 @@ const TvSeries = ()=>{
         loadData();
     },[])
 
-    
-    useEffect(() => {
-        console.log("tv updated:", tv);
-    }, [tv]);
-
     const hasTv = [
         tv?.airing_today,
         tv?.on_the_air,
         tv?.popular,
         tv?.top_rated
     ].every(member => member?.length !== 0 && member !== undefined)
+
     const allTv = [...(tv?.["airing_today"] || []),...(tv?.["top_rated"] || []),...(tv?.["popular"] || []),...(tv?.["on_the_air"] || [])];
 
     const topRef = useRef();
-        
+
     useEffect(() => {
         topRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" })
     },[])
-    console.log("genres", genres);
-    
 
     return(
         <div ref={topRef} className="w-full min-h-50 text-background dark:text-gray-300 bg-foreground dark:bg-background">
             <section className="px-5 md:px-12 pt-16">
-        <div className="flex items-end justify-between mb-6 flex-wrap gap-4">
-          <h2 className="text-2xl md:text-3xl font-bold">All Series</h2>
-          <div className="flex flex-wrap gap-2 text-sm">
-            <span onClick={() => setCategory("All")} className={`glass rounded-full px-3.5 py-1.5 transition hover:-translate-y-1 ${category === "All" ? "bg-primary" : "glass"}`}>All</span>
-            {(["airing_today", "top_rated", "popular", "on_the_air"]).map((s) => (
-              <button
-                key={s}
-                onClick={() => setCategory(s)}
-                className={`rounded-full px-3.5 py-1.5 transition duration-75 hover:-translate-y-1  ${category === s ? "bg-primary" : "glass"}`}
-              >
-                {s === "airing_today" ? "Airing Today" : s === "top_rated" ? "Top Rated" : s === "popular" ? "Popular" : "On The Air"}
-              </button>
-            ))}
-          </div>
-        </div>
+                <div className="flex items-end justify-between mb-6 flex-wrap gap-4">
+                    <h2 className="text-2xl md:text-3xl font-bold">All Series</h2>
+                    <div className="flex flex-wrap gap-2 text-sm">
+                        <span onClick={() => setCategory("All")} className={`glass rounded-full px-3.5 py-1.5 transition hover:-translate-y-1 ${category === "All" ? "bg-primary" : "glass"}`}>All</span>
+                        {(["airing_today", "top_rated", "popular", "on_the_air"]).map((s) => (
+                            <button
+                                key={s}
+                                onClick={() => setCategory(s)}
+                                className={`rounded-full px-3.5 py-1.5 transition duration-75 hover:-translate-y-1  ${category === s ? "bg-primary" : "glass"}`}
+                            >
+                                {s === "airing_today" ? "Airing Today" : s === "top_rated" ? "Top Rated" : s === "popular" ? "Popular" : "On The Air"}
+                            </button>
+                        ))}
+                    </div>
+                </div>
 
-        <div className="flex gap-2 flex-wrap">
-          {["All", ...(genres?.map(gen => gen?.name)) || []].map((g) => (
-            <button
-              key={g}
-              onClick={() => setGenre(g)}
-              className={`rounded-full px-4 py-1.5 text-sm transition duration-75 ${genre === g ? "bg-primary" : "border dark:border-border border-muted/50"}`}
-            >
-              {g}
-            </button>
-          ))}
-        </div>
-      </section>
+                <div className="flex gap-2 flex-wrap">
+                    {["All", ...(genres?.map(gen => gen?.name)) || []].map((g) => (
+                        <button
+                            key={g}
+                            onClick={() => setGenre(g)}
+                            className={`rounded-full px-4 py-1.5 text-sm transition duration-75 ${genre === g ? "bg-primary" : "border dark:border-border border-muted/50"}`}
+                        >
+                            {g}
+                        </button>
+                    ))}
+                </div>
+            </section>
             {hasTv ? (
                 <>
                     <div className="min-h-50 min-w-full px-2 md:px-12">
-                        {/* <p className="text-white text-2xl">&#128293;airing_today</p> */}
                         <br />
                         {genre === "All" ? (
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                            {
-                                [...new Set(allTv)]?.map((tv,i)=>(
-                                    <MovieCard Key={i} movie={tv} genre={genres} index={i}/>
-                                ))
-                            }
+                                {[...new Set(allTv)]?.map((tv,i)=>(
+                                    <MovieCard key={i} movie={tv} genre={genres} index={i}/>
+                                ))}
                             </div>
                         ) : (
                             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                            {
-                                allTv?.map((tv,i)=>{
+                                {allTv?.map((tv,i)=>{
                                     const compare = genres?.find(g => g?.name === genre);
                                     if(tv?.genre_ids?.includes(compare?.id)){
-                                        return <MovieCard Key={i} movie={tv} genre={genres} index={i}/>
+                                        return <MovieCard key={i} movie={tv} genre={genres} index={i}/>
                                     } else {
                                         return null;
                                     }
-})
-                            }
-                        </div>
+                                })}
+                            </div>
                         )}
                     </div>
                 </>

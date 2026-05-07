@@ -86,8 +86,6 @@ const Discover = () => {
     document.addEventListener("click",closeElement)
     return () => document.removeEventListener("click", closeElement)
   },[])
-  console.log("films", (((discover?.["movies"] || [])?.concat((discover?.["tv"] || [])))));
-  
 
   return(
     <main ref={topRef} className="min-h-50 min-w-full text-background bg-foreground dark:bg-background">
@@ -174,7 +172,7 @@ const Discover = () => {
             <div>
               <h2 className="text-sm uppercase tracking-[0.2em] text-background dark:text-muted-foreground mb-4">Popular Right Now</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                {genre === "All" && ((discover?.["movies"]?.concat(discover?.["tv"]))?.map((t) => ( <MovieCard3 t={t} k={t.id}/>)))}
+                {genre === "All" && ((discover?.["movies"]?.concat(discover?.["tv"]))?.map((t,i) => ( <MovieCard3 key={i} t={t} k={t.id}/>)))}
               </div>
             </div>
           </div>
@@ -195,20 +193,20 @@ const Discover = () => {
             </div>
             {type === "movie" ? (
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                {discover?.["movies"]?.map((t) => ( <MovieCard3 t={t} k={t.id}/>))}
+                {discover?.["movies"]?.map((t, i) => ( <MovieCard3 key={i} t={t} k={t.id}/>))}
               </div>
             ) : (
               (type === "series" && (
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                  {discover?.["tv"]?.map((t) => ( <MovieCard3 t={t} k={t.id}/>))}
+                  {discover?.["tv"]?.map((t, i) => ( <MovieCard3 key={i} t={t} k={t.id}/>))}
                 </div>
               ))
             )}
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              {(((discover?.["movies"] || [])?.concat((discover?.["tv"] || [])))?.map((t) => {
+              {(((discover?.["movies"] || [])?.concat((discover?.["tv"] || [])))?.map((t, i) => {
                 const id = genres?.find(g => g?.name === genre);
                 if(t?.genre_ids?.includes(id?.id)){
-                  return  <MovieCard3 t={t} k={t.id}/>
+                  return  <MovieCard3 key={i} t={t} k={t.id}/>
                 }
               }))}
             </div>
@@ -216,9 +214,10 @@ const Discover = () => {
               {(personFilter && personFilter?.length > 0) && (
                 <>
                 <p className="my-5 text-lg md:text-2xl">People</p>
-                <div className="flex gap-5 overflow-auto">{personFilter?.map((p,i) => (
-                  <div className="w-28 h-28 mb-3 shrink-0 group">
-                    <img key={i} src={p.profile_path ? `https://image.tmdb.org/t/p/w500${p.profile_path}` : user_avatar} className="w-full h-full rounded-full object-cover border-2 border-border group-hover:border-primary transition" alt="" />
+                <div className="flex gap-5 overflow-auto">
+                  {personFilter?.map((p,i) => (
+                  <div key={i} className="w-28 h-28 mb-3 shrink-0 group">
+                    <img src={p.profile_path ? `https://image.tmdb.org/t/p/w500${p.profile_path}` : user_avatar} className="w-full h-full rounded-full object-cover border-2 border-border group-hover:border-primary transition" alt="" />
                   </div>
                   ))}
                 </div>
@@ -229,7 +228,7 @@ const Discover = () => {
                 <p className="my-5 text-lg md:text-2xl">Film</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
                   {filmFilter?.map((f,i) => (
-                    <MovieCard3 t={f} k={i} />
+                    <MovieCard3 key={i} t={f} k={i} />
                   ))}
                 </div>
                 </>

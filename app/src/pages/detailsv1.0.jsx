@@ -69,7 +69,6 @@ const Details = () => {
 
     loadData();
   },[media_type, tmdb_id])
-  
 
   useEffect(() => {
     if(similar){

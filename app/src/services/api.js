@@ -84,8 +84,6 @@ const getDiscover = async () => {
             ])
 
             const movies = await movie.json()
-            console.log("M", movies);
-            
 
             const movieWithType = Array.isArray(movies?.results) ? movies?.results?.map(m=>({
                 ...m,
@@ -243,9 +241,10 @@ const getSearchData = async (queryParam) => {
         try{
             const res = await fetch(`${serverUrl}/api/query/search/multi?query=${queryParam}`)
             const data = await res.json();
-            console.log(data);
+
             searchResultsMap.set('search', data.results)
             searchData = data.results;
+            
             return searchData;
         }catch(e){
             console.log('error occurred: ', e.message);

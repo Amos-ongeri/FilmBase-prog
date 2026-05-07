@@ -36,13 +36,6 @@ const MainPage = () => {
     //     Slice = trending?.slice(limit?.start,limit?.end)
     // }
 
-    useEffect(()=>{
-        console.log('genres', genres);
-    },[genres])
-    useEffect(()=>{
-        console.log('trending', trending);
-    },[trending])
-
     return(
         <div className="relative w-full min-h-full bg-foreground dark:bg-background text-accent-foreground">
             {trending !== undefined ? <CarouselComponent data={trending} genres={genres}/> : <HomeSkeleton />}
