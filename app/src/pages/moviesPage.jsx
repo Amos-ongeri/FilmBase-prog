@@ -109,7 +109,7 @@ const Movies = ()=>{
       </section>
       {hasMovies ? (
           <>
-              <div className="min-h-0 min-w-full px-2">
+              <div className="min-h-0 min-w-full px-2 md:px-12">
                 {genre === 'All' ? (
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                       {

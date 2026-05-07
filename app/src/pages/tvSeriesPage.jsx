@@ -88,7 +88,7 @@ const TvSeries = ()=>{
       </section>
             {hasTv ? (
                 <>
-                    <div className="min-h-50 min-w-full px-2 ">
+                    <div className="min-h-50 min-w-full px-2 md:px-12">
                         {/* <p className="text-white text-2xl">&#128293;airing_today</p> */}
                         <br />
                         {genre === "All" ? (

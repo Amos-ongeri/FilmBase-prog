@@ -21,12 +21,12 @@ import { useNavigate } from "react-router-dom";
           loading="lazy"
           width={512}
           height={768}
-          className="absolute inset-0 w-full object-cover transition-transform duration-700 group-hover:scale-110"
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
 
         {/* Bottom gradient always visible */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="absolute -z-10 group-hover:z-10 inset-0 pointer-events-none"
           style={{ background: "var(--gradient-card)" }}
         />
 
@@ -47,12 +47,12 @@ import { useNavigate } from "react-router-dom";
         {/* Play overlay on hover */}
         <div onClick={navigate} className="absolute inset-0 grid place-items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <div className="h-14 w-14 rounded-full bg-primary/95 grid place-items-center shadow-glow scale-90 group-hover:scale-100 transition-transform duration-300">
-            <Play className="h-5 w-5 text-primary-foreground fill-current ml-0.5" />
+            <Play className="h-5 w-5 text-foreground fill-current ml-0.5" />
           </div>
         </div>
 
         {/* Hover overview */}
-        <div className="absolute inset-x-0 bottom-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+        <div className="absolute z-20 inset-x-0 bottom-0 p-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
           <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
             {movie?.overview}
           </p>

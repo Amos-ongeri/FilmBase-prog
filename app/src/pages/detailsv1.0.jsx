@@ -97,6 +97,18 @@ const Details = () => {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
+    if (moreRecommendations) {
+      document
+        ?.querySelector("#item5")
+        ?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      document
+        ?.querySelector("#item0")
+        ?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [moreRecommendations]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setVisible(false);
 
@@ -389,22 +401,22 @@ const Details = () => {
       </section>
 
       {/* SIMILAR TITLES */}
-      <section className="px-6 md:px-12 mt-24 mb-24">
+      <section className="px-2 md:px-12 mt-24 mb-24">
         <div className="flex items-end justify-between mb-6">
           <h2 className="text-2xl md:text-3xl font-bold">More Like This</h2>
           {similarNullFilter?.length > 5 && (<a className="text-sm dark:text-muted-foreground hover:text-primary flex items-center gap-1 transition" onClick={() => setMoreRecommendations(prev => !prev)}>{moreRecommendations  ? "View less" : "View all"} <ChevronRight className="w-4 h-4" /></a>)}
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
           {similarNullFilter?.slice(0,moreRecommendations ? similarNullFilter?.length : 5)?.map((r, i) => (
-            <div key={i} className="group">
+            <div id={`item${i}`} key={i} className="group scroll-mt-3">
               <div className="relative overflow-hidden rounded-2xl mb-3 shadow-card">
                 <img onClick={() => navigate(r)} src={r?.poster_path ? `https://image.tmdb.org/t/p/w500${r?.poster_path}` : ''}  alt={r.title} width={512} height={768} loading="lazy" className="w-full aspect-2/3 object-cover group-hover:scale-105 transition duration-500" />
                 <div className="absolute inset-0 bg-linear-to-t from-background via-background/0 to-background/0 opacity-80" />
                 <div className="absolute top-3 left-3 glass rounded-full px-2.5 py-1 flex items-center gap-1 text-xs">
                   <Star className="w-3 h-3 fill-primary text-primary" /> {((r?.vote_average/10)*5).toFixed(1)}
                 </div>
-                <div onClick={() => navigate(r)} className="absolute bottom-3 right-3 h-10 w-10 rounded-full bg-gradient-orange flex items-center justify-center opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition cursor-pointer">
-                  <Play className="w-4 h-4 fill-current text-primary-foreground" />
+                <div onClick={() => navigate(r)} className="absolute bottom-3 right-3 h-10 w-10 rounded-full bg-primary flex items-center justify-center opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition cursor-pointer">
+                  <Play className="w-4 h-4 fill-current text-foreground" />
                 </div>
               </div>
               <div className="font-semibold text-sm group-hover:text-primary transition truncate">{r?.title || r?.name}</div>
