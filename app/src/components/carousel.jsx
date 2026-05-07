@@ -35,24 +35,24 @@ const CarouselComponent = ({data,genres})=>{
                         <img loading="lazy" className="w-full h-screen rounded-xs object-cover" src={d.backdrop_path ? `https://image.tmdb.org/t/p/w1280${d.backdrop_path}` : ""} alt=""/>
                         <div className="absolute inset-0 flex items-end">
                             {/* gradient overlay */}
-                            <div className="absolute inset-0 bg-gradient-hero" />
-                            <div className="absolute inset-0 bg-gradient-hero-side" />
+                            <div className="absolute inset-0 bg-linear-to-t from-background via-background/50 to-transparent" />
+                            <div className="absolute inset-0 " />
 
                             <div className="relative z-10 p-6 lg:p-12 max-w-2xl text-white space-y-4">
     
                                 {/* title */}
-                                <h1 className="text-3xl lg:text-5xl font-bold leading-tight text-background dark:text-foreground">
+                                <h1 className="text-3xl lg:text-5xl font-bold leading-tight text-foreground">
                                 {d?.name || d?.title}
                                 </h1>
 
                                 {/* meta info */}
                                 <div className="flex items-center gap-3 text-sm text-gray-300">
                                 <Star className="h-3 w-3 fill-primary text-primary" />
-                                <span className="text-background dark:text-foreground"> {d?.vote_average?.toFixed(1)}</span>
-                                <span className="w-1 h-1 rounded-full bg-background dark:bg-muted-foreground/50" />
-                                <span className="text-background dark:text-foreground">{d?.release_date?.split("-")[0] || d?.first_air_date?.split("-")[0]}</span>
-                                <span className="w-1 h-1 rounded-full bg-background dark:bg-muted-foreground/50" />
-                                <span className="uppercase text-background dark:text-foreground">{d?.media_type}</span>
+                                <span className="text-foreground"> {d?.vote_average?.toFixed(1)}</span>
+                                <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
+                                <span className="text-foreground">{d?.release_date?.split("-")[0] || d?.first_air_date?.split("-")[0]}</span>
+                                <span className="w-1 h-1 rounded-full bg-muted-foreground/50" />
+                                <span className="uppercase text-foreground">{d?.media_type}</span>
                                 </div>
 
                                 {/* genres */}
@@ -64,7 +64,7 @@ const CarouselComponent = ({data,genres})=>{
                                     return (
                                     <span
                                         key={g}
-                                        className="text-xs glass px-3 py-1 rounded-full border border-white/20 text-background dark:text-foreground"
+                                        className="text-xs px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 transition backdrop-blur-md border border-white/20 "
                                     >
                                         {name?.name}
                                     </span>
@@ -73,7 +73,7 @@ const CarouselComponent = ({data,genres})=>{
                                 </div>
 
                                 {/* overview */}
-                                <p className="text-sm lg:text-base line-clamp-4 leading-relaxed text-background dark:text-foreground">
+                                <p className="text-sm lg:text-base line-clamp-4 leading-relaxed text-foreground">
                                 {d?.overview}
                                 </p>
 
@@ -87,7 +87,7 @@ const CarouselComponent = ({data,genres})=>{
                                 </button>
 
                                 {/* optional secondary button */}
-                                <button className="bg-white/10 hover:bg-white/20 transition px-5 py-3 rounded-xl glass border border-white/20 text-background dark:text-foreground">
+                                <button className="bg-white/10 hover:bg-white/20 transition px-5 py-3 rounded-xl backdrop-blur-md border border-white/20 text-foreground">
                                     + Watchlist
                                 </button>
                                 </div>

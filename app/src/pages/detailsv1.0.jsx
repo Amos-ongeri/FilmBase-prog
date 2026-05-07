@@ -102,10 +102,6 @@ const Details = () => {
       document
         ?.querySelector("#item5")
         ?.scrollIntoView({ behavior: "smooth" });
-    } else {
-      document
-        ?.querySelector("#item0")
-        ?.scrollIntoView({ behavior: "smooth" });
     }
   }, [moreRecommendations]);
 
