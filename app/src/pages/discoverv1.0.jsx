@@ -154,7 +154,7 @@ const Discover = () => {
           ))}
         </div>
       </section>
-      <section className="px-6 md:px-12 pb-24">
+      <section className="px-2 md:px-5 pb-24">
         {!isSearching ? (
           <div className="space-y-12 max-w-5xl mx-auto">
             <div>

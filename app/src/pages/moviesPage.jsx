@@ -64,7 +64,7 @@ const Movies = ()=>{
 
     return(
         <div ref={topRef} className="w-full min-h-50 text-background dark:text-gray-300 bg-foreground dark:bg-background">
-            <section className="px-6 md:px-12 pt-16 mb-8">
+            <section className="px-5 md:px-12 pt-16 mb-8">
         <div className="flex items-end justify-between mb-6 flex-wrap gap-4">
           <h2 className="text-2xl md:text-3xl font-bold">Browse Movies</h2>
           <div className="flex flex-wrap gap-2 text-sm">
@@ -109,9 +109,9 @@ const Movies = ()=>{
       </section>
       {hasMovies ? (
           <>
-              <div className="min-h-0 min-w-full px-10">
+              <div className="min-h-0 min-w-full px-2">
                 {genre === 'All' ? (
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                       {
                           allMovies?.map((movie,i)=>(
                               <MovieCard movie={movie} genre={genres} index={i}/>
@@ -119,7 +119,7 @@ const Movies = ()=>{
                       }
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                     {
                           allMovies?.map((movie,i)=>{
                               const id = genres?.find(g => g?.name === genre);

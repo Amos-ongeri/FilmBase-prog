@@ -398,7 +398,7 @@ const Details = () => {
           {similarNullFilter?.slice(0,moreRecommendations ? similarNullFilter?.length : 5)?.map((r, i) => (
             <div key={i} className="group">
               <div className="relative overflow-hidden rounded-2xl mb-3 shadow-card">
-                <img src={r?.poster_path ? `https://image.tmdb.org/t/p/w500${r?.poster_path}` : ''}  alt={r.title} width={512} height={768} loading="lazy" className="w-full aspect-2/3 object-cover group-hover:scale-105 transition duration-500" />
+                <img onClick={() => navigate(r)} src={r?.poster_path ? `https://image.tmdb.org/t/p/w500${r?.poster_path}` : ''}  alt={r.title} width={512} height={768} loading="lazy" className="w-full aspect-2/3 object-cover group-hover:scale-105 transition duration-500" />
                 <div className="absolute inset-0 bg-linear-to-t from-background via-background/0 to-background/0 opacity-80" />
                 <div className="absolute top-3 left-3 glass rounded-full px-2.5 py-1 flex items-center gap-1 text-xs">
                   <Star className="w-3 h-3 fill-primary text-primary" /> {((r?.vote_average/10)*5).toFixed(1)}
