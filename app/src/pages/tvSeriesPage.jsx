@@ -2,6 +2,15 @@ import { useState,useEffect, useRef } from "react";
 import CardSkeleton from "@/components/placeholders/cardSkeleton";
 import MovieCard from "@/components/cards/MovieCard";
 import { getTv, getTvGenres } from "@/services/api";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 const TvSeries = ()=>{
     const [tv, setTv] = useState({ popular: [], top_rated: [], on_the_air: [], airing_today: [] })
@@ -106,6 +115,32 @@ const TvSeries = ()=>{
                     ))}
                 </div>
             )}
+            <br />
+            <Pagination>
+                <PaginationContent>
+                    <PaginationItem>
+                        <PaginationPrevious href="#" />
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink href="#">1</PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink href="#" isActive>
+                        2
+                        </PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink href="#">3</PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationEllipsis />
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationNext href="#" />
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
+            <br />
             <footer className="border-t border-muted/50 dark:border-border py-8 px-6 md:px-12 mt-5 text-center text-xs dark:text-muted-foreground">
                 © {new Date().getFullYear()} FilmBase · Built for cinema.
             </footer>
