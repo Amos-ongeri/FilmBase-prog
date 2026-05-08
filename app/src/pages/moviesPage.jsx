@@ -140,20 +140,40 @@ const Movies = ()=>{
       <div className="min-h-0 min-w-full px-2 md:px-12">
         {hasMovies ? (
           <>
-            {genre === 'All' && category === "All" && (
-              <div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                {allMovies?.map((movie,i)=> {
-                    let m = {...movie, media_type: "movie"}
-                    return <MovieCard key={i} movie={m} genre={genres} index={i}/>
-                })}
+            { category === "All" && (
+              (genre !== "All" ? (
+                <div>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                    {allMovies?.map((movie,i)=> {
+                        let m = {...movie, media_type: "movie"}
+                        const gen = genres?.find(g => g?.name === genre)
+
+                        if(movie?.genre_ids?.includes(gen?.id)){
+                          return <MovieCard key={i} movie={m} genre={genres} index={i}/>
+                        }
+                    })}
+                  </div>
+                  <br />
+                    <SmartPagination currentPage={pageAll}
+                    totalPages={movies["now_playing"].total_pages + movies["popular"].total_pages + movies["top_rated"].total_pages + movies["upcoming"].total_pages}
+                    onPageChange={setPageAll}/>
+                  <br />
                 </div>
-                <br />
-                <SmartPagination currentPage={pageAll}
-                  totalPages={movies["now_playing"].total_pages + movies["popular"].total_pages + movies["top_rated"].total_pages + movies["upcoming"].total_pages}
-                  onPageChange={setPageAll}/>
-                <br />
-              </div>
+              ) : (
+                <div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                      {allMovies?.map((movie,i)=> {
+                          let m = {...movie, media_type: "movie"}
+                          return <MovieCard key={i} movie={m} genre={genres} index={i}/>
+                      })}
+                    </div>
+                    <br />
+                    <SmartPagination currentPage={pageAll}
+                      totalPages={movies["now_playing"].total_pages + movies["popular"].total_pages + movies["top_rated"].total_pages + movies["upcoming"].total_pages}
+                      onPageChange={setPageAll}/>
+                    <br />
+                </div>
+              ))
             )}
           </>
         ) : (
@@ -164,7 +184,26 @@ const Movies = ()=>{
           </div>
         )}
         {topRatedMovies && category === "top_rated" && (
-          <div>
+          (genre !== "All" ? (
+            <div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+              {topRatedMovies?.results?.map((movie,i)=> {
+                  let m = {...movie, media_type: "movie"}
+                  const gen = genres?.find(g => g?.name === genre)
+
+                  if(movie?.genre_ids?.includes(gen?.id)){
+                    return <MovieCard key={i} movie={m} genre={genres} index={i}/>
+                  }
+              })}
+              </div>
+              <br />
+              <SmartPagination currentPage={topRatedPage}
+                  totalPages={topRatedMovies?.total_pages}
+                  onPageChange={setTopRatedPage}/>
+              <br />
+            </div>
+          ) : (
+            <div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
               {topRatedMovies?.results?.map((movie,i)=> {
                   let m = {...movie, media_type: "movie"}
@@ -177,9 +216,29 @@ const Movies = ()=>{
                   onPageChange={setTopRatedPage}/>
               <br />
             </div>
+          ))
         )}
         {upcomingMovies && category === "upcoming" && (
-          <div>
+          (genre !== "All" ? (
+            <div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+              {upcomingMovies?.results?.map((movie,i)=> {
+                  let m = {...movie, media_type: "movie"}
+                  const gen = genres?.find(g => g?.name === genre)
+
+                  if(movie?.genre_ids?.includes(gen?.id)){
+                    return <MovieCard key={i} movie={m} genre={genres} index={i}/>
+                  }
+              })}
+              </div>
+              <br />
+              <SmartPagination currentPage={upcomingPage}
+                totalPages={upcomingMovies?.total_pages}
+                  onPageChange={setUpcomingPage}/>
+              <br />
+            </div>
+          ) : (
+            <div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
               {upcomingMovies?.results?.map((movie,i)=> {
                   let m = {...movie, media_type: "movie"}
@@ -192,9 +251,29 @@ const Movies = ()=>{
                   onPageChange={setUpcomingPage}/>
               <br />
             </div>
+          ))
         )}
         {popularMovies && category === "popular" && (
-          <div>
+          (genre !== "All" ? (
+            <div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+              {popularMovies?.results?.map((movie,i)=> {
+                  let m = {...movie, media_type: "movie"}
+                  const gen = genres?.find(g => g?.name === genre)
+
+                  if(movie?.genre_ids?.includes(gen?.id)){
+                    return <MovieCard key={i} movie={m} genre={genres} index={i}/>
+                  }
+              })}
+              </div>
+              <br />
+              <SmartPagination currentPage={popularPage}
+                totalPages={popularMovies?.total_pages}
+                  onPageChange={setPopularPage}/>
+              <br />
+            </div>
+          ) : (
+            <div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
               {popularMovies?.results?.map((movie,i)=> {
                   let m = {...movie, media_type: "movie"}
@@ -207,9 +286,29 @@ const Movies = ()=>{
                   onPageChange={setPopularPage}/>
               <br />
             </div>
+          ))
         )}
         {nowPlayingmovies && category === "now_playing" && (
-          <div>
+          (genre !== "All" ? (
+            <div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+              {nowPlayingmovies?.results?.map((movie,i)=> {
+                  let m = {...movie, media_type: "movie"}
+                  const gen = genres?.find(g => g?.name === genre)
+
+                  if(movie?.genre_ids?.includes(gen?.id)){
+                    return <MovieCard key={i} movie={m} genre={genres} index={i}/>
+                  }
+              })}
+              </div>
+              <br />
+              <SmartPagination currentPage={nowPlayingPage}
+                totalPages={nowPlayingmovies?.total_pages}
+                  onPageChange={setNowPlayingPage}/>
+              <br />
+            </div>
+          ) : (
+            <div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
               {nowPlayingmovies?.results?.map((movie,i)=> {
                   let m = {...movie, media_type: "movie"}
@@ -222,9 +321,10 @@ const Movies = ()=>{
                   onPageChange={setNowPlayingPage}/>
               <br />
             </div>
+          ))
         )}
       </div>
-      
+
       <footer className="border-t border-muted/50 dark:border-border py-8 px-6 mt-5 md:px-12 text-center text-xs dark:text-muted-foreground">
         © {new Date().getFullYear()} FilmBase · Built for cinema.
       </footer>
