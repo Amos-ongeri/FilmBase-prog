@@ -2,38 +2,27 @@ import { useEffect,useRef,useState } from "react";
 import CardSkeleton from "@/components/placeholders/cardSkeleton";
 import MovieCard from "@/components/cards/MovieCard";
 import { getMovieGenres, getMovies } from "@/services/api";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
-
+import { SmartPagination } from "@/components/smartPagination";
 
 const Movies = ()=>{
-  const [movies, setMovies] = useState({ popular: [], top_rated: [], upcoming: [], now_playing: [] })
+  const [movies, setMovies] = useState({})
   const [genres, setGenres] = useState();
   const [genre, setGenre] = useState("All");
   const [category, setCategory] = useState("All");
   const [platform, setPlatform] = useState("All");
+  const [pageAll, setPageAll] = useState(1)
+  const [categoryPage, setCategoryPage] = useState(1)
 
   const initMovies = async () => {
     const ms = await getMovies();
-    setMovies(() => {
-        const newState = {};
-        ms.forEach(r=> newState[r.category] = r.movies);
-        return newState;
-    })
+    setMovies(ms)
   }
 
   const initMovieGenres = async () => {
     const gen = await getMovieGenres();
     setGenres(gen);
   }
-    
+
   useEffect(()=> {
     const loadData = async () => {
       await Promise.all([initMovies(),initMovieGenres()])
@@ -43,13 +32,14 @@ const Movies = ()=>{
 
   //handy learn more
   const hasMovies = [
-    movies?.now_playing,
-    movies?.popular,
-    movies?.top_rated,
-    movies?.upcoming
+    movies?.now_playing?.results,
+    movies?.popular?.results,
+    movies?.top_rated?.results,
+    movies?.upcoming?.results
   ].every(section => section?.length > 0 && section !== undefined);
 
-  const allMovies = [...(movies?.["upcoming"] || []),...(movies?.["top_rated"] || []),...(movies?.["popular"] || []),...(movies?.["now_playing"] || [])];
+  const allMovies = [...(movies?.["upcoming"]?.results || []),...(movies?.["top_rated"]?.results || []),...(movies?.["popular"]?.results || []),...(movies?.["now_playing"]?.results || [])];
+  
 
   const PLATFORMS = ["Netflix", "Prime Video", "Disney+", "Apple TV+", "Max", "Hulu"];
 
@@ -108,20 +98,71 @@ const Movies = ()=>{
       {hasMovies ? (
         <>
           <div className="min-h-0 min-w-full px-2 md:px-12">
-            {genre === 'All' ? (
+            {genre === 'All' && category === "All" && (
+              <div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                {allMovies?.map((movie,i)=>(
-                    <MovieCard key={i} movie={movie} genre={genres} index={i}/>
-                ))}
+                {allMovies?.map((movie,i)=> {
+                    let m = {...movie, media_type: "movie"}
+                    return <MovieCard key={i} movie={m} genre={genres} index={i}/>
+                })}
+                </div>
+                <br />
+                <SmartPagination currentPage={pageAll}
+                  totalPages={movies["now_playing"].total_pages + movies["popular"].total_pages + movies["top_rated"].total_pages + movies["upcoming"].total_pages}
+                  onPageChange={setPageAll}/>
+                <br />
               </div>
-            ) : (
+            )}
+            {genre !== "All" && category === "All" && (
+              <div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                 {allMovies?.map((movie,i)=>{
                   const id = genres?.find(g => g?.name === genre);
+                  let m = {...movie, media_type: "movie"}
                   if(movie?.genre_ids?.includes(id?.id)){
-                    return <MovieCard key={i} movie={movie} genre={genres} index={i}/>
+                    return <MovieCard key={i} movie={m} genre={genres} index={i}/>
                   }
                 })}
+                </div>
+                <br />
+                <SmartPagination currentPage={pageAll}
+                  totalPages={movies["now_playing"].total_pages + movies["popular"].total_pages + movies["top_rated"].total_pages + movies["upcoming"].total_pages}
+                  onPageChange={setPageAll}/>
+                <br />
+              </div>
+            )}
+            {category !== "All" && genre === "All" && (
+              <div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                {movies[category].results?.map((movie,i)=>{
+                    let m = {...movie, media_type: "movie"}
+
+                    return <MovieCard key={i} movie={m} genre={genres} index={i}/>
+                })}
+                </div>
+                <br />
+                <SmartPagination currentPage={categoryPage}
+                  totalPages={movies[category]?.total_pages}
+                  onPageChange={setCategoryPage}/>
+                <br />
+              </div>
+            )}
+            {category !== "All" && genre !== "All" && (
+              <div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                {movies[category].results?.map((movie,i)=>{
+                  const id = genres?.find(g => g?.name === genre);
+                  let m = {...movie, media_type: "movie"}
+                  if(movie?.genre_ids?.includes(id?.id)){
+                    return <MovieCard key={i} movie={m} genre={genres} index={i}/>
+                  }
+                })}
+                </div>
+                <br />
+                <SmartPagination currentPage={categoryPage}
+                  totalPages={movies[category]?.total_pages}
+                  onPageChange={setCategoryPage}/>
+                <br />
               </div>
             )}
           </div>
@@ -133,32 +174,7 @@ const Movies = ()=>{
             ))}
           </div>
       )}
-      <br />
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#" isActive>
-              2
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
-      <br />
+      
       <footer className="border-t border-muted/50 dark:border-border py-8 px-6 mt-5 md:px-12 text-center text-xs dark:text-muted-foreground">
         © {new Date().getFullYear()} FilmBase · Built for cinema.
       </footer>

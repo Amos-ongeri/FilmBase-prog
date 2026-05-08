@@ -241,8 +241,8 @@ const Details = () => {
           <button className="glass p-2 rounded-full ml-auto flex" onClick={() => cast.current.close()}><X/></button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2">
-          {credits?.cast?.map(c => (
-            <div key={c?.id} className="flex items-center gap-5">
+          {credits?.cast?.map((c,i) => (
+            <div key={i} className="flex items-center gap-5">
               <div className="relative w-20 h-20 md:w-28 md:h-28 mb-3 group">
                 <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xs transition" />
                 <img
@@ -296,8 +296,8 @@ const Details = () => {
           <button className="glass p-2 rounded-full ml-auto flex" onClick={() => crew.current.close()}><X/></button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2">
-          {credits?.crew?.map(c => (
-            <div key={c?.id} className="flex items-center gap-5">
+          {credits?.crew?.map((c,i) => (
+            <div key={i} className="flex items-center gap-5">
               <div className="relative w-20 h-20 md:w-28 md:h-28 mb-3 group">
                 <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xs transition" />
                 <img

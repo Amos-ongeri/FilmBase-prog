@@ -3,31 +3,22 @@ const serverUrl = import.meta.env.VITE_SERVER_URL;
 const movieMap = new Map();
 const categories = ['now_playing','popular','top_rated','upcoming'];
 const getMovies = async () => {
-const movies = [];
+const movies = {};
     let moviesData;
     for(const cat of categories){
         if(movieMap.has(cat))
-            movies.push({category: cat, movies: movieMap.get(cat)});
+            movies[cat] = movieMap.get(cat);
         else{
             await fetch(`${serverUrl}/api/${"movie"}/${cat}/list`)
             .then(res => res.json())
             .then(data => {
-                if(Array.isArray(data.results)){
-                moviesData = data.results.map(item=>({
-                    ...item,
-                    media_type: "movie"
-                }))
-            }else if(typeof data.results === 'object'){
-                moviesData = {
-                    ...data.results,
-                    media_type: "movie"
-                }
-            }
+                // console.log("data",data);
+                moviesData = data;
             })
             .catch(e => {throw new Error("error: ", e.message);
             })
             movieMap.set(cat, moviesData);
-            movies.push({ category: cat, movies: moviesData})
+            movies[cat] =  moviesData;
         }
     }
     return movies;
@@ -244,7 +235,7 @@ const getSearchData = async (queryParam) => {
 
             searchResultsMap.set('search', data.results)
             searchData = data.results;
-            
+
             return searchData;
         }catch(e){
             console.log('error occurred: ', e.message);

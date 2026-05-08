@@ -97,7 +97,7 @@ const Discover = () => {
   },[])
 
   return(
-    <main ref={topRef} className="min-h-50 min-w-full text-background text-background dark:text-gray-300 bg-foreground dark:bg-background">
+    <main ref={topRef} className="min-h-50 min-w-full text-background dark:text-gray-300 bg-foreground dark:bg-background">
       <section className="px-6 md:px-12 pt-16 pb-8 max-w-4xl mx-auto">
         <h1 className="text-4xl font-extrabold text-center mb-3 md:text-6xl text-background dark:text-foreground">Discover what to <span className="text-primary">watch</span></h1>
         <p className="text-center text-background dark:text-muted-foreground mb-8">Search across thousands of movies and  series.</p>
@@ -260,36 +260,36 @@ const Discover = () => {
             ) : (
               (type === "series" && (
                 <>
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                  {discover?.["tv"]?.map((t, i) => ( <MovieCard3 key={i} t={t} k={t.id}/>))}
-                </div>
-                <br />
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious href="#" />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">1</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#" isActive>
-                    2
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">3</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext href="#" />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-            <br />
-            </>
+                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                    {discover?.["tv"]?.map((t, i) => ( <MovieCard3 key={i} t={t} k={t.id}/>))}
+                  </div>
+                  <br />
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious href="#" />
+                      </PaginationItem>
+                      <PaginationItem>
+                        <PaginationLink href="#">1</PaginationLink>
+                      </PaginationItem>
+                      <PaginationItem>
+                        <PaginationLink href="#" isActive>
+                          2
+                        </PaginationLink>
+                      </PaginationItem>
+                      <PaginationItem>
+                        <PaginationLink href="#">3</PaginationLink>
+                      </PaginationItem>
+                      <PaginationItem>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                      <PaginationItem>
+                        <PaginationNext href="#" />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                  <br />
+                </>
               ))
             )}
             <>
