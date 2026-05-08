@@ -1,21 +1,44 @@
 import { useEffect,useRef,useState } from "react";
 import CardSkeleton from "@/components/placeholders/cardSkeleton";
 import MovieCard from "@/components/cards/MovieCard";
-import { getMovieGenres, getMovies } from "@/services/api";
+import { getMovieGenres, getMovies, getNowPlayingMovies, getPopularMovies, getTopRatedMovies, getUpcomingMovies } from "@/services/api";
 import { SmartPagination } from "@/components/smartPagination";
 
 const Movies = ()=>{
   const [movies, setMovies] = useState({})
+  const [upcomingMovies, setUpcomingMovies] = useState({})
+  const [topRatedMovies, setTopRatedMovies] = useState({})
+  const [nowPlayingmovies, setNowPlayingMovies] = useState({})
+  const [popularMovies, setPopularMovies] = useState({})
   const [genres, setGenres] = useState();
   const [genre, setGenre] = useState("All");
   const [category, setCategory] = useState("All");
   const [platform, setPlatform] = useState("All");
-  const [pageAll, setPageAll] = useState(1)
-  const [categoryPage, setCategoryPage] = useState(1)
+  const [pageAll, setPageAll] = useState(1);
+  const [upcomingPage, setUpcomingPage] = useState(1)
+  const [topRatedPage, setTopRatedPage]= useState(1);
+  const [nowPlayingPage, setNowPlayingPage] = useState(1);
+  const [popularPage, setPopularPage] = useState(1);
 
   const initMovies = async () => {
-    const ms = await getMovies();
+    const ms = await getMovies(pageAll);
     setMovies(ms)
+  }
+  const initUpcoming = async () => {
+    const ms = await getUpcomingMovies(upcomingPage);
+    setUpcomingMovies(ms)
+  }
+  const initTopRated = async () => {
+    const ms = await getTopRatedMovies(topRatedPage);
+    setTopRatedMovies(ms)
+  }
+  const initNowPlaying = async () => {
+    const ms = await getNowPlayingMovies(nowPlayingPage);
+    setNowPlayingMovies(ms)
+  }
+  const initPopular = async () => {
+    const ms = await getPopularMovies(popularPage);
+    setPopularMovies(ms)
   }
 
   const initMovieGenres = async () => {
@@ -25,10 +48,12 @@ const Movies = ()=>{
 
   useEffect(()=> {
     const loadData = async () => {
-      await Promise.all([initMovies(),initMovieGenres()])
+      await Promise.all([initMovies(), initNowPlaying(), initPopular(), initTopRated(), initUpcoming(),initMovieGenres()])
     }
     loadData()
   },[])
+  console.log("top rated", topRatedMovies);
+  
 
   //handy learn more
   const hasMovies = [

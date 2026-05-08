@@ -1,8 +1,8 @@
 const { tmdbClient } = require('../api/client');
 const client = new tmdbClient();
 
-const getMovies = async (media_type,category)=>{
-    const movies = await client.request(`/${media_type}/${category}`);
+const getMovies = async (media_type,category,page)=>{
+    const movies = await client.request(`/${media_type}/${category}?page=${page}`);
     return movies;
 }
 

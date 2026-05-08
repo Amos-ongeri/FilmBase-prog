@@ -2,14 +2,14 @@ const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 const movieMap = new Map();
 const categories = ['now_playing','popular','top_rated','upcoming'];
-const getMovies = async () => {
+const getMovies = async (page) => {
 const movies = {};
     let moviesData;
     for(const cat of categories){
         if(movieMap.has(cat))
             movies[cat] = movieMap.get(cat);
         else{
-            await fetch(`${serverUrl}/api/${"movie"}/${cat}/list`)
+            await fetch(`${serverUrl}/api/${"movie"}/${cat}/${page}/list`)
             .then(res => res.json())
             .then(data => {
                 // console.log("data",data);
@@ -22,6 +22,67 @@ const movies = {};
         }
     }
     return movies;
+}
+
+const upcomingMovie = new Map();
+const getUpcomingMovies = async (page) => {
+const upcomingMovies = {};
+
+        if(upcomingMovie.has("upcoming"))
+            upcomingMovies["upcoming"] = upcomingMovie.get("upcoming");
+        else{
+            const upcoming = await fetch(`${serverUrl}/api/${"movie"}/${"upcoming"}/${page}/list`)
+            upcomingMovie.set("upcoming", upcoming);
+            upcomingMovies["upcoming"] =  upcoming;
+        }
+    return upcomingMovies;
+}
+
+const topRatedMovie = new Map();
+const getTopRatedMovies = async (page) => {
+const topRatedMovies = {};
+
+        if(topRatedMovie.has("topRated"))
+            topRatedMovies["topRated"] = topRatedMovie.get("topRated");
+        else{
+            const res = await fetch(`${serverUrl}/api/${"movie"}/${"top_rated"}/${page}/list`)
+            const topRated = await res.json()
+            console.log(topRated);
+            
+
+            topRatedMovie.set("topRated", topRated);
+            topRatedMovies["topRated"] =  topRated;
+        }
+    return topRatedMovies;
+}
+
+const nowPlayingMovie = new Map();
+const getNowPlayingMovies = async (page) => {
+const nowPlayingMovies = {};
+
+
+        if(nowPlayingMovie.has("nowPlaying"))
+            nowPlayingMovies["nowPlaying"] = nowPlayingMovie.get("nowPlaying");
+        else{
+            const nowPlaying = await fetch(`${serverUrl}/api/${"movie"}/${"now_playing"}/${page}/list`)
+            nowPlayingMovie.set("nowPlaying", nowPlaying);
+            nowPlayingMovies["nowPlaying"] =  nowPlaying;
+        }
+    return nowPlayingMovies;
+}
+
+const popularMovie = new Map();
+const getPopularMovies = async (page) => {
+const popularMovies = {};
+
+        if(popularMovie.has("popular"))
+            popularMovies["popular"] = popularMovie.get("popular");
+        else{
+            const popular = await fetch(`${serverUrl}/api/${"movie"}/${"popular"}/${page}/list`)
+            popularMovie.set("popular", popular);
+            popularMovies["popular"] =  popular;
+        }
+    return popularMovies;
 }
 
 const tvMap = new Map();
@@ -334,5 +395,6 @@ export {
     getTv, getGenres, getTrending,
     getKeywords, getSearchData, getMovieGenres,
     getTvGenres, getVideos, getCredits,
-    getSimilar, getReviews
+    getSimilar, getReviews, getUpcomingMovies,
+    getNowPlayingMovies, getPopularMovies, getTopRatedMovies
 }

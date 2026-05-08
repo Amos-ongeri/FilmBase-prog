@@ -2,8 +2,8 @@ const {getMovies, getGenres, getDetails, getVideos, getCredits, getSimilar, getR
 
 const moviesCon = async (req, res)=>{
     try{
-        const { media_type,category } = req.params;
-        const data = await getMovies(media_type,category) 
+        const { media_type, category, page } = req.params;
+        const data = await getMovies(media_type,category,page) 
         res.json(data);
     }catch(e){
         console.error("Error in titleCon:", e.message);

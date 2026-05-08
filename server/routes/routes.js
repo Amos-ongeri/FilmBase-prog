@@ -2,7 +2,7 @@ const { similarCon, moviesCon, detailsCon, videosCon, creditsCon, genreCon, revi
 
 const router = require('express').Router()
 
-router.get('/:media_type/:category/list',moviesCon)
+router.get('/:media_type/:category/:page/list',moviesCon)
 router.get('/:id/:media_type/details', detailsCon)
 router.get('/:id/:media_type/videos',videosCon)
 router.get('/:id/:media_type/credits',creditsCon)
