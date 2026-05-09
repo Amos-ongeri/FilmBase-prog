@@ -51,7 +51,6 @@ const getTv = async (page) => {
 
         }
     }
-    console.log("films", tv);
     return tv;
 }
 
