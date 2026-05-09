@@ -6,8 +6,7 @@ const moviesCon = async (req, res)=>{
         const data = await getMovies(media_type,category,page) 
         res.json(data);
     }catch(e){
-        console.error("Error in titleCon:", e.message);
-    res.status(500).json({ error: "Failed to fetch titles" });
+        res.status(500).json({ error: "server error" });
     }
 }
 

@@ -28,10 +28,13 @@ const TvSeries = ()=>{
 
             param.set("category", cat);
             param.set("page", 1);
+            param.set("genre", "All");
 
             return param;
         })
     }
+    console.log("type", typeof page);
+    
 
     useEffect(() => {
         const getData = async () => {
@@ -102,18 +105,12 @@ const TvSeries = ()=>{
                 </div>
             </section>
             <div className="min-h-0 min-w-full px-2 md:px-12">
-            {hasTv ? (
+            {hasTv && (
                 <>
                     { category === "All" && (
                         <FilmSection films={allTv} type={"tv"} genre={genre} genres={genres} page={page} total={tv?.airing_today?.total_pages + tv?.popular?.total_pages + tv?.top_rated?.total_pages + tv?.on_the_air?.total_pages} setPage={(p) => updateParam("page", p)}/>
                     )}
                 </>
-            ) : (
-                <div className="grid grid-cols-5 place-items-center pt-5">
-                    {Array.from({length:5}).map((_,i) => (
-                        <CardSkeleton key={i} />
-                    ))}
-                </div>
             )}
             {tv && category === "top_rated" && (
                 <FilmSection films={tv.results} type={"tv"} genre={genre} genres={genres} page={page} total={tv.total_pages} setPage={(p) => updateParam("page", p)} />

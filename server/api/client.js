@@ -13,20 +13,16 @@ class tmdbClient{
     }
 
     async request(path){
-        try{
-            const res = await fetch(`${this.Base}${path}`,{
-                method: "GET",
-                headers: this.headers
-            })
-            if(!res.ok){
-                const error = await res.json().catch(()=>({}))
-                throw new Error(`Tmdb error ${res.status} : ${error.status_message || res.statusText}`)
-            }
-        
-        return res.json();
-        } catch(e) {
-            throw e;
+        const res = await fetch(`${this.Base}${path}`,{
+            method: "GET",
+            headers: this.headers
+        })
+        if(!res.ok){
+            const error = await res.json().catch(()=>({}))
+            throw new Error(`Tmdb error ${res.status} : ${error.status_message || res.statusText}`)
         }
+
+        return res.json();
     }
 }
 

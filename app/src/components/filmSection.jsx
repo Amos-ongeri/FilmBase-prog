@@ -4,7 +4,7 @@ import { SmartPagination } from "./smartPagination"
 const FilmSection = ({films, genre, genres, page, total, setPage, type}) => {
     const selectedGenre = genres?.find(g => g?.name === genre);
 
-    const filteredFilms = genre !== "All" ? films?.filter(movie => movie.genre_ids.includes(selectedGenre.id)) : films
+    const filteredFilms = genre !== "All" ? films?.filter(movie => movie.genre_ids.includes(selectedGenre?.id)) : films
 
     return (
         <div>

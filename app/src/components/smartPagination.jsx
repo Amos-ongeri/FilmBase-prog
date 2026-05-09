@@ -47,7 +47,6 @@ export const SmartPagination = ({
         {/* Previous */}
         <PaginationItem>
           <PaginationPrevious
-            href="#"
             onClick={(e) => {
               e.preventDefault()
 
@@ -65,7 +64,6 @@ export const SmartPagination = ({
               <PaginationEllipsis />
             ) : (
               <PaginationLink
-                href="#"
                 isActive={page === currentPage}
                 onClick={(e) => {
                   e.preventDefault()

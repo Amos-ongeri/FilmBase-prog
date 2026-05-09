@@ -27,6 +27,8 @@ const Movies = ()=>{
       const params = new URLSearchParams(prev);
       params.set("category", cat);
       params.set("page", 1);
+      params.set("genre", "All");
+
       return params;
     });
   };
