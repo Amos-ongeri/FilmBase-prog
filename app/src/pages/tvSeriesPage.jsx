@@ -87,7 +87,7 @@ const TvSeries = ()=>{
                 <div className="flex items-end justify-between mb-6 flex-wrap gap-4">
                     <h2 className="text-2xl md:text-3xl font-bold">All Series</h2>
                     <div className="flex flex-wrap gap-2 text-sm">
-                        <span onClick={() => setCategory("All")} className={`glass rounded-full px-3.5 py-1.5 transition hover:-translate-y-1 ${category === "All" ? "bg-primary" : "glass"}`}>All</span>
+                        <span onClick={() => setCategory("All")} className={`rounded-full px-3.5 py-1.5 transition hover:-translate-y-1 ${category === "All" ? "bg-primary" : "glass"}`}>All</span>
                         {(["airing_today", "top_rated", "popular", "on_the_air"]).map((s) => (
                             <button
                                 key={s}
