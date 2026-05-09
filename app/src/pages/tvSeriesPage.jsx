@@ -1,51 +1,79 @@
 import { useState,useEffect, useRef } from "react";
 import CardSkeleton from "@/components/placeholders/cardSkeleton";
-import MovieCard from "@/components/cards/MovieCard";
-import { getTv, getTvGenres } from "@/services/api";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
+import { getCategoryTv, getTv, getTvGenres } from "@/services/api";
+import FilmSection from "@/components/filmSection";
 
 const TvSeries = ()=>{
-    const [tv, setTv] = useState({ popular: [], top_rated: [], on_the_air: [], airing_today: [] })
+    const [tv, setTv] = useState({});
+    const [popularTv, setPopularTv] = useState({});
+    const [onTheAirTv, setOnTheAirTv] = useState({});
+    const [topRatedTv, setTopRatedTv] = useState({});
+    const [airingTodayTv, setAiringTodayTv] = useState({});
+    const [pageAll, setPageAll] = useState(1);
+    const [airingTodayPage, setAiringtodayPage] = useState(1)
+    const [topRatedPage, setTopRatedPage]= useState(1);
+    const [onTheAirPage, setOnTheAirPage] = useState(1);
+    const [popularPage, setPopularPage] = useState(1);
     const [genres, setGenres] = useState();
     const [genre, setGenre] = useState("All");
     const [category, setCategory] = useState("All");
 
-    const initTv = async () => {
-        const tv = await getTv()
-        setTv(() => {
-            const newState = {};
-            tv?.forEach(t => newState[t.category] = t.tv)
-            return newState
-        })
-    }
-    const initTvGenres = async () => {
-        const gen = await getTvGenres('tv');
-        setGenres(gen);
-    }
-
-    useEffect(()=> {
-        const loadData = async () => {
-            await Promise.all([initTv(),initTvGenres()])
+    useEffect(() => {
+        const initTv = async () => {
+            const tv = await getTv(pageAll)
+            setTv(tv)
         }
-        loadData();
+        initTv()
+    },[pageAll])
+
+    useEffect(() => {
+        const initTvGenres = async () => {
+            const gen = await getTvGenres('tv');
+            setGenres(gen);
+        }
+        initTvGenres()
     },[])
 
+    useEffect(() => {
+        const initOnTheAir = async () => {
+        const ms = await getCategoryTv("on_the_air",onTheAirPage);
+        setOnTheAirTv(ms)
+        }
+        initOnTheAir();
+    },[onTheAirPage])
+
+    useEffect(() => {
+        const initTopRated = async () => {
+        const ms = await getCategoryTv("top_rated",topRatedPage);
+        setTopRatedTv(ms)
+        }
+        initTopRated();
+    },[topRatedPage])
+
+    useEffect(() => {
+        const airingToday = async () => {
+        const ms = await getCategoryTv("airing_today",airingTodayPage);
+        setAiringTodayTv(ms)
+        }
+        airingToday();
+    },[airingTodayPage])
+
+    useEffect(()=> {
+        const initPopular = async () => {
+        const ms = await getCategoryTv("popular",popularPage);
+      setPopularTv(ms)
+        }
+        initPopular();
+    },[popularPage])
+
     const hasTv = [
-        tv?.airing_today,
-        tv?.on_the_air,
-        tv?.popular,
-        tv?.top_rated
+        tv?.airing_today?.results,
+        tv?.on_the_air?.results,
+        tv?.popular?.results,
+        tv?.top_rated?.results
     ].every(member => member?.length !== 0 && member !== undefined)
 
-    const allTv = [...(tv?.["airing_today"] || []),...(tv?.["top_rated"] || []),...(tv?.["popular"] || []),...(tv?.["on_the_air"] || [])];
+    const allTv = [...(tv?.airing_today?.results || []),...(tv?.top_rated?.results || []),...(tv?.popular?.results || []),...(tv?.on_the_air?.results || [])];
 
     const topRef = useRef();
 
@@ -55,7 +83,7 @@ const TvSeries = ()=>{
 
     return(
         <div ref={topRef} className="w-full min-h-50 text-background dark:text-gray-300 bg-foreground dark:bg-background">
-            <section className="px-5 md:px-12 pt-16">
+            <section className="px-5 md:px-12 pt-16 mb-8">
                 <div className="flex items-end justify-between mb-6 flex-wrap gap-4">
                     <h2 className="text-2xl md:text-3xl font-bold">All Series</h2>
                     <div className="flex flex-wrap gap-2 text-sm">
@@ -84,29 +112,12 @@ const TvSeries = ()=>{
                     ))}
                 </div>
             </section>
+            <div className="min-h-0 min-w-full px-2 md:px-12">
             {hasTv ? (
                 <>
-                    <div className="min-h-50 min-w-full px-2 md:px-12">
-                        <br />
-                        {genre === "All" ? (
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                                {[...new Set(allTv)]?.map((tv,i)=>(
-                                    <MovieCard key={i} movie={tv} genre={genres} index={i}/>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                                {allTv?.map((tv,i)=>{
-                                    const compare = genres?.find(g => g?.name === genre);
-                                    if(tv?.genre_ids?.includes(compare?.id)){
-                                        return <MovieCard key={i} movie={tv} genre={genres} index={i}/>
-                                    } else {
-                                        return null;
-                                    }
-                                })}
-                            </div>
-                        )}
-                    </div>
+                    { category === "All" && (
+                        <FilmSection films={allTv} type={"tv"} genre={genre} genres={genres} page={pageAll} total={tv?.airing_today?.total_pages + tv?.popular?.total_pages + tv?.top_rated?.total_pages + tv?.on_the_air?.total_pages} setPage={setPageAll}/>
+                    )}
                 </>
             ) : (
                 <div className="grid grid-cols-5 place-items-center pt-5">
@@ -115,31 +126,19 @@ const TvSeries = ()=>{
                     ))}
                 </div>
             )}
-            <br />
-            <Pagination>
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious href="#" />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#">1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#" isActive>
-                        2
-                        </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#">3</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationEllipsis />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationNext href="#" />
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
+            {topRatedTv && category === "top_rated" && (
+                <FilmSection films={topRatedTv.results} type={"tv"} genre={genre} genres={genres} page={topRatedPage} total={topRatedTv.total_pages} setPage={setTopRatedPage} />
+            )}
+            {airingTodayTv && category === "airing_today" && (
+                <FilmSection films={airingTodayTv.results} type={"tv"} genre={genre} genres={genres} page={airingTodayPage} total={airingTodayTv.total_pages} setPage={setAiringtodayPage} />
+            )}
+            {onTheAirTv && category === "on_the_air" && (
+                <FilmSection films={onTheAirTv.results} type={"tv"} genre={genre} genres={genres} page={onTheAirPage} total={onTheAirTv.total_pages} setPage={setOnTheAirPage} />
+            )}
+            {popularTv && category === "popular" && (
+                <FilmSection films={popularTv.results} type={"tv"} genre={genre} genres={genres} page={popularPage} total={popularTv.total_pages} setPage={setPopularPage} />
+            )}
+            </div>
             <br />
             <footer className="border-t border-muted/50 dark:border-border py-8 px-6 md:px-12 mt-5 text-center text-xs dark:text-muted-foreground">
                 © {new Date().getFullYear()} FilmBase · Built for cinema.

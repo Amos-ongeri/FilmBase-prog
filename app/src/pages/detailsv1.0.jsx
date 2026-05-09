@@ -147,7 +147,7 @@ const Details = () => {
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary mb-5">
               <span className="h-px w-8 bg-primary" /> Featured Film
             </div>
-            <h1 className="text-5xl md:text-7xl font-extrabold leading-[1.05] mb-6 transition-colors duration-300">
+            <h1 className="text-5xl md:text-6xl font-extrabold leading-[1.05] w-full mb-6 transition-colors duration-300">
               {details?.title || details?.name}
             </h1>
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm  dark:text-muted-foreground text-background/70 mb-7">

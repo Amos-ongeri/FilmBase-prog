@@ -1,16 +1,15 @@
 import { useEffect,useRef,useState } from "react";
 import CardSkeleton from "@/components/placeholders/cardSkeleton";
-import MovieCard from "@/components/cards/MovieCard";
-import { getMovieGenres, getMovies, getNowPlayingMovies, getPopularMovies, getTopRatedMovies, getUpcomingMovies } from "@/services/api";
-import { SmartPagination } from "@/components/smartPagination";
+import { getCategoryMovies, getMovieGenres, getMovies } from "@/services/api";
+import FilmSection from "@/components/filmSection";
 
 const Movies = ()=>{
   const [movies, setMovies] = useState({})
   const [upcomingMovies, setUpcomingMovies] = useState({})
   const [topRatedMovies, setTopRatedMovies] = useState({})
-  const [nowPlayingmovies, setNowPlayingMovies] = useState({})
+  const [nowPlayingMovies, setNowPlayingMovies] = useState({})
   const [popularMovies, setPopularMovies] = useState({})
-  const [genres, setGenres] = useState();
+  const [genres, setGenres] = useState([]);
   const [genre, setGenre] = useState("All");
   const [category, setCategory] = useState("All");
   const [platform, setPlatform] = useState("All");
@@ -19,7 +18,6 @@ const Movies = ()=>{
   const [topRatedPage, setTopRatedPage]= useState(1);
   const [nowPlayingPage, setNowPlayingPage] = useState(1);
   const [popularPage, setPopularPage] = useState(1);
-  console.log("movies", movies);
 
   useEffect(() => {
     const initMovieGenres = async () => {
@@ -39,7 +37,7 @@ const Movies = ()=>{
 
   useEffect(() => {
     const initUpcoming = async () => {
-      const ms = await getUpcomingMovies(upcomingPage);
+      const ms = await getCategoryMovies("upcoming",upcomingPage);
       setUpcomingMovies(ms)
     }
     initUpcoming();
@@ -47,7 +45,7 @@ const Movies = ()=>{
 
   useEffect(() => {
     const initTopRated = async () => {
-      const ms = await getTopRatedMovies(topRatedPage);
+      const ms = await getCategoryMovies("top_rated",topRatedPage);
       setTopRatedMovies(ms)
     }
     initTopRated();
@@ -55,7 +53,7 @@ const Movies = ()=>{
 
   useEffect(() => {
     const initNowPlaying = async () => {
-      const ms = await getNowPlayingMovies(nowPlayingPage);
+      const ms = await getCategoryMovies("now_playing",nowPlayingPage);
       setNowPlayingMovies(ms)
     }
     initNowPlaying();
@@ -63,7 +61,7 @@ const Movies = ()=>{
 
   useEffect(()=> {
     const initPopular = async () => {
-      const ms = await getPopularMovies(popularPage);
+      const ms = await getCategoryMovies("popular",popularPage);
       setPopularMovies(ms)
     }
     initPopular();
@@ -81,7 +79,6 @@ const Movies = ()=>{
   ].every(section => section?.length > 0 && section !== undefined);
 
   const allMovies = [...(movies?.["upcoming"]?.results || []),...(movies?.["top_rated"]?.results || []),...(movies?.["popular"]?.results || []),...(movies?.["now_playing"]?.results || [])];
-  
 
   const PLATFORMS = ["Netflix", "Prime Video", "Disney+", "Apple TV+", "Max", "Hulu"];
 
@@ -141,39 +138,7 @@ const Movies = ()=>{
         {hasMovies ? (
           <>
             { category === "All" && (
-              (genre !== "All" ? (
-                <div>
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                    {allMovies?.map((movie,i)=> {
-                        let m = {...movie, media_type: "movie"}
-                        const gen = genres?.find(g => g?.name === genre)
-
-                        if(movie?.genre_ids?.includes(gen?.id)){
-                          return <MovieCard key={i} movie={m} genre={genres} index={i}/>
-                        }
-                    })}
-                  </div>
-                  <br />
-                    <SmartPagination currentPage={pageAll}
-                    totalPages={movies["now_playing"].total_pages + movies["popular"].total_pages + movies["top_rated"].total_pages + movies["upcoming"].total_pages}
-                    onPageChange={setPageAll}/>
-                  <br />
-                </div>
-              ) : (
-                <div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                      {allMovies?.map((movie,i)=> {
-                          let m = {...movie, media_type: "movie"}
-                          return <MovieCard key={i} movie={m} genre={genres} index={i}/>
-                      })}
-                    </div>
-                    <br />
-                    <SmartPagination currentPage={pageAll}
-                      totalPages={movies["now_playing"].total_pages + movies["popular"].total_pages + movies["top_rated"].total_pages + movies["upcoming"].total_pages}
-                      onPageChange={setPageAll}/>
-                    <br />
-                </div>
-              ))
+              <FilmSection films={allMovies} type={"movie"} genre={genre} genres={genres} page={pageAll} total={movies["now_playing"].total_pages + movies["popular"].total_pages + movies["top_rated"].total_pages + movies["upcoming"].total_pages} setPage={setPageAll}/>
             )}
           </>
         ) : (
@@ -184,144 +149,16 @@ const Movies = ()=>{
           </div>
         )}
         {topRatedMovies && category === "top_rated" && (
-          (genre !== "All" ? (
-            <div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-              {topRatedMovies?.results?.map((movie,i)=> {
-                  let m = {...movie, media_type: "movie"}
-                  const gen = genres?.find(g => g?.name === genre)
-
-                  if(movie?.genre_ids?.includes(gen?.id)){
-                    return <MovieCard key={i} movie={m} genre={genres} index={i}/>
-                  }
-              })}
-              </div>
-              <br />
-              <SmartPagination currentPage={topRatedPage}
-                  totalPages={topRatedMovies?.total_pages}
-                  onPageChange={setTopRatedPage}/>
-              <br />
-            </div>
-          ) : (
-            <div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-              {topRatedMovies?.results?.map((movie,i)=> {
-                  let m = {...movie, media_type: "movie"}
-                  return <MovieCard key={i} movie={m} genre={genres} index={i}/>
-              })}
-              </div>
-              <br />
-              <SmartPagination currentPage={topRatedPage}
-                  totalPages={topRatedMovies?.total_pages}
-                  onPageChange={setTopRatedPage}/>
-              <br />
-            </div>
-          ))
+          <FilmSection films={topRatedMovies.results} type={"movie"} genre={genre} genres={genres} page={topRatedPage} total={topRatedMovies?.total_pages} setPage={setTopRatedPage} />
         )}
         {upcomingMovies && category === "upcoming" && (
-          (genre !== "All" ? (
-            <div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-              {upcomingMovies?.results?.map((movie,i)=> {
-                  let m = {...movie, media_type: "movie"}
-                  const gen = genres?.find(g => g?.name === genre)
-
-                  if(movie?.genre_ids?.includes(gen?.id)){
-                    return <MovieCard key={i} movie={m} genre={genres} index={i}/>
-                  }
-              })}
-              </div>
-              <br />
-              <SmartPagination currentPage={upcomingPage}
-                totalPages={upcomingMovies?.total_pages}
-                  onPageChange={setUpcomingPage}/>
-              <br />
-            </div>
-          ) : (
-            <div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-              {upcomingMovies?.results?.map((movie,i)=> {
-                  let m = {...movie, media_type: "movie"}
-                  return <MovieCard key={i} movie={m} genre={genres} index={i}/>
-              })}
-              </div>
-              <br />
-              <SmartPagination currentPage={upcomingPage}
-                totalPages={upcomingMovies?.total_pages}
-                  onPageChange={setUpcomingPage}/>
-              <br />
-            </div>
-          ))
+          <FilmSection films={upcomingMovies.results} type={"movie"} genre={genre} genres={genres} page={upcomingPage} total={upcomingMovies?.total_pages} setPage={setUpcomingPage} />
         )}
         {popularMovies && category === "popular" && (
-          (genre !== "All" ? (
-            <div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-              {popularMovies?.results?.map((movie,i)=> {
-                  let m = {...movie, media_type: "movie"}
-                  const gen = genres?.find(g => g?.name === genre)
-
-                  if(movie?.genre_ids?.includes(gen?.id)){
-                    return <MovieCard key={i} movie={m} genre={genres} index={i}/>
-                  }
-              })}
-              </div>
-              <br />
-              <SmartPagination currentPage={popularPage}
-                totalPages={popularMovies?.total_pages}
-                  onPageChange={setPopularPage}/>
-              <br />
-            </div>
-          ) : (
-            <div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-              {popularMovies?.results?.map((movie,i)=> {
-                  let m = {...movie, media_type: "movie"}
-                  return <MovieCard key={i} movie={m} genre={genres} index={i}/>
-              })}
-              </div>
-              <br />
-              <SmartPagination currentPage={popularPage}
-                totalPages={popularMovies?.total_pages}
-                  onPageChange={setPopularPage}/>
-              <br />
-            </div>
-          ))
+          <FilmSection films={popularMovies.results} type={"movie"} genre={genre} genres={genres} page={popularPage} total={popularMovies?.total_pages} setPage={setPopularPage} />
         )}
-        {nowPlayingmovies && category === "now_playing" && (
-          (genre !== "All" ? (
-            <div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-              {nowPlayingmovies?.results?.map((movie,i)=> {
-                  let m = {...movie, media_type: "movie"}
-                  const gen = genres?.find(g => g?.name === genre)
-
-                  if(movie?.genre_ids?.includes(gen?.id)){
-                    return <MovieCard key={i} movie={m} genre={genres} index={i}/>
-                  }
-              })}
-              </div>
-              <br />
-              <SmartPagination currentPage={nowPlayingPage}
-                totalPages={nowPlayingmovies?.total_pages}
-                  onPageChange={setNowPlayingPage}/>
-              <br />
-            </div>
-          ) : (
-            <div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-              {nowPlayingmovies?.results?.map((movie,i)=> {
-                  let m = {...movie, media_type: "movie"}
-                  return <MovieCard key={i} movie={m} genre={genres} index={i}/>
-              })}
-              </div>
-              <br />
-              <SmartPagination currentPage={nowPlayingPage}
-                totalPages={nowPlayingmovies?.total_pages}
-                  onPageChange={setNowPlayingPage}/>
-              <br />
-            </div>
-          ))
+        {nowPlayingMovies && category === "now_playing" && (
+          <FilmSection films={nowPlayingMovies.results} type={"movie"} genre={genre} genres={genres} page={nowPlayingPage} total={nowPlayingMovies?.total_pages} setPage={setNowPlayingPage} />
         )}
       </div>
 

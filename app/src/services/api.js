@@ -18,99 +18,56 @@ const movies = {};
     return movies;
 }
 
-const upcomingMovie = new Map();
-const getUpcomingMovies = async (page) => {
-let upcomingMovies = {};
+const categoryMovie = new Map();
+const getCategoryMovies = async (category,page) => {
+    let categoryMovies = {};
 
-        if(upcomingMovie.has(`upcoming${page}`)){
-            upcomingMovies = upcomingMovie.get(`upcoming${page}`);
-        } else {
-            const res = await fetch(`${serverUrl}/api/${"movie"}/${"upcoming"}/${page}/list`);
-            const upcoming = await res.json();
-            upcomingMovie.set(`upcoming${page}`, upcoming);
-            upcomingMovies =  upcoming;
-        }
-    return upcomingMovies;
-}
-
-const topRatedMovie = new Map();
-const getTopRatedMovies = async (page) => {
-let topRatedMovies = {};
-
-        if(topRatedMovie.has(`topRated:${page}`)){
-            topRatedMovies = topRatedMovie.get(`topRated:${page}`);
+        if(categoryMovie.has(`${category}:${page}`)){
+            categoryMovies = categoryMovie.get(`${category}:${page}`);
         }else{
-            const res = await fetch(`${serverUrl}/api/${"movie"}/${"top_rated"}/${page}/list`);
-            const topRated = await res.json();
-            console.log(topRated);
-
-            topRatedMovie.set(`topRated:${page}`, topRated);
-            topRatedMovies =  topRated;
+            const res = await fetch(`${serverUrl}/api/${"movie"}/${category}/${page}/list`);
+            const films = await res.json();
+            categoryMovie.set(`${category}:${page}`, films);
+            categoryMovies =  films;
         }
-    return topRatedMovies;
-}
-
-const nowPlayingMovie = new Map();
-const getNowPlayingMovies = async (page) => {
-let nowPlayingMovies = {};
-
-
-        if(nowPlayingMovie.has(`nowPlaying:${page}`)){
-            nowPlayingMovies = nowPlayingMovie.get(`nowPlaying:${page}`);
-        } else {
-            const res = await fetch(`${serverUrl}/api/${"movie"}/${"now_playing"}/${page}/list`);
-            const nowPlaying = await res.json();
-            nowPlayingMovie.set(`nowPlaying:${page}`, nowPlaying);
-            nowPlayingMovies =  nowPlaying;
-        }
-    return nowPlayingMovies;
-}
-
-const popularMovie = new Map();
-const getPopularMovies = async (page) => {
-    let popularMovies = {};
-
-        if(popularMovie.has(`popular:${page}`)){
-            popularMovies = popularMovie.get(`popular:${page}`);
-        }else{
-            const res = await fetch(`${serverUrl}/api/${"movie"}/${"popular"}/${page}/list`);
-            const popular = await res.json();
-            popularMovie.set(`popular:${page}`, popular);
-            popularMovies =  popular;
-        }
-    return popularMovies;
+    return categoryMovies;
 }
 
 const tvMap = new Map();
 const tvCategories = ['airing_today','popular','top_rated','on_the_air'];
-const getTv = async () => {
-    const tv = [];
-    let tvData;
+const getTv = async (page) => {
+    const tv = {};
+
     for(const cat of tvCategories){
-        if(tvMap.has(cat))
-            tv.push({category: cat, tv: tvMap.get(cat)});
-        else{
-        await fetch(`${serverUrl}/api/${"tv"}/${cat}/list`)
-        .then(res => res.json())
-        .then(data => {
-            if(Array.isArray(data.results)){
-                tvData = data.results.map(item=>({
-                    ...item,
-                    media_type: "tv"
-                }))
-            }else if(typeof data.results === 'object'){
-                tvData = {
-                    ...data.results,
-                    media_type: "tv"
-                }
-            }
-        })
-        .catch(e => {throw new Error("error: ", e.message);})
-            tvMap.set(cat, tvData);
-            tv.push({ category: cat, tv: tvData})
+        if(tvMap.has(`cat:${page}`)){
+            tv[cat] = tvMap.get(`${cat}:${page}`);
+        }else{
+            const res = await fetch(`${serverUrl}/api/${"tv"}/${cat}/${page}/list`)
+            const tvFilms = await res.json();
+
+            tvMap.set(`${cat}:${page}`, tvFilms);
+
+            tv[cat] = tvFilms;
+
         }
     }
+    console.log("films", tv);
     return tv;
+}
+
+const categoryTv = new Map();
+const getCategoryTv = async (category,page) => {
+    let categoryTvs = {};
+
+        if(categoryTv.has(`${category}:${page}`)){
+            categoryTvs = categoryTv.get(`${category}:${page}`);
+        }else{
+            const res = await fetch(`${serverUrl}/api/${"tv"}/${category}/${page}/list`);
+            const films = await res.json();
+            categoryTv.set(`${category}:${page}`, films);
+            categoryTvs =  films;
+        }
+    return categoryTvs;
 }
 
 const dataMap = new Map();
@@ -391,6 +348,6 @@ export {
     getTv, getGenres, getTrending,
     getKeywords, getSearchData, getMovieGenres,
     getTvGenres, getVideos, getCredits,
-    getSimilar, getReviews, getUpcomingMovies,
-    getNowPlayingMovies, getPopularMovies, getTopRatedMovies
+    getSimilar, getReviews, getCategoryMovies,
+    getCategoryTv
 }
