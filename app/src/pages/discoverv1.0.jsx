@@ -5,27 +5,64 @@ import { Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { MdSearch } from "react-icons/md";
 import user_avatar from '../assets/user-avatar.png'
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
+import { useSearchParams } from "react-router-dom";
 
 const Discover = () => {
-  const [type, setType] = useState("all");
-  const [query, setQuery] = useState("");
+  const GENRES = ["Science Fiction", "Drama", "Thriller", "Adventure", "Mystery", "Action"];
+
   const [temporaryQuery, setTemporaryQuery] = useState("");
-  const [genre, setGenre] = useState("All");
+  const [query, setQuery] = useState('');
   const [genres, setGenres] = useState();
   const [discover, setDiscover] = useState();
   const [keywords,setKeywords] = useState();
   const [searchData, setSearchData] = useState();
-  const GENRES = ["Science Fiction", "Drama", "Thriller", "Adventure", "Mystery", "Action"];
+
+  const [searchParam, setSearchParam] = useSearchParams();
+  // const page = Number(searchParam.get("page") ?? 1);
+  const type = searchParam.get("type") ?? "all";
+  const genre = searchParam.get("genre") ?? "All";
+  // const query = searchParam.get("query") ?? "";
+
   const isSearching = query.length > 0 || genre !== "All" || type !== "all";
+
+  const updateParams = (key, value) => {
+    const params = new URLSearchParams(searchParam);
+
+    params.set(key,value);
+
+    setSearchParam(params);
+  }
+
+  const changeType = (t) => {
+    setSearchParam(() => {
+      const params = new URLSearchParams();
+      params.set("type", t)
+
+      return params;
+    })
+  }
+
+  const resetParams = () => {
+    setSearchParam(() => {
+      const params = new URLSearchParams();
+
+      return params;
+    })
+  }
+
+  useEffect(() => {
+    const q = query.trim();
+    if (!q) return;
+
+    //never run if no query
+    const timeout = setTimeout(() => {
+      const params = new URLSearchParams();
+      params.set("query", q);
+      setSearchParam(params);
+    }, 600);
+
+    return () => clearTimeout(timeout);
+  }, [query, setSearchParam]);
 
   useEffect(() => {
 
@@ -108,9 +145,8 @@ const Discover = () => {
             onChange={(e) => {
               setQuery(e.target.value);
               setTemporaryQuery(e.target.value);
-              setGenre("All");
-              setType("all");
-              if(!e?.target?.value){setQuery(""); setGenre("All"); setType("all");}
+
+              if(!e?.target?.value){resetParams()}
               if(keywordsRef?.current.classList.contains("hidden")){keywordsRef?.current.classList.remove("hidden");}
             }}
             placeholder="Search titles, genres, actors…"
@@ -118,7 +154,7 @@ const Discover = () => {
           />
           {query && (
             <button
-              onClick={() =>{setQuery(""); setGenre("All"); setType("all"); }}
+              onClick={() =>{resetParams()}}
               className="absolute right-5 top-1/2 -translate-y-1/2 text-muted/50 hover:dark:text-foreground hover:text-muted transition-colors duration-75"
               >
               <X className="w-5 h-5" />
@@ -129,7 +165,7 @@ const Discover = () => {
               {
                 keywords.map((k,i)=>(
                   <div onClick={()=> {
-                      setQuery(k.name)
+                      updateParams("query",k.name)
                       setTemporaryQuery('')
                     }} key={i} className="h-fit hover:bg-muted hover:text-white rounded-md p-3 flex items-center text-foreground cursor-pointer gap-3">
                     <MdSearch size={20}/>
@@ -145,9 +181,7 @@ const Discover = () => {
             <button
               key={t}
               onClick={() => {
-                setType(t);
-                setGenre("All");
-                setQuery('');
+                changeType(t);
               }}
               className={`
                 rounded-full px-5 py-2 text-sm border border-muted/50 dark:border-border transition capitalize
@@ -170,7 +204,7 @@ const Discover = () => {
                 {GENRES.map((g) => (
                   <button
                     key={g}
-                    onClick={() => setGenre(g)}
+                    onClick={() => updateParams("genre",g)}
                     className="h-15 rounded-2xl overflow-hidden border border-muted/50 dark:border-border group    hover:border-0 transition duration-150"
                   >
                     <div className="relative h-full flex items-center justify-center text-xl font-bold hover:dark:text-slate-900 hover:text-foreground z-10 transition-colors duration-75 before:absolute before:inset-0 hover:before:bg-primary before:-z-20 before:transition-colors before:duration-75 dark:text-foreground text-background">{g}</div>
@@ -184,32 +218,6 @@ const Discover = () => {
                 {genre === "All" && ((discover?.["movies"]?.concat(discover?.["tv"]))?.map((t,i) => ( <MovieCard3 key={i} t={t} k={t.id}/>)))}
               </div>
             </div>
-            <br />
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious href="#" />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">1</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#" isActive>
-                    2
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">3</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext href="#" />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-            <br />
           </div>
         ) : (
           <div>
@@ -219,7 +227,7 @@ const Discover = () => {
               </div>
               {(genre !== "All" || type !== "all") && (
                 <button
-                  onClick={() => { setGenre("All"); setType("all"); }}
+                  onClick={() => resetParams()}
                   className="text-sm text-primary hover:underline"
                 >
                   Clear filters
@@ -231,31 +239,6 @@ const Discover = () => {
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
                 {discover?.["movies"]?.map((t, i) => ( <MovieCard3 key={i} t={t} k={t.id}/>))}
               </div>
-              <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious href="#" />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">1</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#" isActive>
-                    2
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">3</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext href="#" />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-            <br />
             </>
             ) : (
               (type === "series" && (
@@ -263,32 +246,6 @@ const Discover = () => {
                   <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
                     {discover?.["tv"]?.map((t, i) => ( <MovieCard3 key={i} t={t} k={t.id}/>))}
                   </div>
-                  <br />
-                  <Pagination>
-                    <PaginationContent>
-                      <PaginationItem>
-                        <PaginationPrevious href="#" />
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink href="#">1</PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink href="#" isActive>
-                          2
-                        </PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationLink href="#">3</PaginationLink>
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationEllipsis />
-                      </PaginationItem>
-                      <PaginationItem>
-                        <PaginationNext href="#" />
-                      </PaginationItem>
-                    </PaginationContent>
-                  </Pagination>
-                  <br />
                 </>
               ))
             )}
@@ -301,32 +258,6 @@ const Discover = () => {
                 }
               }))}
             </div>
-            <br />
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious href="#" />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">1</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#" isActive>
-                    2
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">3</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext href="#" />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
-            <br />
             </>
             <div>
               {(personFilter && personFilter?.length > 0) && (
