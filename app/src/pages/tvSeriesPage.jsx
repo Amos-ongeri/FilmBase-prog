@@ -2,29 +2,50 @@ import { useState,useEffect, useRef } from "react";
 import CardSkeleton from "@/components/placeholders/cardSkeleton";
 import { getCategoryTv, getTv, getTvGenres } from "@/services/api";
 import FilmSection from "@/components/filmSection";
+import { useSearchParams } from "react-router-dom";
 
 const TvSeries = ()=>{
     const [tv, setTv] = useState({});
-    const [popularTv, setPopularTv] = useState({});
-    const [onTheAirTv, setOnTheAirTv] = useState({});
-    const [topRatedTv, setTopRatedTv] = useState({});
-    const [airingTodayTv, setAiringTodayTv] = useState({});
-    const [pageAll, setPageAll] = useState(1);
-    const [airingTodayPage, setAiringtodayPage] = useState(1)
-    const [topRatedPage, setTopRatedPage]= useState(1);
-    const [onTheAirPage, setOnTheAirPage] = useState(1);
-    const [popularPage, setPopularPage] = useState(1);
     const [genres, setGenres] = useState();
-    const [genre, setGenre] = useState("All");
-    const [category, setCategory] = useState("All");
+
+    const [searchParam, setSearchParam]= useSearchParams();
+
+    const page = Number(searchParam.get('page') ?? 1);
+    const category = searchParam.get('category') ?? "All";
+    const genre = searchParam.get('genre') ?? "All";
+
+    const updateParam = (key, value) => {
+        const param = new URLSearchParams(searchParam);
+
+        param.set(key, value);
+
+        setSearchParam(param);
+    }
+
+    const changeCategory = (cat) => {
+        setSearchParam(prev => {
+            const param = new URLSearchParams(prev);
+
+            param.set("category", cat);
+            param.set("page", 1);
+
+            return param;
+        })
+    }
 
     useEffect(() => {
-        const initTv = async () => {
-            const tv = await getTv(pageAll)
-            setTv(tv)
+        const getData = async () => {
+            let data;
+
+            if(category === "All"){
+                data = await getTv(page);
+            } else {
+                data = await getCategoryTv(category,page);
+            }
+            setTv(data);
         }
-        initTv()
-    },[pageAll])
+        getData();
+    },[category,page])
 
     useEffect(() => {
         const initTvGenres = async () => {
@@ -34,38 +55,6 @@ const TvSeries = ()=>{
         initTvGenres()
     },[])
 
-    useEffect(() => {
-        const initOnTheAir = async () => {
-        const ms = await getCategoryTv("on_the_air",onTheAirPage);
-        setOnTheAirTv(ms)
-        }
-        initOnTheAir();
-    },[onTheAirPage])
-
-    useEffect(() => {
-        const initTopRated = async () => {
-        const ms = await getCategoryTv("top_rated",topRatedPage);
-        setTopRatedTv(ms)
-        }
-        initTopRated();
-    },[topRatedPage])
-
-    useEffect(() => {
-        const airingToday = async () => {
-        const ms = await getCategoryTv("airing_today",airingTodayPage);
-        setAiringTodayTv(ms)
-        }
-        airingToday();
-    },[airingTodayPage])
-
-    useEffect(()=> {
-        const initPopular = async () => {
-        const ms = await getCategoryTv("popular",popularPage);
-      setPopularTv(ms)
-        }
-        initPopular();
-    },[popularPage])
-
     const hasTv = [
         tv?.airing_today?.results,
         tv?.on_the_air?.results,
@@ -73,7 +62,7 @@ const TvSeries = ()=>{
         tv?.top_rated?.results
     ].every(member => member?.length !== 0 && member !== undefined)
 
-    const allTv = [...(tv?.airing_today?.results || []),...(tv?.top_rated?.results || []),...(tv?.popular?.results || []),...(tv?.on_the_air?.results || [])];
+    const allTv = category === "All" && [...(tv?.airing_today?.results || []),...(tv?.top_rated?.results || []),...(tv?.popular?.results || []),...(tv?.on_the_air?.results || [])];
 
     const topRef = useRef();
 
@@ -87,11 +76,11 @@ const TvSeries = ()=>{
                 <div className="flex items-end justify-between mb-6 flex-wrap gap-4">
                     <h2 className="text-2xl md:text-3xl font-bold">All Series</h2>
                     <div className="flex flex-wrap gap-2 text-sm">
-                        <span onClick={() => setCategory("All")} className={`rounded-full px-3.5 py-1.5 transition hover:-translate-y-1 ${category === "All" ? "bg-primary" : "glass"}`}>All</span>
+                        <span onClick={() => changeCategory("All")} className={`rounded-full px-3.5 py-1.5 transition hover:-translate-y-1 ${category === "All" ? "bg-primary" : "glass"}`}>All</span>
                         {(["airing_today", "top_rated", "popular", "on_the_air"]).map((s) => (
                             <button
                                 key={s}
-                                onClick={() => setCategory(s)}
+                                onClick={() => changeCategory(s)}
                                 className={`rounded-full px-3.5 py-1.5 transition duration-75 hover:-translate-y-1  ${category === s ? "bg-primary" : "glass"}`}
                             >
                                 {s === "airing_today" ? "Airing Today" : s === "top_rated" ? "Top Rated" : s === "popular" ? "Popular" : "On The Air"}
@@ -104,7 +93,7 @@ const TvSeries = ()=>{
                     {["All", ...(genres?.map(gen => gen?.name)) || []].map((g) => (
                         <button
                             key={g}
-                            onClick={() => setGenre(g)}
+                            onClick={() => updateParam("genre",g)}
                             className={`rounded-full px-4 py-1.5 text-sm transition duration-75 ${genre === g ? "bg-primary" : "border dark:border-border border-muted/50"}`}
                         >
                             {g}
@@ -116,7 +105,7 @@ const TvSeries = ()=>{
             {hasTv ? (
                 <>
                     { category === "All" && (
-                        <FilmSection films={allTv} type={"tv"} genre={genre} genres={genres} page={pageAll} total={tv?.airing_today?.total_pages + tv?.popular?.total_pages + tv?.top_rated?.total_pages + tv?.on_the_air?.total_pages} setPage={setPageAll}/>
+                        <FilmSection films={allTv} type={"tv"} genre={genre} genres={genres} page={page} total={tv?.airing_today?.total_pages + tv?.popular?.total_pages + tv?.top_rated?.total_pages + tv?.on_the_air?.total_pages} setPage={(p) => updateParam("page", p)}/>
                     )}
                 </>
             ) : (
@@ -126,17 +115,17 @@ const TvSeries = ()=>{
                     ))}
                 </div>
             )}
-            {topRatedTv && category === "top_rated" && (
-                <FilmSection films={topRatedTv.results} type={"tv"} genre={genre} genres={genres} page={topRatedPage} total={topRatedTv.total_pages} setPage={setTopRatedPage} />
+            {tv && category === "top_rated" && (
+                <FilmSection films={tv.results} type={"tv"} genre={genre} genres={genres} page={page} total={tv.total_pages} setPage={(p) => updateParam("page", p)} />
             )}
-            {airingTodayTv && category === "airing_today" && (
-                <FilmSection films={airingTodayTv.results} type={"tv"} genre={genre} genres={genres} page={airingTodayPage} total={airingTodayTv.total_pages} setPage={setAiringtodayPage} />
+            {tv && category === "airing_today" && (
+                <FilmSection films={tv.results} type={"tv"} genre={genre} genres={genres} page={page} total={tv.total_pages} setPage={(p) => updateParam("page", p)} />
             )}
-            {onTheAirTv && category === "on_the_air" && (
-                <FilmSection films={onTheAirTv.results} type={"tv"} genre={genre} genres={genres} page={onTheAirPage} total={onTheAirTv.total_pages} setPage={setOnTheAirPage} />
+            {tv && category === "on_the_air" && (
+                <FilmSection films={tv.results} type={"tv"} genre={genre} genres={genres} page={page} total={tv.total_pages} setPage={(p) => updateParam("page", p)} />
             )}
-            {popularTv && category === "popular" && (
-                <FilmSection films={popularTv.results} type={"tv"} genre={genre} genres={genres} page={popularPage} total={popularTv.total_pages} setPage={setPopularPage} />
+            {tv && category === "popular" && (
+                <FilmSection films={tv.results} type={"tv"} genre={genre} genres={genres} page={page} total={tv.total_pages} setPage={(p) => updateParam("page", p)} />
             )}
             </div>
             <br />
