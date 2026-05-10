@@ -45,6 +45,15 @@ const Discover = () => {
       return params;
     })
   }
+  const changeQuery = (q) => {
+    setSearchParam(() => {
+      const params = new URLSearchParams();
+      params.set("query", q)
+      params.set("type", 'all')
+
+      return params;
+    })
+  }
 
   const resetParams = () => {
     setSearchParam(() => {
@@ -141,7 +150,7 @@ const Discover = () => {
             value={query}
             onChange={(e) => {
               setTemporaryQuery(e.target.value);
-              updateParams("query", e.target.value)
+              changeQuery(e.target.value)
 
               if(!e?.target?.value){resetParams()}
               if(keywordsRef?.current.classList.contains("hidden")){keywordsRef?.current.classList.remove("hidden");}
