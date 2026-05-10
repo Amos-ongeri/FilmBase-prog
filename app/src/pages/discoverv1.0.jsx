@@ -1,11 +1,11 @@
 import MovieCard1 from "@/components/cards/MovieCard1";
 import { MovieCard3 } from "@/components/cards/MovieCard3";
-import { getDiscover, getGenres, getKeywords, getSearchData } from "@/services/api";
+import { getDiscover, getGenres, getKeywords, getSearchData, getTypeDiscover } from "@/services/api";
 import { Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { MdSearch } from "react-icons/md";
-import user_avatar from '../assets/user-avatar.png'
 import { useSearchParams } from "react-router-dom";
+import { DiscoverSection, SearchResultSection } from "@/components/filmSection";
 
 const Discover = () => {
   const GENRES = ["Science Fiction", "Drama", "Thriller", "Adventure", "Mystery", "Action"];
@@ -23,6 +23,9 @@ const Discover = () => {
   const query = searchParam.get("query") ?? "";
   const search = useRef();
 
+  console.log("search", searchData);
+  
+
   const isSearching = query.length > 0 || genre !== "All" || type !== "all";
 
   const updateParams = (key, value) => {
@@ -37,6 +40,7 @@ const Discover = () => {
     setSearchParam(() => {
       const params = new URLSearchParams();
       params.set("type", t)
+      params.set("page", 1)
 
       return params;
     })
@@ -45,31 +49,14 @@ const Discover = () => {
   const resetParams = () => {
     setSearchParam(() => {
       const params = new URLSearchParams();
+      params.set("type", "all")
+      params.set("page", 1)
 
       return params;
     })
   }
 
   useEffect(() => {
-    const q = query.trim();
-    if (!q) return;
-
-    //never run if no query
-    const timeout = setTimeout(() => {
-      const params = new URLSearchParams();
-      params.set("query", q);
-      setSearchParam(params);
-    }, 600);
-
-    return () => clearTimeout(timeout);
-  }, [query, setSearchParam]);
-
-  useEffect(() => {
-
-    const initDiscover = async () => {
-      const discover = await getDiscover(page);
-      setDiscover(discover);
-    }
 
     const initGenres = async () => {
       const genres = await getGenres();
@@ -77,8 +64,7 @@ const Discover = () => {
     }
 
     initGenres();
-    initDiscover();
-  },[page])
+  },[])
 
   useEffect(()=>{
     const not  = ()=>{
@@ -100,8 +86,6 @@ const Discover = () => {
   },[keywords?.length, query])
 
   useEffect(() => {
-    if(!query.trim()) return;
-
     const initSearchData = async () => {
       const thisSearchData =  await getSearchData(query);
       setSearchData(thisSearchData);
@@ -109,12 +93,28 @@ const Discover = () => {
 
     initSearchData();
   },[query])
+  console.log("query",query.length);
+  
+
+  useEffect(() => {
+    const getData = async () => {
+      let data;
+      if(type === "all"){
+        data = await getDiscover(page);
+      } else {
+        data = await getTypeDiscover(type, page)
+      }
+
+      setDiscover(data);
+    }
+    getData()
+  },[page, type])
 
   let personFilter = undefined;
   let filmFilter = undefined;
   if(searchData){
-    personFilter = searchData?.filter(s => s?.media_type === "person");
-    filmFilter = searchData?.filter(s => (s.media_type === 'tv' || s.media_type === 'movie') && s.poster_path !== null);
+    personFilter = searchData?.results?.filter(s => s?.media_type === "person");
+    filmFilter = searchData?.results?.filter(s => (s.media_type === 'tv' || s.media_type === 'movie') && s.poster_path !== null);
   }
 
   const topRef = useRef();
@@ -133,8 +133,8 @@ const Discover = () => {
     document.addEventListener("click",closeElement)
     return () => document.removeEventListener("click", closeElement)
   },[])
-  console.log(type);
-  
+
+  const allDiscoveryData = type === "all" ? [...(discover?.['movies']?.results.map(m => ({...m, media_type: "movie"})) || []), ...(discover?.['tv']?.results.map(t => ({...t, media_type: "tv"})) || [])] : [];
 
   return(
     <main ref={topRef} className="min-h-50 min-w-full text-background dark:text-gray-300 bg-foreground dark:bg-background">
@@ -181,7 +181,7 @@ const Discover = () => {
           )}
         </div>
         <div className="flex justify-center gap-2 mt-6">
-          {["all", "movie", "series"].map((t) => (
+          {["all", "movie", "tv"].map((t) => (
             <button
               key={t}
               onClick={() => {
@@ -194,7 +194,7 @@ const Discover = () => {
                 : "border-border text-muted/50 dark:text-muted-foreground hover:text-background hover:dark:text-foreground"}
               `}
               >
-                {t === "all" ? "All" : t === "series" ? "series" : t + "s"}
+                {t === "all" ? "All" : t === "tv" ? "series" : t + "s"}
             </button>
           ))}
         </div>
@@ -218,9 +218,9 @@ const Discover = () => {
             </div>
             <div>
               <h2 className="text-sm uppercase tracking-[0.2em] text-background dark:text-muted-foreground mb-4">Popular Right Now</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                {genre === "All" && ((discover?.["movies"]?.concat(discover?.["tv"]))?.map((t,i) => ( <MovieCard3 key={i} t={t} k={t.id}/>)))}
-              </div>
+              {genre === "All" && type === 'all' &&
+                <DiscoverSection films={allDiscoveryData} page={page} total={discover?.["movies"]?.total_pages + discover?.["tv"]?.total_pages} setPage={(p) => updateParams("page", p)} />
+              }
             </div>
           </div>
         ) : (
@@ -239,54 +239,25 @@ const Discover = () => {
               )}
             </div>
             {type === "movie" ? (
-              <>
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                {discover?.["movies"]?.map((t, i) => ( <MovieCard3 key={i} t={t} k={t.id}/>))}
-              </div>
-            </>
+              <DiscoverSection films={discover?.results?.map(d => ({...d, media_type: "movie"}))} page={page} total={discover?.total_pages} setPage={(p) => updateParams("page", p)} />
             ) : (
-              (type === "series" && (
-                <>
-                  <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                    {discover?.["tv"]?.map((t, i) => ( <MovieCard3 key={i} t={t} k={t.id}/>))}
-                  </div>
-                </>
+              (type === "tv" && (
+                <DiscoverSection films={discover?.results?.map(d => ({...d, media_type: "tv"}))} page={page} total={discover?.total_pages} setPage={(p) => updateParams("page", p)} />
               ))
             )}
-            <>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-              {(((discover?.["movies"] || [])?.concat((discover?.["tv"] || [])))?.map((t, i) => {
-                const id = genres?.find(g => g?.name === genre);
-                if(t?.genre_ids?.includes(id?.id)){
-                  return  <MovieCard3 key={i} t={t} k={t.id}/>
-                }
-              }))}
-            </div>
-            </>
-            <div>
-              {(personFilter && personFilter?.length > 0) && (
-                <>
-                <p className="my-5 text-lg md:text-2xl">People</p>
-                <div className="flex gap-5 overflow-auto">
-                  {personFilter?.map((p,i) => (
-                  <div key={i} className="w-28 h-28 mb-3 shrink-0 group">
-                    <img src={p.profile_path ? `https://image.tmdb.org/t/p/w500${p.profile_path}` : user_avatar} className="w-full h-full rounded-full object-cover border-2 border-border group-hover:border-primary transition" alt="" />
-                  </div>
-                  ))}
-                </div>
-                </>
-              )}
-              {(filmFilter && filmFilter?.length > 0) && (
-                <>
-                <p className="my-5 text-lg md:text-2xl">Film</p>
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                  {filmFilter?.map((f,i) => (
-                    <MovieCard3 key={i} t={f} k={i} />
-                  ))}
-                </div>
-                </>
-              )}
-            </div>
+            {genre !== 'All' && (
+              <>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                {allDiscoveryData?.map((t, i) => {
+                  const id = genres?.find(g => g?.name === genre);
+                  if(t?.genre_ids?.includes(id?.id)){
+                    return  <MovieCard3 key={i} t={t} k={t.id}/>
+                  }
+                })}
+              </div>
+              </>
+            )}
+            <SearchResultSection persons={personFilter} films={filmFilter} page={page} total={searchData?.total_pages} setPage={(p) => updateParams("page", p)} />
           </div>
         )}
       </section>

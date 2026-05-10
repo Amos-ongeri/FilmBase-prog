@@ -69,17 +69,17 @@ const getCategoryTv = async (category,page) => {
     return categoryTvs;
 }
 
-const dataMap = new Map();
+const discoverMap = new Map();
 const getDiscover = async (page) => {
     const types = {
         t1: 'movie',
         t2: 'tv'
     }
+    let discoverData = {}
     try{
-        let discoverData = {}
-        if(dataMap.has(`movie:${page}`) && dataMap.has(`tv:${page}`)){
-            discoverData["movies"] = dataMap.get(`movie:${page}`);
-            discoverData["tv"] = dataMap.get(`tv:${page}`);
+        if(discoverMap.has(`movie:${page}`) && discoverMap.has(`tv:${page}`)){
+            discoverData["movies"] = discoverMap.get(`movie:${page}`);
+            discoverData["tv"] = discoverMap.get(`tv:${page}`);
         }else{
             const [movie, tv] = await Promise.all([
                 fetch(`${serverUrl}/api/discover/${types.t1}/${page}`),
@@ -87,20 +87,40 @@ const getDiscover = async (page) => {
             ])
 
             const movies = await movie.json()
-            console.log(("movies", movies));
-            
 
             const Tv = await tv.json()
-            console.log("tv",Tv);
-            
 
-        dataMap.set(`movie:${page}`, movies)
-        dataMap.set(`tv:${page}`, Tv)
-        discoverData = {'movies': movie, 'tv': tv}
+        discoverMap.set(`movie:${page}`, movies)
+        discoverMap.set(`tv:${page}`, Tv)
+        discoverData['movies'] = movies;
+        discoverData['tv'] = Tv;
         }
-        console.log(discoverData);
+
         return discoverData;
+
+    }catch(e){
+        console.log('error occurred: ', e.message);
+    }
+}
+const typeMap = new Map();
+const getTypeDiscover = async (type,page) => {
+    let discoverData = {}
+    try{
+        if(typeMap.has(`movie:${page}`) && typeMap.has(`tv:${page}`)){
+            discoverData = typeMap.get(`${type}:${page}`);
+        }else{
+            const res = await fetch(`${serverUrl}/api/discover/${type}/${page}`);
+
+            const movies = await res.json()
+
+            typeMap.set(`movie:${page}`, movies)
+            discoverData = movies;
+        }
+        console.log("types", discoverData);
         
+
+        return discoverData;
+
     }catch(e){
         console.log('error occurred: ', e.message);
     }
@@ -200,7 +220,7 @@ const trendingMap = new Map();
 const getTrending = async (media_type, time_window) => {
     let trending = {}
     try{
-        if(dataMap.has('trending')){
+        if(trendingMap.has('trending')){
             trending["trending"] = trendingMap.get('trending');
             return trending["trending"];
         }else{
@@ -233,18 +253,18 @@ const getKeywords = async (query) => {
 }
 
 const searchResultsMap = new Map()
-const getSearchData = async (queryParam) => {
+const getSearchData = async (queryParam, page) => {
     let searchData = [];
-    if(searchResultsMap.has(queryParam)){
-        searchData = searchResultsMap.get(queryParam);
+    if(searchResultsMap.has(`${queryParam}:${page}`)){
+        searchData = searchResultsMap.get(`${queryParam}:${page}`);
         return searchData;
     }else{
         try{
-            const res = await fetch(`${serverUrl}/api/query/search/multi?query=${queryParam}`)
+            const res = await fetch(`${serverUrl}/api/query/search/multi?query=${queryParam}&page=${page}`)
             const data = await res.json();
 
-            searchResultsMap.set('search', data.results)
-            searchData = data.results;
+            searchResultsMap.set(`${queryParam}:${page}`, data)
+            searchData = data;
 
             return searchData;
         }catch(e){
@@ -345,5 +365,5 @@ export {
     getKeywords, getSearchData, getMovieGenres,
     getTvGenres, getVideos, getCredits,
     getSimilar, getReviews, getCategoryMovies,
-    getCategoryTv
+    getCategoryTv, getTypeDiscover
 }
