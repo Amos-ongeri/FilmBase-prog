@@ -87,12 +87,12 @@ const Discover = () => {
 
   useEffect(() => {
     const initSearchData = async () => {
-      const thisSearchData =  await getSearchData(query);
+      const thisSearchData =  await getSearchData(query,page);
       setSearchData(thisSearchData);
     }
 
     initSearchData();
-  },[query])
+  },[page, query])
   console.log("query",query.length);
   
 
@@ -109,13 +109,6 @@ const Discover = () => {
     }
     getData()
   },[page, type])
-
-  let personFilter = undefined;
-  let filmFilter = undefined;
-  if(searchData){
-    personFilter = searchData?.results?.filter(s => s?.media_type === "person");
-    filmFilter = searchData?.results?.filter(s => (s.media_type === 'tv' || s.media_type === 'movie') && s.poster_path !== null);
-  }
 
   const topRef = useRef();
   useEffect(() => {
@@ -257,7 +250,7 @@ const Discover = () => {
               </div>
               </>
             )}
-            <SearchResultSection persons={personFilter} films={filmFilter} page={page} total={searchData?.total_pages} setPage={(p) => updateParams("page", p)} />
+            <SearchResultSection results={searchData?.results} page={page} total={searchData?.total_pages} setPage={(p) => updateParams("page", p)} />
           </div>
         )}
       </section>

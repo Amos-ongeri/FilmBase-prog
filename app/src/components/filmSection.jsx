@@ -36,9 +36,16 @@ export const DiscoverSection = ({films, page, setPage, total}) => {
     )
 }
 
-export const SearchResultSection = ({persons, films, page, total, setPage}) => {
+export const SearchResultSection = ({ results, page, total, setPage }) => {
+    let persons = undefined;
+    let films = undefined;
+        if(results){
+        persons = results?.filter(s => s?.media_type === "person");
+        films = results?.filter(s => (s.media_type === 'tv' || s.media_type === 'movie') && s.poster_path !== null);
+    }
+
     return (
-        <div>
+        <div className="space-y-15">
             {persons?.length > 0 && (
                 <>
                 <p className="my-5 text-lg md:text-2xl">People</p>
@@ -71,14 +78,13 @@ export const SearchResultSection = ({persons, films, page, total, setPage}) => {
                     <MovieCard3 key={i} t={f} k={i} />
                     ))}
                 </div>
-
-                <SmartPagination
-                    currentPage={page}
-                    totalPages={total}
-                    onPageChange={setPage}
-                />
                 </>
             )}
+            <SmartPagination
+                currentPage={page}
+                totalPages={total}
+                onPageChange={setPage}
+            />
         </div>
     )
 }
