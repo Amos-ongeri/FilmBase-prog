@@ -67,6 +67,13 @@ export const SearchResultSection = ({ results, page, total, setPage }) => {
                     </div>
                     ))}
                 </div>
+                {films?.length === 0 && (
+                    <SmartPagination
+                        currentPage={page}
+                        totalPages={total}
+                        onPageChange={setPage}
+                    />
+                )}
                 </>
             )}
             {films?.length > 0 && (
@@ -78,13 +85,13 @@ export const SearchResultSection = ({ results, page, total, setPage }) => {
                     <MovieCard3 key={i} t={f} k={i} />
                     ))}
                 </div>
+                <SmartPagination
+                    currentPage={page}
+                    totalPages={total}
+                    onPageChange={setPage}
+                />
                 </>
             )}
-            <SmartPagination
-                currentPage={page}
-                totalPages={total}
-                onPageChange={setPage}
-            />
         </div>
     )
 }
