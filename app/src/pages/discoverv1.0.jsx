@@ -65,6 +65,16 @@ const Discover = () => {
     })
   }
 
+  const resetGenreAndPage = () => {
+    setSearchParam(() => {
+      const params = new URLSearchParams();
+      params.set("type", "all")
+      params.set("page", page)
+
+      return params;
+    })
+  }
+
   useEffect(() => {
 
     const initGenres = async () => {
@@ -229,11 +239,19 @@ const Discover = () => {
           <div>
             <div className="flex items-center justify-between mb-6">
               <div className="text-sm text-background dark:text-muted-foreground">
-                {query ? <> for "<span className="text-background dark:text-foreground">{query}</span>"</> : genre ? <> for "<span className="text-background dark:text-foreground">{genre}</span>"</> : type ? <> for "<span className="text-background dark:text-foreground">{type}</span>"</> : ""}
+                {query && <> for "<span className="text-background dark:text-foreground">{query}</span>"</>}
+                {genre !== 'All' && <> for "<span className="text-background dark:text-foreground">{genre}</span>"</>}
+                {type !== "all" && <> for "<span className="text-background dark:text-foreground">{type}</span>"</>}
               </div>
               {(genre !== "All" || type !== "all") && (
                 <button
-                  onClick={() => resetParams()}
+                  onClick={() => {
+                    if(type !== 'all'){
+                      resetParams();
+                    } else {
+                      resetGenreAndPage();
+                    }
+                  }}
                   className="text-sm text-primary hover:underline"
                 >
                   Clear filters
