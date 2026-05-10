@@ -11,17 +11,17 @@ const Discover = () => {
   const GENRES = ["Science Fiction", "Drama", "Thriller", "Adventure", "Mystery", "Action"];
 
   const [temporaryQuery, setTemporaryQuery] = useState("");
-  const [query, setQuery] = useState('');
   const [genres, setGenres] = useState();
   const [discover, setDiscover] = useState();
   const [keywords,setKeywords] = useState();
   const [searchData, setSearchData] = useState();
 
   const [searchParam, setSearchParam] = useSearchParams();
-  // const page = Number(searchParam.get("page") ?? 1);
+  const page = Number(searchParam.get("page") ?? 1);
   const type = searchParam.get("type") ?? "all";
   const genre = searchParam.get("genre") ?? "All";
-  // const query = searchParam.get("query") ?? "";
+  const query = searchParam.get("query") ?? "";
+  const search = useRef();
 
   const isSearching = query.length > 0 || genre !== "All" || type !== "all";
 
@@ -67,7 +67,7 @@ const Discover = () => {
   useEffect(() => {
 
     const initDiscover = async () => {
-      const discover = await getDiscover();
+      const discover = await getDiscover(page);
       setDiscover(discover);
     }
 
@@ -78,7 +78,7 @@ const Discover = () => {
 
     initGenres();
     initDiscover();
-  },[])
+  },[page])
 
   useEffect(()=>{
     const not  = ()=>{
@@ -100,6 +100,7 @@ const Discover = () => {
   },[keywords?.length, query])
 
   useEffect(() => {
+    if(!query.trim()) return;
 
     const initSearchData = async () => {
       const thisSearchData =  await getSearchData(query);
@@ -132,6 +133,8 @@ const Discover = () => {
     document.addEventListener("click",closeElement)
     return () => document.removeEventListener("click", closeElement)
   },[])
+  console.log(type);
+  
 
   return(
     <main ref={topRef} className="min-h-50 min-w-full text-background dark:text-gray-300 bg-foreground dark:bg-background">
@@ -141,10 +144,11 @@ const Discover = () => {
         <div className="relative">
           <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-background/50 dark:text-muted-foreground z-20" />
           <input
+            ref={search}
             value={query}
             onChange={(e) => {
-              setQuery(e.target.value);
               setTemporaryQuery(e.target.value);
+              updateParams("query", e.target.value)
 
               if(!e?.target?.value){resetParams()}
               if(keywordsRef?.current.classList.contains("hidden")){keywordsRef?.current.classList.remove("hidden");}

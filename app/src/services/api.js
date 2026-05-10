@@ -70,40 +70,37 @@ const getCategoryTv = async (category,page) => {
 }
 
 const dataMap = new Map();
-const getDiscover = async () => {
+const getDiscover = async (page) => {
     const types = {
         t1: 'movie',
         t2: 'tv'
     }
-    let discoverData = {}
     try{
-        if(dataMap.has('movie') && dataMap.has('tv')){
-            discoverData["movies"] = dataMap.get('movie');
-            discoverData["tv"] = dataMap.get('tv');
-            return discoverData;
+        let discoverData = {}
+        if(dataMap.has(`movie:${page}`) && dataMap.has(`tv:${page}`)){
+            discoverData["movies"] = dataMap.get(`movie:${page}`);
+            discoverData["tv"] = dataMap.get(`tv:${page}`);
         }else{
             const [movie, tv] = await Promise.all([
-                fetch(`${serverUrl}/api/discover/${types.t1}`),
-                fetch(`${serverUrl}/api/discover/${types.t2}`)
+                fetch(`${serverUrl}/api/discover/${types.t1}/${page}`),
+                fetch(`${serverUrl}/api/discover/${types.t2}/${page}`)
             ])
 
             const movies = await movie.json()
+            console.log(("movies", movies));
+            
 
-            const movieWithType = Array.isArray(movies?.results) ? movies?.results?.map(m=>({
-                ...m,
-                media_type: 'movie'
-            })) : movie?.results === "Object" && {...movies, media_type: "movie"}
             const Tv = await tv.json()
-            const tvWithType = Array.isArray(Tv?.results) ? Tv?.results?.map(t=>({
-                ...t,
-                media_type: 'tv'
-            })) : Tv?.results === "Object" && {...tv, media_type: "tv"}
+            console.log("tv",Tv);
+            
 
-        dataMap.set('movie', movies.results)
-        dataMap.set('tv', Tv.results)
-        discoverData = {'movies': movieWithType, 'tv': tvWithType}
-        return discoverData;
+        dataMap.set(`movie:${page}`, movies)
+        dataMap.set(`tv:${page}`, Tv)
+        discoverData = {'movies': movie, 'tv': tv}
         }
+        console.log(discoverData);
+        return discoverData;
+        
     }catch(e){
         console.log('error occurred: ', e.message);
     }

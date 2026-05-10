@@ -83,19 +83,19 @@ const trendingCon = async (req,res)=>{
         res.json(data)
     }catch(e){
         console.log('error:', e.message);
-        res.status(500).json({error: 'server error'})        
+        res.status(500).json({error: 'server error'})
     }
 }
 
 const discoverCon = async (req, res) => {
     try{
-        const { type } = req.params
-        const { sort_value } = req.query
-        const data = await getDiscover(type,sort_value)      
+        const { type, page } = req.params
+
+        const data = await getDiscover(type, page)
         res.json(data);
     }catch(e){
         console.log('error:', e.message);
-        res.status(500).json({error: 'server error'})  
+        res.status(500).json({error: 'server error'})
     }
 }
 

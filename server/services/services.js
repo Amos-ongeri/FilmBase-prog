@@ -41,9 +41,14 @@ const getTrending = async (media_type,time_window ) =>{
     return trending;
 }
 
-const getDiscover = async (type,sort_value) => {
-    const discover = await client.request(`/discover/${type}${sort_value ? `?sort_by=${sort_value}`: ''}`)
+const getDiscover = async (type,page) => {
+    const discover = await client.request(`/discover/${type}?page=${page}`)
     return discover;
 }
 
-module.exports = { getMovies, getDetails, getVideos, getCredits, getSimilar, getGenres, getReviews, getTrending, getDiscover };
+module.exports = { getMovies, getDetails,
+     getVideos, getCredits,
+      getSimilar, getGenres,
+       getReviews, getTrending,
+        getDiscover 
+};

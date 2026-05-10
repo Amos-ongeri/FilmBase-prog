@@ -10,6 +10,6 @@ router.get('/:id/:media_type/similar',similarCon)
 router.get('/:type/genres', genreCon)
 router.get('/:id/:media_type/reviews', reviewsCon)
 router.get('/:media_type/:time_window/trending', trendingCon)
-router.get('/discover/:type', discoverCon)
+router.get('/discover/:type/:page', discoverCon)
 
 module.exports = router
