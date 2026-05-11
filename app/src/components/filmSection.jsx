@@ -56,12 +56,13 @@ export const SearchResultSection = ({ results, page, total, setPage }) => {
         films = results?.filter(s => (s.media_type === 'tv' || s.media_type === 'movie') && s.poster_path !== null);
     }
 
+    const top = useRef()
     useEffect(() => {
-        window.scrollTo({top:0, behavior: "smooth"})
+        top.current?.scrollIntoView({top:0, behavior: "smooth"})
     },[page])
 
     return (
-        <div className="space-y-15">
+        <div ref={top} className="space-y-15 scroll-mt-15">
             {persons?.length > 0 && (
                 <>
                 <p className="my-5 text-lg md:text-2xl">People</p>
