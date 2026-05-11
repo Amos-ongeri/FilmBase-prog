@@ -2,17 +2,24 @@ import MovieCard from "./cards/MovieCard"
 import { MovieCard3 } from "./cards/MovieCard3";
 import { SmartPagination } from "./smartPagination"
 import user_avatar from '../assets/user-avatar.png'
+import { useEffect, useRef } from "react";
 
 const FilmSection = ({films, genre, genres, page, total, setPage, type}) => {
     const selectedGenre = genres?.find(g => g?.name === genre);
 
     const filteredFilms = genre !== "All" ? films?.filter(movie => movie.genre_ids.includes(selectedGenre?.id)) : films
 
+    const cardRefs = useRef([]);
+
+    useEffect(() => {
+        cardRefs.current[0]?.scrollIntoView({behavior: "smooth"})
+    },[page])
+
     return (
         <div className="space-y-15">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                 {filteredFilms?.map((movie,i)=> (
-                    <MovieCard key={i} movie={{...movie, media_type: type}} genre={genres} index={i}/>
+                    <div className="scroll-mt-15" ref={(el) => cardRefs.current[i] = el} key={i}><MovieCard movie={{...movie, media_type: type}} genre={genres} index={i}/></div>
                 ))}
             </div>
             <SmartPagination currentPage={page}
@@ -23,10 +30,15 @@ const FilmSection = ({films, genre, genres, page, total, setPage, type}) => {
 }
 
 export const DiscoverSection = ({films, page, setPage, total}) => {
+    useEffect(() => {
+        cardRefs.current[0]?.scrollIntoView({behavior: "smooth"})
+    },[page])
+
+    const cardRefs = useRef([]);
     return (
         <div className="space-y-15">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {films?.map((t,i) => ( <MovieCard3 key={i} t={t} k={t.id}/>))}
+            {films?.map((t,i) => ( <div className="scroll-mt-15" ref={(el) => (cardRefs.current[i] = el)} key={i}><MovieCard3 t={t} k={t.id}/></div>))}
         </div>
         <SmartPagination currentPage={page}
             totalPages={total}
@@ -43,6 +55,10 @@ export const SearchResultSection = ({ results, page, total, setPage }) => {
         persons = results?.filter(s => s?.media_type === "person");
         films = results?.filter(s => (s.media_type === 'tv' || s.media_type === 'movie') && s.poster_path !== null);
     }
+
+    useEffect(() => {
+        window.scrollTo({top:0, behavior: "smooth"})
+    },[page])
 
     return (
         <div className="space-y-15">

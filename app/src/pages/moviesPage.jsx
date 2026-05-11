@@ -3,6 +3,7 @@ import CardSkeleton from "@/components/placeholders/cardSkeleton";
 import { getCategoryMovies, getMovieGenres, getMovies } from "@/services/api";
 import FilmSection from "@/components/filmSection";
 import { useSearchParams } from "react-router-dom";
+import { Spinner } from "@/components/ui/spinner";
 
 const Movies = ()=>{
   const [movies, setMovies] = useState({})
@@ -124,21 +125,31 @@ const Movies = ()=>{
         {hasMovies && (
           <>
             { category === "All" && (
-              <FilmSection films={allMovies} type={"movie"} genre={genre} genres={genres} page={page} total={movies["now_playing"].total_pages + movies["popular"].total_pages + movies["top_rated"].total_pages + movies["upcoming"].total_pages} setPage={(p) => updateParam('page', p)}/>
+              (!movies ? (<Spinner />) : (
+                <FilmSection films={allMovies} type={"movie"} genre={genre} genres={genres} page={page} total={movies["now_playing"].total_pages + movies["popular"].total_pages + movies["top_rated"].total_pages + movies["upcoming"].total_pages} setPage={(p) => updateParam('page', p)}/>
+              ))
             )}
         </>
         )}
         {movies && category === "top_rated" && (
-          <FilmSection films={movies.results} type={"movie"} genre={genre} genres={genres} page={page} total={movies?.total_pages} setPage={(p) => updateParam('page', p)} />
+          (!movies ? (<Spinner />) : (
+            <FilmSection films={movies.results} type={"movie"} genre={genre} genres={genres} page={page} total={movies?.total_pages} setPage={(p) => updateParam('page', p)} />
+          ))
         )}
         {movies && category === "upcoming" && (
-          <FilmSection films={movies.results} type={"movie"} genre={genre} genres={genres} page={page} total={movies?.total_pages} setPage={(p) => updateParam('page', p)} />
+          (!movies ? (<Spinner />) : (
+            <FilmSection films={movies.results} type={"movie"} genre={genre} genres={genres} page={page} total={movies?.total_pages} setPage={(p) => updateParam('page', p)} />
+          ))
         )}
         {movies && category === "popular" && (
-          <FilmSection films={movies.results} type={"movie"} genre={genre} genres={genres} page={page} total={movies?.total_pages} setPage={(p) => updateParam('page', p)} />
+          (!movies ? (<Spinner />) : (
+            <FilmSection films={movies.results} type={"movie"} genre={genre} genres={genres} page={page} total={movies?.total_pages} setPage={(p) => updateParam('page', p)} />
+          ))
         )}
         {movies && category === "now_playing" && (
-          <FilmSection films={movies.results} type={"movie"} genre={genre} genres={genres} page={page} total={movies?.total_pages} setPage={(p) => updateParam('page', p)} />
+          (!movies ? (<Spinner />) : (
+            <FilmSection films={movies.results} type={"movie"} genre={genre} genres={genres} page={page} total={movies?.total_pages} setPage={(p) => updateParam('page', p)} />
+          ))
         )}
       </div>
 

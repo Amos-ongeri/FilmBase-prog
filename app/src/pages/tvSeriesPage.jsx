@@ -3,6 +3,7 @@ import CardSkeleton from "@/components/placeholders/cardSkeleton";
 import { getCategoryTv, getTv, getTvGenres } from "@/services/api";
 import FilmSection from "@/components/filmSection";
 import { useSearchParams } from "react-router-dom";
+import { Spinner } from "@/components/ui/spinner";
 
 const TvSeries = ()=>{
     const [tv, setTv] = useState({});
@@ -106,23 +107,31 @@ const TvSeries = ()=>{
             </section>
             <div className="min-h-0 min-w-full px-2 md:px-12">
             {hasTv && (
-                <>
-                    { category === "All" && (
-                        <FilmSection films={allTv} type={"tv"} genre={genre} genres={genres} page={page} total={tv?.airing_today?.total_pages + tv?.popular?.total_pages + tv?.top_rated?.total_pages + tv?.on_the_air?.total_pages} setPage={(p) => updateParam("page", p)}/>
-                    )}
-                </>
+                (!tv ? (<Spinner />) : (
+                    <>
+                        { category === "All" && (
+                            <FilmSection films={allTv} type={"tv"} genre={genre} genres={genres} page={page} total={tv?.airing_today?.total_pages + tv?.popular?.total_pages + tv?.top_rated?.total_pages + tv?.on_the_air?.total_pages} setPage={(p) => updateParam("page", p)}/>
+                        )}
+                    </>
+                ))
             )}
-            {tv && category === "top_rated" && (
-                <FilmSection films={tv.results} type={"tv"} genre={genre} genres={genres} page={page} total={tv.total_pages} setPage={(p) => updateParam("page", p)} />
+            {category === "top_rated" && (
+                (!tv ? (<Spinner />) : (<FilmSection films={tv?.results} type={"tv"} genre={genre} genres={genres} page={page} total={tv?.total_pages} setPage={(p) => updateParam("page", p)} />))
             )}
-            {tv && category === "airing_today" && (
-                <FilmSection films={tv.results} type={"tv"} genre={genre} genres={genres} page={page} total={tv.total_pages} setPage={(p) => updateParam("page", p)} />
+            {category === "airing_today" && (
+                (!tv ? (<Spinner />) : (
+                    <FilmSection films={tv?.results} type={"tv"} genre={genre} genres={genres} page={page} total={tv?.total_pages} setPage={(p) => updateParam("page", p)} />
+                ))
             )}
-            {tv && category === "on_the_air" && (
-                <FilmSection films={tv.results} type={"tv"} genre={genre} genres={genres} page={page} total={tv.total_pages} setPage={(p) => updateParam("page", p)} />
+            {category === "on_the_air" && (
+                (!tv ? (<Spinner />) : (
+                    <FilmSection films={tv?.results} type={"tv"} genre={genre} genres={genres} page={page} total={tv?.total_pages} setPage={(p) => updateParam("page", p)} />
+                ))
             )}
-            {tv && category === "popular" && (
-                <FilmSection films={tv.results} type={"tv"} genre={genre} genres={genres} page={page} total={tv.total_pages} setPage={(p) => updateParam("page", p)} />
+            {category === "popular" && (
+                (!tv ? (<Spinner />) : (
+                    <FilmSection films={tv?.results} type={"tv"} genre={genre} genres={genres} page={page} total={tv?.total_pages} setPage={(p) => updateParam("page", p)} />
+                ))
             )}
             </div>
             <br />

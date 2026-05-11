@@ -215,7 +215,7 @@ const Detail = ()=>{
                 </div>
             )}
                 {credits && (
-                <dialog onClick={(e) => altModalClose(e,creditsModal)} 
+                <dialog onClick={(e) => altModalClose(e,creditsModal)}
                 className="m-auto lg:w-[60%] lg:h-[80%] rounded-2xl lg:overflow-hidden bg-slate-900 text-white" ref={creditsModal}>
                     <div className="sticky top-0 flex justify-between p-2 h-[7%]">
                         <div></div>

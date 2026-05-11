@@ -2,13 +2,13 @@ import MovieCard1 from "@/components/cards/MovieCard1";
 import { MovieCard3 } from "@/components/cards/MovieCard3";
 import { getDiscover, getGenres, getKeywords, getSearchData, getTypeDiscover } from "@/services/api";
 import { Search, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MdSearch } from "react-icons/md";
 import { useSearchParams } from "react-router-dom";
 import { DiscoverSection, SearchResultSection } from "@/components/filmSection";
+import { Spinner } from "@/components/ui/spinner";
 
 const Discover = () => {
-  const GENRES = ["Science Fiction", "Drama", "Thriller", "Adventure", "Mystery", "Action"];
 
   const [temporaryQuery, setTemporaryQuery] = useState("");
   const [genres, setGenres] = useState();
@@ -216,14 +216,14 @@ const Discover = () => {
           <div className="space-y-12 max-w-5xl mx-auto">
             <div>
               <h2 className="text-sm uppercase tracking-[0.2em] text-background dark:text-muted-foreground mb-4">Browse by Genre</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {GENRES.map((g) => (
+              <div className="flex flex-wrap gap-2">
+                {genres?.map((g) => (
                   <button
-                    key={g}
-                    onClick={() => updateParams("genre",g)}
-                    className="h-15 rounded-2xl overflow-hidden border border-muted/50 dark:border-border group    hover:border-0 transition duration-150"
+                    key={g?.id}
+                    onClick={() => updateParams("genre",g?.name)}
+                    className="rounded-2xl overflow-hidden border border-muted/50 dark:border-border group hover:border-0 transition duration-150"
                   >
-                    <div className="relative h-full flex items-center justify-center text-xl font-bold hover:dark:text-slate-900 hover:text-foreground z-10 transition-colors duration-75 before:absolute before:inset-0 hover:before:bg-primary before:-z-20 before:transition-colors before:duration-75 dark:text-foreground text-background">{g}</div>
+                    <div className="relative h-full flex items-center justify-center text-sm font-bold hover:dark:text-slate-900 hover:text-foreground z-10 transition-colors duration-75 before:absolute before:inset-0 hover:before:bg-primary before:-z-20 before:transition-colors before:duration-75 dark:text-foreground text-background px-4 py-1.5  ">{g?.name}</div>
                   </button>
                 ))}
               </div>
@@ -231,7 +231,9 @@ const Discover = () => {
             <div>
               <h2 className="text-sm uppercase tracking-[0.2em] text-background dark:text-muted-foreground mb-4">Popular Right Now</h2>
               {genre === "All" && type === 'all' &&
-                <DiscoverSection films={allDiscoveryData} page={page} total={discover?.["movies"]?.total_pages + discover?.["tv"]?.total_pages} setPage={(p) => updateParams("page", p)} />
+                (!discover ? (<Spinner/>) : (
+                  <DiscoverSection films={allDiscoveryData} page={page} total={discover?.["movies"]?.total_pages + discover?.["tv"]?.total_pages} setPage={(p) => updateParams("page", p)} />
+                ))
               }
             </div>
           </div>
@@ -259,10 +261,14 @@ const Discover = () => {
               )}
             </div>
             {type === "movie" ? (
-              <DiscoverSection films={discover?.results?.map(d => ({...d, media_type: "movie"}))} page={page} total={discover?.total_pages} setPage={(p) => updateParams("page", p)} />
+              (!discover ? (<Spinner />) : (
+                <DiscoverSection films={discover?.results?.map(d => ({...d, media_type: "movie"}))} page={page} total={discover?.total_pages} setPage={(p) => updateParams("page", p)} />
+              ))
             ) : (
               (type === "tv" && (
-                <DiscoverSection films={discover?.results?.map(d => ({...d, media_type: "tv"}))} page={page} total={discover?.total_pages} setPage={(p) => updateParams("page", p)} />
+                (!discover ? (<Spinner />) : (
+                  <DiscoverSection films={discover?.results?.map(d => ({...d, media_type: "tv"}))} page={page} total={discover?.total_pages} setPage={(p) => updateParams("page", p)} />
+                ))
               ))
             )}
             {genre !== 'All' && (
