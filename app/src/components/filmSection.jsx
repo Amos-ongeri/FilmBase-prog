@@ -9,17 +9,17 @@ const FilmSection = ({films, genre, genres, page, total, setPage, type}) => {
 
     const filteredFilms = genre !== "All" ? films?.filter(movie => movie.genre_ids.includes(selectedGenre?.id)) : films
 
-    const cardRefs = useRef([]);
+    const cards = useRef([]);
 
     useEffect(() => {
-        cardRefs.current[0]?.scrollIntoView({behavior: "smooth"})
+        cards.current?.scrollIntoView({behavior: "smooth"})
     },[page])
 
     return (
-        <div className="space-y-15">
+        <div ref={cards} className="space-y-15 scroll-mt-15">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
                 {filteredFilms?.map((movie,i)=> (
-                    <div className="scroll-mt-15" ref={(el) => cardRefs.current[i] = el} key={i}><MovieCard movie={{...movie, media_type: type}} genre={genres} index={i}/></div>
+                    <MovieCard movie={{...movie, media_type: type}} genre={genres} index={i}/>
                 ))}
             </div>
             <SmartPagination currentPage={page}
@@ -31,14 +31,14 @@ const FilmSection = ({films, genre, genres, page, total, setPage, type}) => {
 
 export const DiscoverSection = ({films, page, setPage, total}) => {
     useEffect(() => {
-        cardRefs.current[0]?.scrollIntoView({behavior: "smooth"})
+        cards.current?.scrollIntoView({behavior: "smooth"})
     },[page])
 
-    const cardRefs = useRef([]);
+    const cards = useRef();
     return (
-        <div className="space-y-15">
+        <div ref={cards} className="space-y-15 scroll-mt-15">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {films?.map((t,i) => ( <div className="scroll-mt-15" ref={(el) => (cardRefs.current[i] = el)} key={i}><MovieCard3 t={t} k={t.id}/></div>))}
+            {films?.map((t,i) => (<MovieCard3 key={i} t={t} k={t.id}/>))}
         </div>
         <SmartPagination currentPage={page}
             totalPages={total}
