@@ -368,6 +368,7 @@ const getImages = async (media_type, id) => {
         const res = await fetch(`${serverUrl}/api/${media_type}/${id}/images`);
 
         const images = await res.json();
+        console.log("images", images);
 
         imagesMap.set("images", images);
 
