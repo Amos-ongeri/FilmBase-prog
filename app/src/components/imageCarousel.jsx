@@ -39,7 +39,7 @@ const CarouselComponent = ({data,genres})=>{
                             <div className="absolute inset-0 bg-gradient-hero-side  " />
 
                             <div className="relative z-10 p-6 lg:p-12 max-w-2xl text-white space-y-4">
-    
+
                                 {/* title */}
                                 <h1 className="text-3xl lg:text-5xl font-bold leading-tight text-background dark:text-foreground transition duration-150">
                                 {d?.name || d?.title}
@@ -97,8 +97,10 @@ const CarouselComponent = ({data,genres})=>{
                 </CarouselItem>
             ))}
             </CarouselContent>
-            <CarouselPrevious variant="myvar"/>
-            <CarouselNext variant="myvar"/>
+            <div className="absolute right-1/8 top-1/8 py-6 lg:py-12 -translate-x-1/4 space-x-5">
+                <CarouselPrevious variant="myvar"/>
+                <CarouselNext variant="myvar"/>
+            </div>
         </Carousel>
     )
 }
@@ -117,11 +119,13 @@ export const BackdropsCarousel = ({backdrops}) => {
         >
             <CarouselContent>
             {backdrops?.map((b,i) => (
-                <CarouselItem className="basis-full md:basis-1/3" key={i}><img className="h-full object-cover" src={`https://image.tmdb.org/t/p/w780${b.file_path}`} alt="image" /></CarouselItem>
+                <CarouselItem className="basis-full md:basis-1/3" key={i}><img loading="lazy" className="h-full object-cover" src={`https://image.tmdb.org/t/p/w780${b.file_path}`} alt="image" /></CarouselItem>
             ))}
             </CarouselContent>
-            <CarouselPrevious variant="newVar"/>
-            <CarouselNext variant="newVar"/>
+            <div className="absolute left-1/2 bottom-1 -translate-x-1/2 space-x-5">
+                <CarouselPrevious variant="newVar"/>
+                <CarouselNext variant="newVar"/>
+            </div>
         </Carousel>
     )
 }
@@ -140,11 +144,13 @@ export const PostersCarousel = ({posters}) => {
         >
             <CarouselContent>
             {posters?.map((b,i) => (
-                <CarouselItem className="basis-full md:basis-1/4" key={i}><div className="h-full"><img className="h-full object-cover" src={`https://image.tmdb.org/t/p/w780${b.file_path}`} alt="image" /></div></CarouselItem>
+                <CarouselItem className="basis-full md:basis-1/4" key={i}><div className="h-full"><img loading="lazy" className="h-full object-cover" src={`https://image.tmdb.org/t/p/w780${b.file_path}`} alt="image" /></div></CarouselItem>
             ))}
             </CarouselContent>
-            <CarouselPrevious variant="newVar"/>
-            <CarouselNext variant="newVar"/>
+            <div className="absolute left-1/2 bottom-1 -translate-x-1/2 space-x-5">
+                <CarouselPrevious variant="newVar"/>
+                <CarouselNext variant="newVar"/>
+            </div>
         </Carousel>
     )
 }

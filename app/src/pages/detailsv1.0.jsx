@@ -257,11 +257,11 @@ const Details = () => {
 
       {/*images*/}
       <section className="px-6 md:px-12 mt-5">
-        <p className="text-primary italic text-lg mb-4">backdrops</p>
+        <p className="text-primary italic text-lg mb-4">{images?.backdrops?.length} backdrops</p>
         <BackdropsCarousel backdrops={images?.backdrops} />
       </section>
       <section className="px-6 md:px-12 mt-5">
-        <p className="text-primary italic text-lg mb-4">posters</p>
+        <p className="text-primary italic text-lg mb-4">{images?.posters?.length} posters</p>
         <PostersCarousel posters={images?.posters} />
       </section>
 

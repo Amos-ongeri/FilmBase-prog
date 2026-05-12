@@ -147,7 +147,7 @@ function CarouselPrevious({
   size = "icon-sm",
   ...props
 }) {
-  const { orientation, scrollPrev, canScrollPrev } = useCarousel()
+  const { scrollPrev, canScrollPrev } = useCarousel()
 
   return (
     <Button
@@ -155,9 +155,7 @@ function CarouselPrevious({
       variant={variant}
       size={size}
       title="previous"
-      className={cn("absolute touch-manipulation rounded-full w-12 h-12 text-white", orientation === "horizontal"
-        ? "top-1/6 bottom-3 right-26   -translate-y-1/2"
-        : "-top-12 left-1/2 -translate-x-1/2 rotate-90", className)}
+      className={cn("touch-manipulation rounded-full w-12 h-12 text-white", className)}
       disabled={!canScrollPrev}
       onClick={scrollPrev}
       {...props}>
@@ -173,7 +171,7 @@ function CarouselNext({
   size = "icon-sm",
   ...props
 }) {
-  const { orientation, scrollNext, canScrollNext } = useCarousel()
+  const { scrollNext, canScrollNext } = useCarousel()
 
   return (
     <Button
@@ -181,9 +179,7 @@ function CarouselNext({
       variant={variant}
       size={size}
       title="next"
-      className={cn("absolute touch-manipulation rounded-full w-12 h-12 text-white", orientation === "horizontal"
-        ? "top-1/6 bottom-3 right-12 -translate-y-1/2"
-        : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90", className)}
+      className={cn("touch-manipulation rounded-full w-12 h-12 text-white", className)}
       disabled={!canScrollNext}
       onClick={scrollNext}
       {...props}>
