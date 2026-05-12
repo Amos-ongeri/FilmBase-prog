@@ -103,7 +103,7 @@ const CarouselComponent = ({data,genres})=>{
     )
 }
 
-export const BackdropsCarousel = ({backdrops, configs}) => {
+export const BackdropsCarousel = ({backdrops}) => {
     return(
         <Carousel
             plugins={[
@@ -117,7 +117,7 @@ export const BackdropsCarousel = ({backdrops, configs}) => {
         >
             <CarouselContent>
             {backdrops?.map((b,i) => (
-                <CarouselItem className="basis-full md:basis-1/3" key={i}><img className="h-full object-cover" src={`${configs?.images?.secure_base_url}/w780${b.file_path}`} alt="image" /></CarouselItem>
+                <CarouselItem className="basis-full md:basis-1/3" key={i}><img className="h-full object-cover" src={`https://image.tmdb.org/t/p/w780${b.file_path}`} alt="image" /></CarouselItem>
             ))}
             </CarouselContent>
             <CarouselPrevious variant="newVar"/>
@@ -126,7 +126,7 @@ export const BackdropsCarousel = ({backdrops, configs}) => {
     )
 }
 
-export const PostersCarousel = ({posters, configs}) => {
+export const PostersCarousel = ({posters}) => {
     return(
         <Carousel
             plugins={[
@@ -140,7 +140,7 @@ export const PostersCarousel = ({posters, configs}) => {
         >
             <CarouselContent>
             {posters?.map((b,i) => (
-                <CarouselItem className="basis-full md:basis-1/3" key={i}><img className="h-full object-cover" src={`${configs?.images?.secure_base_url}/w780${b.file_path}`} alt="image" /></CarouselItem>
+                <CarouselItem className="basis-full md:basis-1/4" key={i}><div className="h-full"><img className="h-full object-cover" src={`https://image.tmdb.org/t/p/w780${b.file_path}`} alt="image" /></div></CarouselItem>
             ))}
             </CarouselContent>
             <CarouselPrevious variant="newVar"/>
