@@ -52,7 +52,7 @@ const getImages = async (media_type, id) => {
 }
 
 const getConfigs = async () => {
-    const configs = await client.request("/configurations");
+    const configs = await client.request("/configuration");
     return configs;
 }
 

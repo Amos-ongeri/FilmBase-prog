@@ -114,7 +114,7 @@ const imagesCon = async (req, res) => {
         res.json(data);
     } catch (e) {
         console.log("ERROR", e.message);
-        
+
         res.status(500).json({error: "server error"});
     }
 }
