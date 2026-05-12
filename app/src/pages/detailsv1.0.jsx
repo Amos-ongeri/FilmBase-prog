@@ -377,37 +377,41 @@ const Details = () => {
       </section>
 
       {/* TRAILER */}
-      <section id="trailer" title={`${videos === undefined || videos?.length === 0 ? "this video is not available" : ""}`} className="relative px-6 md:px-12 mt-24" >
-        <h2 className="text-2xl md:text-3xl font-bold mb-6">Official Trailer</h2>
-        <div className={`relative rounded-3xl overflow-hidden shadow-card group cursor-pointer md:max-w-5xl mx-auto ${videos === undefined || videos?.length === 0 ? "grayscale pointer-events-none" : ""}`}>
-          {videos?.length > 0 && (
-            (YT && (
-              <iframe
-                width={560}
-                height={315}
-                title={videos?.[0]?.name}
-                key={videos?.[0]?.key}
-                src={`https://www.youtube.com/embed/${videos?.[0]?.key}?rel=0${YT ? "&autoplay=1" : ""}` }
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscopepicture-in-picture"
-                allowFullScreen
-                className="absolute inset-0 z-10 object-cover w-full h-full object-center rounded-lg">
-              </iframe>
-            ))
+      <section id="trailer" title={`${videos === undefined || videos?.length === 0 ? "this video is not available" : ""}`} className="relative md:px-12 mt-24" >
+        <h2 className="text-2xl md:text-3xl px-6 font-bold mb-6">Official Trailer</h2>
+        <div className={`relative md:rounded-3xl overflow-hidden shadow-card group cursor-pointer md:max-w-5xl mx-auto h-60 md:h-96 ${videos === undefined || videos?.length === 0 ? "grayscale pointer-events-none" : ""}`}>
+          {YT && videos?.length > 0 ? (
+            <iframe
+              width={560}
+              height={315}
+              title={videos?.[0]?.name}
+              key={videos?.[0]?.key}
+              src={`https://www.youtube.com/embed/${videos?.[0]?.key}?rel=0${YT ? "&autoplay=1" : ""}` }
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media;gyroscopepicture-in-picture"
+              allowFullScreen
+              className="absolute inset-0 object-cover w-full h-full object-center">
+            </iframe>
+          ) : (
+            <>
+            <div className="absolute -inset-1 bg-gradient-orange opacity-30 blur-2xl -z-10" />
+            <img src={`${configs?.images?.secure_base_url}/w1280${details?.backdrop_path}`} alt="Trailer" width={1920} height={1088} loading="lazy" className="w-full aspect-video object-cover brightness-65 group-hover:brightness-80 transition" />
+            <div onClick={() => {
+              if (videos?.length > 0) setYT(true);
+            }} className="absolute inset-0 flex items-center justify-center">
+              <div className="h-20 w-20 rounded-full bg-primary flex items-center justify-center shadow-glow group-hover:scale-110 transition">
+                <Play className="w-8 h-8 fill-current text-foreground ml-1" />
+              </div>
+            </div>
+            <div onClick={() => {
+              if (videos?.length > 0) setYT(true);
+            }}  className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
+              <div>
+                <div className="text-xs uppercase tracking-widest text-primary mb-1">Trailer</div>
+                <div className="text-sm md:text-lg font-bold">{videos?.[0]?.name}</div>
+              </div>
+            </div>
+            </>
           )}
-          <div className="absolute -inset-1 bg-gradient-orange opacity-30 blur-2xl -z-10" />
-          <img src={`${configs?.images?.secure_base_url}/w1280${details?.backdrop_path}`} alt="Trailer" width={1920} height={1088} loading="lazy" className="w-full aspect-video object-cover brightness-65 group-hover:brightness-80 transition" />
-          <div onClick={() => setYT(true)} className="absolute inset-0 flex items-center justify-center">
-            <div className="h-20 w-20 rounded-full bg-primary flex items-center justify-center shadow-glow group-hover:scale-110 transition">
-              <Play className="w-8 h-8 fill-current text-foreground ml-1" />
-            </div>
-          </div>
-          <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between">
-            <div>
-              <div className="text-xs uppercase tracking-widest text-primary mb-1">Trailer</div>
-              <div className="text-lg font-bold">{videos?.[0]?.name}</div>
-            </div>
-            <button className="h-10 w-10 rounded-full glass flex items-center justify-center"><Volume2 className="w-4 h-4" /></button>
-          </div>
         </div>
       </section>
 
