@@ -104,17 +104,18 @@ const TvSeries = ()=>{
                 </div>
             </section>
             <div className="min-h-0 min-w-full px-2 md:px-12">
-            {hasTv && (
-                (!tv ? (<Spinner />) : (
+            {!hasTv && category === "All" ? (<div className="flex items-center justify-center"><Spinner /></div>) : (
                     <>
                         { category === "All" && (
                             <FilmSection films={allTv} type={"tv"} genre={genre} genres={genres} page={page} total={tv?.airing_today?.total_pages + tv?.popular?.total_pages + tv?.top_rated?.total_pages + tv?.on_the_air?.total_pages} setPage={(p) => updateParam("page", p)}/>
                         )}
                     </>
+                )
+            }
+            {!tv ? (<Spinner />) :
+                ((category === "top_rated" && (
+                    <FilmSection films={tv?.results} type={"tv"} genre={genre} genres={genres} page={page} total={tv?.total_pages} setPage={(p) => updateParam("page", p)} />
                 ))
-            )}
-            {category === "top_rated" && (
-                (!tv ? (<Spinner />) : (<FilmSection films={tv?.results} type={"tv"} genre={genre} genres={genres} page={page} total={tv?.total_pages} setPage={(p) => updateParam("page", p)} />))
             )}
             {category === "airing_today" && (
                 (!tv ? (<Spinner />) : (

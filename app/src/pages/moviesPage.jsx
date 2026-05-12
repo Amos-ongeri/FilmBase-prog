@@ -122,14 +122,12 @@ const Movies = ()=>{
         </div>
       </section>
       <div className="min-h-0 min-w-full px-2 md:px-12">
-        {hasMovies && (
+        {!hasMovies && category === "All" ? (<div className="flex items-center justify-center"><Spinner /></div>) : (
           <>
             { category === "All" && (
-              (!movies ? (<Spinner />) : (
-                <FilmSection films={allMovies} type={"movie"} genre={genre} genres={genres} page={page} total={movies["now_playing"].total_pages + movies["popular"].total_pages + movies["top_rated"].total_pages + movies["upcoming"].total_pages} setPage={(p) => updateParam('page', p)}/>
-              ))
+              <FilmSection films={allMovies} type={"movie"} genre={genre} genres={genres} page={page} total={movies["now_playing"].total_pages + movies["popular"].total_pages + movies["top_rated"].total_pages + movies["upcoming"].total_pages} setPage={(p) => updateParam('page', p)}/>
             )}
-        </>
+          </>
         )}
         {movies && category === "top_rated" && (
           (!movies ? (<Spinner />) : (

@@ -119,13 +119,11 @@ export const BackdropsCarousel = ({backdrops}) => {
         >
             <CarouselContent>
             {backdrops?.map((b,i) => (
-                <CarouselItem className="basis-full md:basis-1/3" key={i}><img loading="lazy" className="h-full object-cover" src={`https://image.tmdb.org/t/p/w780${b.file_path}`} alt="image" /></CarouselItem>
+                <CarouselItem className="basis-1/1 md:basis-1/3" key={i}><img loading="lazy" className="h-full object-cover" src={`https://image.tmdb.org/t/p/w780${b.file_path}`} alt="image" /></CarouselItem>
             ))}
             </CarouselContent>
-            <div className="absolute left-1/2 bottom-1 -translate-x-1/2 space-x-5">
-                <CarouselPrevious variant="newVar"/>
-                <CarouselNext variant="newVar"/>
-            </div>
+            <CarouselPrevious variant="newVar" className="absolute top-1/2 left-1 -translate-y-1/2"/>
+            <CarouselNext variant="newVar" className="absolute top-1/2 right-1 -translate-y-1/2"/>
         </Carousel>
     )
 }
@@ -144,13 +142,11 @@ export const PostersCarousel = ({posters}) => {
         >
             <CarouselContent>
             {posters?.map((b,i) => (
-                <CarouselItem className="basis-full md:basis-1/4" key={i}><div className="h-full"><img loading="lazy" className="h-full object-cover" src={`https://image.tmdb.org/t/p/w780${b.file_path}`} alt="image" /></div></CarouselItem>
+                <CarouselItem className="basis-1/2 md:basis-1/4" key={i}><div className="h-full"><img loading="lazy" className="h-full object-cover" src={`https://image.tmdb.org/t/p/w780${b.file_path}`} alt="image" /></div></CarouselItem>
             ))}
             </CarouselContent>
-            <div className="absolute left-1/2 bottom-1 -translate-x-1/2 space-x-5">
-                <CarouselPrevious variant="newVar"/>
-                <CarouselNext variant="newVar"/>
-            </div>
+            <CarouselPrevious variant="newVar" className="absolute top-1/2 left-1 -translate-y-1/2"/>
+            <CarouselNext variant="newVar" className="absolute top-1/2 right-1 -translate-y-1/2"/>
         </Carousel>
     )
 }

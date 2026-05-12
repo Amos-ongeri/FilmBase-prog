@@ -80,7 +80,6 @@ export const SmartPagination = ({
         {/* Next */}
         <PaginationItem>
           <PaginationNext
-            href="#"
             onClick={(e) => {
               e.preventDefault()
 

@@ -11,6 +11,7 @@ import Autoplay from "../../node_modules/embla-carousel-autoplay"
 import ISO6391 from "iso-639-1";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { BackdropsCarousel, PostersCarousel } from "@/components/imageCarousel";
+import { Spinner } from "@/components/ui/spinner";
 
 
 const platforms = ["Netflix", "Prime Video", "Disney+", "Apple TV+", "Max", "Hulu"];
@@ -33,7 +34,7 @@ const Details = () => {
   const crew = useRef();
 
   console.log("images", images);
-  console.log("configs", configs);
+  // console.log("configs", configs);
   
 
   useEffect(() => {
@@ -103,22 +104,6 @@ const Details = () => {
       navigation(`/details/${data?.id}/${data?.media_type}`)
   }
 
-  const lines = [
-    "Some stories end, but never really leave us.",
-    "Every frame carries a feeling words cannot hold.",
-    "The best films do not ask for attention, they keep it.",
-    "A great story changes shape each time you return to it.",
-    "Not every journey happens on a road.",
-    "Some moments on screen stay longer than years in memory.",
-    "Behind every silence, something is being said.",
-    "The credits roll, but the meaning keeps moving.",
-    "We watch for entertainment, and stay for recognition.",
-    "Certain stories find us exactly when we need them.",
-  ];
-
-  // const [index, setIndex] = useState(0);
-  // const [visible, setVisible] = useState(true);
-
   useEffect(() => {
     if (moreRecommendations) {
       document
@@ -126,19 +111,6 @@ const Details = () => {
         ?.scrollIntoView({ behavior: "smooth" });
     }
   }, [moreRecommendations]);
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setVisible(false);
-
-  //     setTimeout(() => {
-  //       setIndex((prev) => (prev + 1) % lines.length);
-  //       setVisible(true)
-  //     }, 500);
-  //   }, 8000);
-
-  //   return () => clearInterval(interval);
-  // }, [lines.length]);
 
   const ModalClose = (e,modal) => {
     const posModal = modal.current.getBoundingClientRect();
@@ -154,13 +126,15 @@ const Details = () => {
 
       {/* HERO */}
       <section className="relative h-screen min-h-160 w-full overflow-hidden">
-        <img
+        {!details?.backdrop_path ? (<div className="absolute inset-0 w-full h-full flex items-center justify-center"><Spinner /></div>) : (
+          <img
           src={`https://image.tmdb.org/t/p/w1280${details?.backdrop_path}`}
           alt="Movie backdrop"
           width={1920}
           height={1088}
           className="absolute inset-0 w-full h-full object-cover object-center"
-        />
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-hero" />
         <div className="absolute inset-0 bg-gradient-hero-side" />
 
@@ -189,15 +163,7 @@ const Details = () => {
               ))}
 
             </div>
-            {/* <p
-              className={`
-              text-base md:text-lg text-background/80 dark:text-muted-foreground leading-relaxed mb-8 max-w-xl
-              transition-all duration-500
-              ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}
-              `}
-              >
-              {lines[index]}
-            </p> */}
+
             <div className="flex flex-wrap items-center gap-3">
               <Button onClick={() => {document.getElementById("trailer")?.scrollIntoView({
                 behavior: "smooth"
