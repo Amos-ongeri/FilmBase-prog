@@ -1,4 +1,4 @@
-const { similarCon, moviesCon, detailsCon, videosCon, creditsCon, genreCon, reviewsCon, trendingCon, discoverCon} = require('../controllers/controllers');
+const { similarCon, moviesCon, detailsCon, videosCon, creditsCon, genreCon, reviewsCon, trendingCon, discoverCon, imagesCon} = require('../controllers/controllers');
 
 const router = require('express').Router()
 
@@ -11,5 +11,6 @@ router.get('/:type/genres', genreCon)
 router.get('/:id/:media_type/reviews', reviewsCon)
 router.get('/:media_type/:time_window/trending', trendingCon)
 router.get('/discover/:type/:page', discoverCon)
+router.get('/:media_type/:id/images', imagesCon)
 
 module.exports = router

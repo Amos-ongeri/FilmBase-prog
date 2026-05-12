@@ -46,9 +46,14 @@ const getDiscover = async (type,page) => {
     return discover;
 }
 
+const getImages = async (media_type, id) => {
+    const images = await client.request(`${media_type}/${id}/images`);
+    return images
+}
+
 module.exports = { getMovies, getDetails,
      getVideos, getCredits,
       getSimilar, getGenres,
        getReviews, getTrending,
-        getDiscover 
+        getDiscover, getImages
 };

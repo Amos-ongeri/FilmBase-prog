@@ -1,4 +1,4 @@
-const {getMovies, getGenres, getDetails, getVideos, getCredits, getSimilar, getReviews, getTrending, getDiscover} = require('../services/services')
+const {getMovies, getGenres, getDetails, getVideos, getCredits, getSimilar, getReviews, getTrending, getDiscover, getImages} = require('../services/services')
 
 const moviesCon = async (req, res)=>{
     try{
@@ -99,4 +99,21 @@ const discoverCon = async (req, res) => {
     }
 }
 
-module.exports = { moviesCon, detailsCon, videosCon, creditsCon, similarCon, genreCon, reviewsCon, trendingCon, discoverCon}
+const imagesCon = async (req, res) => {
+    try{
+        const {media_type, id} = req.params;
+
+        const data = await getImages(media_type, id);
+
+        res.status(200).json(data);
+    } catch (e) {
+        res.status(500).json({error: "server error"});
+    }
+}
+
+module.exports = { moviesCon, detailsCon,
+    videosCon, creditsCon,
+    similarCon, genreCon,
+    reviewsCon, trendingCon,
+    discoverCon, imagesCon
+}
