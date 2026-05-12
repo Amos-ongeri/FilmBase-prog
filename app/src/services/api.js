@@ -359,11 +359,30 @@ const getReviews = async (tmdb_id, media_type)=>{
     }
 }
 
+const imagesMap = new Map();
+const getImages = async (media_type, id) => {
+    let imagesData;
+    if(imagesMap.has("images")){
+        imagesData = imagesMap.get("images");
+    } else {
+        const res = await fetch(`${serverUrl}/api/${media_type}/${id}/images`);
+
+        const images = await res.json();
+
+        imagesMap.set("images", images);
+
+        imagesData = images
+    }
+
+    return imagesData;
+}
+
 export {
     getDetails, getDiscover, getMovies,
     getTv, getGenres, getTrending,
     getKeywords, getSearchData, getMovieGenres,
     getTvGenres, getVideos, getCredits,
     getSimilar, getReviews, getCategoryMovies,
-    getCategoryTv, getTypeDiscover
+    getCategoryTv, getTypeDiscover,
+    getImages
 }

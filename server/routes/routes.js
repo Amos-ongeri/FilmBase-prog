@@ -1,4 +1,9 @@
-const { similarCon, moviesCon, detailsCon, videosCon, creditsCon, genreCon, reviewsCon, trendingCon, discoverCon, imagesCon} = require('../controllers/controllers');
+const { similarCon, moviesCon,
+    detailsCon, videosCon,
+    creditsCon, genreCon,
+    reviewsCon, trendingCon,
+    discoverCon, imagesCon
+} = require('../controllers/controllers');
 
 const router = require('express').Router()
 

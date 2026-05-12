@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useParams} from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import avatar from '../assets/user-avatar.png';
-import { getCredits, getDetails, getReviews, getSimilar, getVideos } from "@/services/api";
+import { getCredits, getDetails, getImages, getReviews, getSimilar, getVideos } from "@/services/api";
 import { formatNumber } from "@/utils/formatLargeNo";
 
 //maps language codes to original language e.g en - English
@@ -18,6 +18,7 @@ const Details = () => {
 
   const [details, setDetails] = useState();
   const [videos, setVideos] = useState([]);
+  const [images, setImages] = useState({});
   const [credits, setCredits] = useState();
   const [similar,setSimilar] = useState();
   const [reviews,setReviews] = useState();
@@ -26,6 +27,9 @@ const Details = () => {
   const topRef = useRef();
   const cast = useRef();
   const crew = useRef();
+
+  console.log("images", images);
+  
 
   useEffect(() => {
     topRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -62,9 +66,16 @@ const Details = () => {
       setReviews(revius);
     }
 
+    const initImages = async () => {
+      const images = await getImages(media_type,tmdb_id);
+
+      setImages(images);
+    }
+
     const loadData = async () => {
       await Promise.all([initDetails(), initVideos(),
-          initCredits(), initSimilar(), initReviews()]);
+          initCredits(), initSimilar(), initReviews(),
+          initImages()]);
     }
 
     loadData();
