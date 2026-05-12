@@ -116,8 +116,8 @@ const Details = () => {
     "Certain stories find us exactly when we need them.",
   ];
 
-  const [index, setIndex] = useState(0);
-  const [visible, setVisible] = useState(true);
+  // const [index, setIndex] = useState(0);
+  // const [visible, setVisible] = useState(true);
 
   useEffect(() => {
     if (moreRecommendations) {
@@ -127,18 +127,18 @@ const Details = () => {
     }
   }, [moreRecommendations]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setVisible(false);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setVisible(false);
 
-      setTimeout(() => {
-        setIndex((prev) => (prev + 1) % lines.length);
-        setVisible(true)
-      }, 500);
-    }, 8000);
+  //     setTimeout(() => {
+  //       setIndex((prev) => (prev + 1) % lines.length);
+  //       setVisible(true)
+  //     }, 500);
+  //   }, 8000);
 
-    return () => clearInterval(interval);
-  }, [lines.length]);
+  //   return () => clearInterval(interval);
+  // }, [lines.length]);
 
   const ModalClose = (e,modal) => {
     const posModal = modal.current.getBoundingClientRect();
@@ -189,7 +189,7 @@ const Details = () => {
               ))}
 
             </div>
-            <p
+            {/* <p
               className={`
               text-base md:text-lg text-background/80 dark:text-muted-foreground leading-relaxed mb-8 max-w-xl
               transition-all duration-500
@@ -197,7 +197,7 @@ const Details = () => {
               `}
               >
               {lines[index]}
-            </p>
+            </p> */}
             <div className="flex flex-wrap items-center gap-3">
               <Button onClick={() => {document.getElementById("trailer")?.scrollIntoView({
                 behavior: "smooth"
