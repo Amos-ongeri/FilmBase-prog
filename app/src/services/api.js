@@ -382,7 +382,7 @@ const getConfigs = async () => {
     let configurations;
     try{
         if(configsMap.has("configs")){
-            configurations = configsMap.get("confi")
+            configurations = configsMap.get("configs")
         } else {
             const res = await fetch(`${serverUrl}/api/configurations`);
             const configs = await res.json();

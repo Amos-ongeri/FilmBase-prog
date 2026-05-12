@@ -1,5 +1,5 @@
 import Satoru from "../assets/satoru.png"
-import CarouselComponent from "../components/carousel";
+import CarouselComponent from "../components/imageCarousel";
 // import { movies } from "../data/testMovies";
 import { useEffect, useState } from "react";
 import Banner from "../sandbox/Banner";

@@ -5,9 +5,12 @@ import { useState, useEffect, useRef } from "react";
 import avatar from '../assets/user-avatar.png';
 import { getConfigs, getCredits, getDetails, getImages, getReviews, getSimilar, getVideos } from "@/services/api";
 import { formatNumber } from "@/utils/formatLargeNo";
+import Autoplay from "../../node_modules/embla-carousel-autoplay"
 
 //maps language codes to original language e.g en - English
 import ISO6391 from "iso-639-1";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { BackdropsCarousel, PostersCarousel } from "@/components/imageCarousel";
 
 
 const platforms = ["Netflix", "Prime Video", "Disney+", "Apple TV+", "Max", "Hulu"];
@@ -29,6 +32,7 @@ const Details = () => {
   const cast = useRef();
   const crew = useRef();
 
+  console.log("images", images);
   console.log("configs", configs);
   
 
@@ -151,7 +155,7 @@ const Details = () => {
       {/* HERO */}
       <section className="relative h-screen min-h-160 w-full overflow-hidden">
         <img
-          src={`https://image.tmdb.org/t/p/w1280${details?.backdrop_path}`}
+          src={`${configs?.images?.secure_base_url}/w1280${details?.backdrop_path}`}
           alt="Movie backdrop"
           width={1920}
           height={1088}
@@ -220,7 +224,7 @@ const Details = () => {
           <div className="relative group">
             <div className="absolute -inset-2 bg-gradient-orange opacity-0 group-hover:opacity-30 blur-sm transition duration-500 rounded-3xl" />
             <img
-              src={`https://image.tmdb.org/t/p/w1280${details?.poster_path}`}
+              src={`${configs?.images?.secure_base_url}/w1280${details?.poster_path}`}
               alt="Poster"
               width={512}
               height={768}
@@ -251,6 +255,16 @@ const Details = () => {
         </div>
       </section>
 
+      {/*images*/}
+      <section className="px-6 md:px-12 mt-5">
+        <p className="text-primary italic text-lg mb-4">backdrops</p>
+        <BackdropsCarousel backdrops={images?.backdrops} configs={configs} />
+      </section>
+      <section className="px-6 md:px-12 mt-5">
+        <p className="text-primary italic text-lg mb-4">posters</p>
+        <PostersCarousel posters={images?.posters} configs={configs} />
+      </section>
+
       {/* CAST */}
       <dialog ref={cast} onClick={(e) => {ModalClose(e,cast)}} className="w-full h-full md:w-[70%] md:h-[80%] m-auto rounded-md p-5">
 
@@ -264,7 +278,7 @@ const Details = () => {
               <div className="relative w-20 h-20 md:w-28 md:h-28 mb-3 group">
                 <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xs transition" />
                 <img
-                  src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar}
+                  src={c.profile_path !== null ? `${configs?.images?.secure_base_url}/w500${c.profile_path}` : avatar}
                   alt={c.name}
                   width={512}
                   height={512}
@@ -292,7 +306,7 @@ const Details = () => {
               <div className="relative w-28 h-28 mx-auto mb-3">
                 <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xs transition" />
                 <img
-                  src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar}
+                  src={c.profile_path !== null ? `${configs?.images?.secure_base_url}/w500${c.profile_path}` : avatar}
                   alt={c.name}
                   width={512}
                   height={512}
@@ -319,7 +333,7 @@ const Details = () => {
               <div className="relative w-20 h-20 md:w-28 md:h-28 mb-3 group">
                 <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xs transition" />
                 <img
-                  src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar}
+                  src={c.profile_path !== null ? `${configs?.images?.secure_base_url}/w500${c.profile_path}` : avatar}
                   alt={c.name}
                   width={512}
                   height={512}
@@ -347,7 +361,7 @@ const Details = () => {
               <div className="relative w-28 h-28 mx-auto mb-3">
                 <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xs transition" />
                 <img
-                  src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar}
+                  src={c.profile_path !== null ? `${configs?.images?.secure_base_url}/w500${c.profile_path}` : avatar}
                   alt={c.name}
                   width={512}
                   height={512}
@@ -381,7 +395,7 @@ const Details = () => {
             ))
           )}
           <div className="absolute -inset-1 bg-gradient-orange opacity-30 blur-2xl -z-10" />
-          <img src={`https://image.tmdb.org/t/p/w1280${details?.backdrop_path}`} alt="Trailer" width={1920} height={1088} loading="lazy" className="w-full aspect-video object-cover brightness-65 group-hover:brightness-80 transition" />
+          <img src={`${configs?.images?.secure_base_url}/w1280${details?.backdrop_path}`} alt="Trailer" width={1920} height={1088} loading="lazy" className="w-full aspect-video object-cover brightness-65 group-hover:brightness-80 transition" />
           <div onClick={() => setYT(true)} className="absolute inset-0 flex items-center justify-center">
             <div className="h-20 w-20 rounded-full bg-primary flex items-center justify-center shadow-glow group-hover:scale-110 transition">
               <Play className="w-8 h-8 fill-current text-foreground ml-1" />
@@ -425,7 +439,7 @@ const Details = () => {
           {similarNullFilter?.slice(0,moreRecommendations ? similarNullFilter?.length : 5)?.map((r, i) => (
             <div id={`item${i}`} key={i} className="group scroll-mt-3">
               <div onClick={() => navigate(r)} className="relative overflow-hidden rounded-2xl mb-3 shadow-card">
-                <img src={r?.poster_path ? `https://image.tmdb.org/t/p/w500${r?.poster_path}` : ''}  alt={r.title} width={512} height={768} loading="lazy" className="w-full aspect-2/3 object-cover group-hover:scale-105 transition duration-500" />
+                <img src={r?.poster_path ? `${configs?.images?.secure_base_url}/w500${r?.poster_path}` : ''}  alt={r.title} width={512} height={768} loading="lazy" className="w-full aspect-2/3 object-cover group-hover:scale-105 transition duration-500" />
                 <div className="absolute inset-0 bg-linear-to-t from-background via-background/0 to-background/0 opacity-80" />
                 <div className="absolute top-3 left-3 glass rounded-full px-2.5 py-1 flex items-center gap-1 text-xs">
                   <Star className="w-3 h-3 fill-primary text-primary" /> {((r?.vote_average/10)*5).toFixed(1)}

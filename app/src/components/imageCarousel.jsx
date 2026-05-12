@@ -103,4 +103,50 @@ const CarouselComponent = ({data,genres})=>{
     )
 }
 
+export const BackdropsCarousel = ({backdrops, configs}) => {
+    return(
+        <Carousel
+            plugins={[
+                Autoplay({
+                    delay: 10000,
+                })
+            ]}
+            opts={{
+                loop: true
+            }}
+        >
+            <CarouselContent>
+            {backdrops?.map((b,i) => (
+                <CarouselItem className="basis-full md:basis-1/3" key={i}><img className="h-full object-cover" src={`${configs?.images?.secure_base_url}/w780${b.file_path}`} alt="image" /></CarouselItem>
+            ))}
+            </CarouselContent>
+            <CarouselPrevious variant="newVar"/>
+            <CarouselNext variant="newVar"/>
+        </Carousel>
+    )
+}
+
+export const PostersCarousel = ({posters, configs}) => {
+    return(
+        <Carousel
+            plugins={[
+                Autoplay({
+                    delay: 8000,
+                })
+            ]}
+            opts={{
+                loop: true
+            }}
+        >
+            <CarouselContent>
+            {posters?.map((b,i) => (
+                <CarouselItem className="basis-full md:basis-1/3" key={i}><img className="h-full object-cover" src={`${configs?.images?.secure_base_url}/w780${b.file_path}`} alt="image" /></CarouselItem>
+            ))}
+            </CarouselContent>
+            <CarouselPrevious variant="newVar"/>
+            <CarouselNext variant="newVar"/>
+        </Carousel>
+    )
+}
+
 export default CarouselComponent;
