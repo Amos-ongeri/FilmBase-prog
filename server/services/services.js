@@ -51,9 +51,15 @@ const getImages = async (media_type, id) => {
     return images;
 }
 
+const getConfigs = async () => {
+    const configs = await client.request("/configurations");
+    return configs;
+}
+
 module.exports = { getMovies, getDetails,
      getVideos, getCredits,
       getSimilar, getGenres,
        getReviews, getTrending,
-        getDiscover, getImages
+        getDiscover, getImages,
+        getConfigs
 };

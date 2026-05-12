@@ -28,7 +28,7 @@ const Details = () => {
   const cast = useRef();
   const crew = useRef();
 
-  
+  console.log("images", images);
   
 
   useEffect(() => {

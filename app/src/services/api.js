@@ -362,15 +362,14 @@ const getReviews = async (tmdb_id, media_type)=>{
 const imagesMap = new Map();
 const getImages = async (media_type, id) => {
     let imagesData;
-    if(imagesMap.has("images")){
-        imagesData = imagesMap.get("images");
+    if(imagesMap.has(`images: ${id}`)){
+        imagesData = imagesMap.get(`images: ${id}`);
     } else {
         const res = await fetch(`${serverUrl}/api/${media_type}/${id}/images`);
 
         const images = await res.json();
-        console.log("images", images);
 
-        imagesMap.set("images", images);
+        imagesMap.set(`images: ${id}`, images);
 
         imagesData = images
     }

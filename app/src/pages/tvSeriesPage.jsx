@@ -34,8 +34,6 @@ const TvSeries = ()=>{
             return param;
         })
     }
-    console.log("type", typeof page);
-    
 
     useEffect(() => {
         const getData = async () => {
