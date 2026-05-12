@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useParams} from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import avatar from '../assets/user-avatar.png';
-import { getCredits, getDetails, getImages, getReviews, getSimilar, getVideos } from "@/services/api";
+import { getConfigs, getCredits, getDetails, getImages, getReviews, getSimilar, getVideos } from "@/services/api";
 import { formatNumber } from "@/utils/formatLargeNo";
 
 //maps language codes to original language e.g en - English
@@ -22,13 +22,14 @@ const Details = () => {
   const [credits, setCredits] = useState();
   const [similar,setSimilar] = useState();
   const [reviews,setReviews] = useState();
+  const [configs, setConfigs] = useState({});
   const [YT, setYT] = useState(false);
   const [moreRecommendations, setMoreRecommendations] = useState(false);
   const topRef = useRef();
   const cast = useRef();
   const crew = useRef();
 
-  console.log("images", images);
+  console.log("configs", configs);
   
 
   useEffect(() => {
@@ -72,10 +73,16 @@ const Details = () => {
       setImages(images);
     }
 
+    const initConfigs = async () => {
+      const conf = await getConfigs();
+      
+      setConfigs(conf);
+    }
+
     const loadData = async () => {
       await Promise.all([initDetails(), initVideos(),
           initCredits(), initSimilar(), initReviews(),
-          initImages()]);
+          initImages(), initConfigs()]);
     }
 
     loadData();

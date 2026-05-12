@@ -122,7 +122,7 @@ const imagesCon = async (req, res) => {
 const configsCon = async (req, res) =>{
     try{
         const data = await getConfigs();
-        res.status(200).json(data);
+        res.json(data);
     } catch (e) {
         console.log("ERROR", e.message);
         res.status(500).json({error: "server error"})

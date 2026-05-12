@@ -377,6 +377,27 @@ const getImages = async (media_type, id) => {
     return imagesData;
 }
 
+const configsMap = new Map();
+const getConfigs = async () => {
+    let configurations;
+    try{
+        if(configsMap.has("configs")){
+            configurations = configsMap.get("confi")
+        } else {
+            const res = await fetch(`${serverUrl}/api/configurations`);
+            const configs = await res.json();
+
+            configsMap.set("configs", configs);
+
+            configurations = configs;
+        }
+    } catch(e) {
+        console.log("ERROR", e.message);
+    }
+
+    return configurations;
+}
+
 export {
     getDetails, getDiscover, getMovies,
     getTv, getGenres, getTrending,
@@ -384,5 +405,5 @@ export {
     getTvGenres, getVideos, getCredits,
     getSimilar, getReviews, getCategoryMovies,
     getCategoryTv, getTypeDiscover,
-    getImages
+    getImages, getConfigs
 }
