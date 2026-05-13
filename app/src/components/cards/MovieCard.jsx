@@ -1,3 +1,4 @@
+import { getPosterSize } from "@/utils/imageSizes";
 import { Bookmark, Play, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -16,7 +17,7 @@ import { useNavigate } from "react-router-dom";
     >
       <div className="relative aspect-2/3 overflow-hidden rounded-2xl bg-surface shadow-card transition-all duration-500 group-hover:scale-[1.04] group-hover:shadow-glow">
         <img
-          src={movie?.poster_path ? `https://image.tmdb.org/t/p/w500${movie?.poster_path}` : ''} 
+          src={movie?.poster_path ? `https://image.tmdb.org/t/p/${getPosterSize()}${movie?.poster_path}` : ''} 
           alt={`${movie.title} poster`}
           loading="lazy"
           width={512}

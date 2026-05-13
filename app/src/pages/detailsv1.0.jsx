@@ -12,6 +12,7 @@ import ISO6391 from "iso-639-1";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { BackdropsCarousel, PostersCarousel } from "@/components/imageCarousel";
 import { Spinner } from "@/components/ui/spinner";
+import { getPosterSize } from "@/utils/imageSizes";
 
 
 const platforms = ["Netflix", "Prime Video", "Disney+", "Apple TV+", "Max", "Hulu"];
@@ -33,8 +34,8 @@ const Details = () => {
   const cast = useRef();
   const crew = useRef();
 
-  console.log("images", images);
-  // console.log("configs", configs);
+  // console.log("images", images);
+  console.log("configs", configs);
   
 
   useEffect(() => {
@@ -409,7 +410,7 @@ const Details = () => {
           {similarNullFilter?.slice(0,moreRecommendations ? similarNullFilter?.length : 5)?.map((r, i) => (
             <div id={`item${i}`} key={i} className="group scroll-mt-3">
               <div onClick={() => navigate(r)} className="relative overflow-hidden rounded-2xl mb-3 shadow-card">
-                <img src={r?.poster_path ? `https://image.tmdb.org/t/p/w500${r?.poster_path}` : ''}  alt={r.title} width={512} height={768} loading="lazy" className="w-full aspect-2/3 object-cover group-hover:scale-105 transition duration-500" />
+                <img src={r?.poster_path ? `https://image.tmdb.org/t/p/${getPosterSize()}${r?.poster_path}` : ''}  alt={r.title} width={512} height={768} loading="lazy" className="w-full aspect-2/3 object-cover group-hover:scale-105 transition duration-500" />
                 <div className="absolute inset-0 bg-linear-to-t from-background via-background/0 to-background/0 opacity-80" />
                 <div className="absolute top-3 left-3 glass rounded-full px-2.5 py-1 flex items-center gap-1 text-xs">
                   <Star className="w-3 h-3 fill-primary text-primary" /> {((r?.vote_average/10)*5).toFixed(1)}

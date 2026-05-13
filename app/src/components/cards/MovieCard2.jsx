@@ -1,3 +1,4 @@
+import { getPosterSize } from "@/utils/imageSizes";
 import { MdPlayArrow, MdStar } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +10,7 @@ const MovieCard2 = ({data})=>{
     }
     return (
         <div className="flex space-x-2 w-80 h-60">
-            <img src={`https://image.tmdb.org/t/p/w500${data.poster_path}`} alt="" className="flex-1 h-60 rounded-2xl"/>
+            <img src={`https://image.tmdb.org/t/p/${getPosterSize()}${data.poster_path}`} alt="" className="flex-1 h-60 rounded-2xl"/>
             <div className="text-white flex-2">
                 <p className="text-2xl line-clamp-2">{data?.title || data?.name}</p>
                 <br />

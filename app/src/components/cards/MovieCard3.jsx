@@ -1,3 +1,4 @@
+import { getPosterSize } from "@/utils/imageSizes";
 import { Bookmark, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -10,7 +11,7 @@ export const MovieCard3 = ({ t, k}) => {
   <div key={k} className="group block">
     <div onClick={navigate} className="relative overflow-hidden rounded-2xl mb-3 shadow-card">
       <img
-        src={`https://image.tmdb.org/t/p/w500${t?.poster_path}`}
+        src={`https://image.tmdb.org/t/p/${getPosterSize()}${t?.poster_path}`}
         alt={t?.title || t?.name}
         loading="lazy"
         className="w-full  object-cover group-hover:scale-105 transition duration-500"

@@ -2,6 +2,7 @@ import { CiBookmark } from "react-icons/ci";
 // import {  MdStar } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import Rating from '../../../node_modules/@mui/material/Rating';
+import { getPosterSize } from "@/utils/imageSizes";
 
 const MovieCard1 = ({data,Key}) => {
     const navigation = useNavigate();
@@ -12,7 +13,7 @@ const MovieCard1 = ({data,Key}) => {
     return(
         <div key={Key}  className="lg:w-50 lg:h-80 w-40 h-fit lg:mb-15 rounded-lg transition-shadow duration-200 space-y-2">
             <div className="h-fit w-full relative group perspective-near overflow-hidden rounded-lg">
-                <img onClick={navigate} loading="lazy" className="rounded-lg w-full h-70 object-cover object-center group-hover:translate-z-3 hover:opacity-70 transition-all duration-200 cursor-pointer" src={data.poster_path ? `https://image.tmdb.org/t/p/w500${data.poster_path}` : ''} />
+                <img onClick={navigate} loading="lazy" className="rounded-lg w-full h-70 object-cover object-center group-hover:translate-z-3 hover:opacity-70 transition-all duration-200 cursor-pointer" src={data.poster_path ? `https://image.tmdb.org/t/p/${getPosterSize()}${data.poster_path}` : ''} />
                 <div className="flex items-center justify-center space-x-1 min-w-12 rounded-lg px-1 absolute bottom-1 left-1 text-gray-300 bg-slate-700">
                     <Rating sx={{
                         '& .MuiRating-iconEmpty .MuiSvgIcon-root': {

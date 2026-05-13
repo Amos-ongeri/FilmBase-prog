@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/carousel"
 import Autoplay from "../../node_modules/embla-carousel-autoplay"
 import { Star } from "lucide-react";
+import { getBackdropSize, getPosterSize } from "@/utils/imageSizes";
 
 const CarouselComponent = ({data,genres})=>{
 
@@ -32,7 +33,7 @@ const CarouselComponent = ({data,genres})=>{
                 {data?.map((d,i) => (
                 <CarouselItem key={i}>
                     <div className="relative">
-                        <img loading="lazy" className="w-full h-screen rounded-xs object-cover" src={d.backdrop_path ? `https://image.tmdb.org/t/p/w1280${d.backdrop_path}` : ""} alt=""/>
+                        <img loading="lazy" className="w-full h-screen rounded-xs object-cover" src={d.backdrop_path ? `https://image.tmdb.org/t/p/${getBackdropSize()}${d.backdrop_path}` : ""} alt=""/>
                         <div className="absolute inset-0 flex items-end">
                             {/* gradient overlay */}
                             <div className="absolute inset-0 bg-gradient-hero" />
@@ -119,7 +120,7 @@ export const BackdropsCarousel = ({backdrops}) => {
         >
             <CarouselContent>
             {backdrops?.map((b,i) => (
-                <CarouselItem className="basis-1/1 md:basis-1/3" key={i}><img loading="lazy" className="h-full object-cover" src={`https://image.tmdb.org/t/p/w780${b.file_path}`} alt="image" /></CarouselItem>
+                <CarouselItem className="basis-1/1 md:basis-1/3" key={i}><img loading="lazy" className="h-full object-cover" src={`https://image.tmdb.org/t/p/${getBackdropSize()}${b.file_path}`} alt="image" /></CarouselItem>
             ))}
             </CarouselContent>
             <CarouselPrevious variant="newVar" className="absolute top-1/2 left-1 -translate-y-1/2"/>
@@ -142,7 +143,7 @@ export const PostersCarousel = ({posters}) => {
         >
             <CarouselContent>
             {posters?.map((b,i) => (
-                <CarouselItem className="basis-1/2 md:basis-1/4" key={i}><div className="h-full"><img loading="lazy" className="h-full object-cover" src={`https://image.tmdb.org/t/p/w780${b.file_path}`} alt="image" /></div></CarouselItem>
+                <CarouselItem className="basis-1/2 md:basis-1/4" key={i}><div className="h-full"><img loading="lazy" className="h-full object-cover" src={`https://image.tmdb.org/t/p/${getPosterSize()}${b.file_path}`} alt="image" /></div></CarouselItem>
             ))}
             </CarouselContent>
             <CarouselPrevious variant="newVar" className="absolute top-1/2 left-1 -translate-y-1/2"/>
