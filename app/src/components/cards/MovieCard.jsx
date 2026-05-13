@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
         navigation(`/details/${movie?.id}/${movie?.media_type}`)
     }
 
-    const rating = ((movie.vote_average/10)*5).toFixed(1);
+    const rating = ((movie?.vote_average/10)*5).toFixed(1);
   return (
     <article
       className="group relative animate-fade-up"
@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
       <div className="relative aspect-2/3 overflow-hidden rounded-2xl bg-surface shadow-card transition-all duration-500 group-hover:scale-[1.04] group-hover:shadow-glow">
         <img
           src={movie?.poster_path ? `https://image.tmdb.org/t/p/${getPosterSize()}${movie?.poster_path}` : ''} 
-          alt={`${movie.title} poster`}
+          alt={`${movie?.title} poster`}
           loading="lazy"
           width={512}
           height={768}

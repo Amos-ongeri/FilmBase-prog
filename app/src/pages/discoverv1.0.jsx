@@ -2,7 +2,7 @@ import MovieCard1 from "@/components/cards/MovieCard1";
 import { MovieCard3 } from "@/components/cards/MovieCard3";
 import { getDiscover, getGenres, getKeywords, getSearchData, getTypeDiscover } from "@/services/api";
 import { Search, X } from "lucide-react";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdSearch } from "react-icons/md";
 import { useSearchParams } from "react-router-dom";
 import { DiscoverSection, SearchResultSection } from "@/components/filmSection";
@@ -22,9 +22,6 @@ const Discover = () => {
   const genre = searchParam.get("genre") ?? "All";
   const query = searchParam.get("query") ?? "";
   const search = useRef();
-
-  console.log("search", searchData);
-  
 
   const isSearching = query.length > 0 || genre !== "All" || type !== "all";
 
@@ -112,8 +109,6 @@ const Discover = () => {
 
     initSearchData();
   },[page, query])
-  console.log("query",query.length);
-  
 
   useEffect(() => {
     const getData = async () => {

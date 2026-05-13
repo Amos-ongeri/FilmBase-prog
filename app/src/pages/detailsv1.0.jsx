@@ -34,10 +34,6 @@ const Details = () => {
   const cast = useRef();
   const crew = useRef();
 
-  // console.log("images", images);
-  console.log("configs", configs);
-  
-
   useEffect(() => {
     topRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" })
   },[tmdb_id])
@@ -137,7 +133,6 @@ const Details = () => {
           />
         )}
         <div className="absolute inset-0 bg-gradient-hero" />
-        <div className="absolute inset-0 bg-gradient-hero-side" />
 
         <div className="relative z-10 h-full flex items-end pb-20 px-6 md:px-12">
           <div className="max-w-2xl animate-fade-in">

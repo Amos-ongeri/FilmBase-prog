@@ -2,7 +2,7 @@ const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 const movieMap = new Map();
 const categories = ['now_playing','popular','top_rated','upcoming'];
-const getMovies = async (page) => {
+const getMovies = async (page = 1) => {
 const movies = {};
     let moviesData;
     for(const cat of categories){
@@ -19,7 +19,7 @@ const movies = {};
 }
 
 const categoryMovie = new Map();
-const getCategoryMovies = async (category,page) => {
+const getCategoryMovies = async (category,page = 1) => {
     let categoryMovies = {};
 
         if(categoryMovie.has(`${category}:${page}`)){
@@ -35,7 +35,7 @@ const getCategoryMovies = async (category,page) => {
 
 const tvMap = new Map();
 const tvCategories = ['airing_today','popular','top_rated','on_the_air'];
-const getTv = async (page) => {
+const getTv = async (page = 1) => {
     const tv = {};
 
     for(const cat of tvCategories){
@@ -55,7 +55,7 @@ const getTv = async (page) => {
 }
 
 const categoryTv = new Map();
-const getCategoryTv = async (category,page) => {
+const getCategoryTv = async (category,page = 1) => {
     let categoryTvs = {};
 
         if(categoryTv.has(`${category}:${page}`)){
@@ -224,18 +224,15 @@ const getTrending = async (media_type, time_window) => {
             trending["trending"] = trendingMap.get('trending');
             return trending["trending"];
         }else{
-            await fetch(`${serverUrl}/api/${media_type}/${time_window}/trending`)
-            .then(res => res.json())
-            .then(data => {
+            const res = await fetch(`${serverUrl}/api/${media_type}/${time_window}/trending`)
+            const data = await res.json();
                 trendingMap.set('trending', data.results)
                 trending["trending"] = data.results;
-            })
-            .catch(e => {throw new Error("error: ", e.message);
-            })
         }
     }catch(e){
         console.log('error occurred: ', e.message);
     }
+
     return trending["trending"];
 }
 

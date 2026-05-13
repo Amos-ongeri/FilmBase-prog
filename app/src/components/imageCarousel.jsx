@@ -10,13 +10,35 @@ import Autoplay from "../../node_modules/embla-carousel-autoplay"
 import { Star } from "lucide-react";
 import { getBackdropSize, getPosterSize } from "@/utils/imageSizes";
 
-const CarouselComponent = ({data,genres})=>{
+const CarouselComponent = ({data,genres, variant = "movies" })=>{
 
     const navigate = useNavigate()
 
     const navigateTo = (d)=>{
         navigate(`/details/${d?.id}/${d?.media_type}`)
     }
+
+    const variants = {
+  trending: {
+    card: "w-[220px] md:w-[280px] scale-[1.02] hover:scale-105",
+    glow: "shadow-[0_0_40px_rgba(255,0,80,0.25)]",
+    overlay: "bg-gradient-to-t from-black/80 via-black/20",
+  },
+
+  movies: {
+    card: "w-[160px] md:w-[180px] hover:scale-105",
+    glow: "hover:shadow-xl",
+    overlay: "bg-black/40",
+  },
+
+  tv: {
+    card: "w-[140px] md:w-[160px] rounded-xl hover:scale-105",
+    glow: "hover:shadow-md",
+    overlay: "bg-gradient-to-b from-black/60",
+  },
+};
+
+const style = variants[variant];
 
     return(
         <Carousel
@@ -31,18 +53,18 @@ const CarouselComponent = ({data,genres})=>{
         >
             <CarouselContent>
                 {data?.map((d,i) => (
-                <CarouselItem key={i}>
-                    <div className="relative">
-                        <img loading="lazy" className="w-full h-screen rounded-xs object-cover" src={d.backdrop_path ? `https://image.tmdb.org/t/p/${getBackdropSize()}${d.backdrop_path}` : ""} alt=""/>
+                <CarouselItem key={i} className='md:basis-1/3'>
+                    <div className="relative h-70">
+                        <img loading="lazy" className="w-full h-full rounded-xs object-center object-cover" src={d.backdrop_path ? `https://image.tmdb.org/t/p/${getPosterSize()}${d.poster_path}` : ""} alt=""/>
                         <div className="absolute inset-0 flex items-end">
                             {/* gradient overlay */}
                             <div className="absolute inset-0 bg-gradient-hero" />
                             <div className="absolute inset-0 bg-gradient-hero-side  " />
 
-                            <div className="relative z-10 p-6 lg:p-12 max-w-2xl text-white space-y-4">
+                            <div className="relative z-10 p-2 lg:p-4 max-w-2xl text-white space-y-4">
 
                                 {/* title */}
-                                <h1 className="text-3xl lg:text-5xl font-bold leading-tight text-background dark:text-foreground transition duration-150">
+                                <h1 className="text-3xl lg:text-2xl font-bold leading-tight text-background dark:text-foreground transition duration-150">
                                 {d?.name || d?.title}
                                 </h1>
 
@@ -74,7 +96,7 @@ const CarouselComponent = ({data,genres})=>{
                                 </div>
 
                                 {/* overview */}
-                                <p className="text-sm lg:text-base line-clamp-4 leading-relaxed text-background dark:text-foreground">
+                                <p title={`${d?.overview}`} className="text-sm lg:text-base line-clamp-4 leading-relaxed text-background dark:text-foreground ">
                                 {d?.overview}
                                 </p>
 
@@ -82,13 +104,13 @@ const CarouselComponent = ({data,genres})=>{
                                 <div className="flex items-center gap-4 pt-2">
                                 <button
                                     onClick={() => navigateTo(d)}
-                                    className="bg-[#FF3C00] hover:bg-[#ff521f] transition-colors px-6 py-3 rounded-xl font-semibold shadow-lg"
+                                    className="bg-[#FF3C00] hover:bg-[#ff521f] transition-colors px-4 py-2 rounded-xl font-semibold shadow-lg"
                                 >
                                     View Details
                                 </button>
 
                                 {/* optional secondary button */}
-                                <button className="bg-white/10 hover:bg-white/20 transition duration-150 px-5 py-3 rounded-xl glass border border-white/20 text-background dark:text-foreground">
+                                <button className="bg-white/10 hover:bg-white/20 transition duration-150 px-4 py-2 rounded-xl glass border border-white/20 text-background dark:text-foreground">
                                     + Watchlist
                                 </button>
                                 </div>

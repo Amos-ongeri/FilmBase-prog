@@ -1,4 +1,4 @@
-import MainPage from './pages/home'
+import MainPage from './pages/homev1.0'
 import { Route, Routes} from "react-router-dom";
 import TopBar from './components/topBar';
 import ScrollToTop from './components/scroll_to_top.jsx'
@@ -33,7 +33,7 @@ function App() {
       <Navigation isOpenSidebar={isopen} toggle={() => setIsOpen(prev => !prev)}/>
       <div className='w-full min-h-50 overflow-y-auto'>
         <TopBar toggleSidebar={() => setIsOpen(prev => !prev)}/>
-        <div className="lg:min-h-[91%] ">
+        <div className="lg:min-h-[91%]">
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path='/details/:tmdb_id/:media_type' element={<Details/>}/>

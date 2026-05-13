@@ -1,8 +1,8 @@
 import Satoru from "../assets/satoru.png"
-import CarouselComponent from "../components/imageCarousel";
+import CarouselComponent from "../../components/imageCarousel";
 // import { movies } from "../data/testMovies";
 import { useEffect, useState } from "react";
-import Banner from "../sandbox/Banner";
+import Banner from "../../sandbox/Banner";
 import HomeSkeleton from "@/components/placeholders/homeSkeleton";
 import { getGenres, getTrending } from "@/services/api";
 
@@ -39,6 +39,7 @@ const MainPage = () => {
     return(
         <div className="relative w-full min-h-full bg-foreground dark:bg-background text-accent-foreground">
             {trending !== undefined ? <CarouselComponent data={trending} genres={genres}/> : <HomeSkeleton />}
+            <div className="h-50 w-full"></div>
         </div>
     )
 }
