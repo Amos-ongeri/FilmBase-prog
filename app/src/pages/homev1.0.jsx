@@ -7,6 +7,7 @@ import { getBackdropSize } from "@/utils/imageSizes";
 import { Spinner } from "@/components/ui/spinner";
 import { MovieCard3 } from "@/components/cards/MovieCard3";
 import { getFeaturedMovie } from "@/utils/featured";
+import MovieScroller from "@/components/movieScrollerv1.0";
 
 const HomePage = () => {
     const [tv, setTv] = useState({});
@@ -41,7 +42,7 @@ const HomePage = () => {
 
     const featured = getFeaturedMovie(movies);
 
-    const trending = [...(movies || [])].sort((a, b) => b.rating - a.rating).slice(0, 6);
+    const trending = [...(movies || [])].sort((a, b) => b.rating - a.rating);
 
     const newSeries = tv?.airing_today?.results?.slice(0, 6);
   return (
@@ -78,7 +79,7 @@ const HomePage = () => {
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <Button asChild size="lg" className="bg-primary hover:opacity-90 text-foreground rounded-full px-7 h-12 shadow-glow font-semibold">
+              <Button asChild size="lg" className="bg-primary hover:opacity-90 text-primary-foreground rounded-full px-7 h-12 shadow-glow font-semibold">
                 <Link to={`/details/${featured?.id}/movie`}>
                   <Play className="w-4 h-4 fill-current" /> View Details
                 </Link>
@@ -95,7 +96,7 @@ const HomePage = () => {
             <Link
               key={g}
               to={`/movies?genre=${g?.name}`}
-              className="glass rounded-full px-5 py-2.5 text-sm whitespace-nowrap hover:border-primary hover:dark:border-primary hover:text-primary transition"
+              className="glass rounded-full px-5 py-2.5 text-sm whitespace-nowrap hover:border-primary hover:text-primary transition"
             >
               {g?.name}
             </Link>
@@ -113,11 +114,12 @@ const HomePage = () => {
             View all <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
-        {!trending ? (<div className="flex items-center justify-center"><Spinner /></div>) : (
+        <MovieScroller data={trending} />
+        {/* {!trending ? (<div className="flex items-center justify-center"><Spinner /></div>) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
                 {trending?.map((t) => <MovieCard3 key={t.id} t={{...t, media_type: "movie"}} />)}
             </div>
-        )}
+        )} */}
       </section>
 
       {/* NEW SERIES */}
