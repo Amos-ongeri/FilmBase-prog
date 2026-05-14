@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { MovieCard3 } from "./cards/MovieCard3";
+import { MovieCard3 } from "../components/cards/MovieCard3";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const MovieScroller = ({data})=>{
