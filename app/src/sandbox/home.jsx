@@ -1,8 +1,8 @@
 import Satoru from "../assets/satoru.png"
-import CarouselComponent from "../../components/imageCarousel";
+import CarouselComponent from "../components/imageCarousel";
 // import { movies } from "../data/testMovies";
 import { useEffect, useState } from "react";
-import Banner from "../Banner";
+import Banner from "./Banner";
 import HomeSkeleton from "@/components/placeholders/homeSkeleton";
 import { getGenres, getTrending } from "@/services/api";
 

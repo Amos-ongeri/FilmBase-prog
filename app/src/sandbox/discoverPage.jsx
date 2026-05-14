@@ -1,6 +1,6 @@
 import { useEffect,useState } from "react";
-import MovieCard from "../../components/cards/MovieCard";
-import MovieCard1 from "../../components/cards/MovieCard1";
+import MovieCard from "../components/cards/MovieCard";
+import MovieCard1 from "../components/cards/MovieCard1";
 import { MdArrowDownward, MdArrowUpward, MdSearch, MdSort } from "react-icons/md";
 import user_avatar from '../assets/user-avatar.png'
 import { CiFilter } from "react-icons/ci";

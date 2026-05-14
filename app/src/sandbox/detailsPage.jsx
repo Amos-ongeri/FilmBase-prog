@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 // import { movies } from "../../data/testMovies";
-import MovieCard1 from "../../components/cards/MovieCard1";
+import MovieCard1 from "../components/cards/MovieCard1";
 import avatar from '../assets/user-avatar.png'
 import { MdArrowForward, MdArrowForwardIos } from "react-icons/md";
 import CardSkeleton from "@/components/placeholders/cardSkeleton";
