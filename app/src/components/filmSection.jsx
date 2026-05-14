@@ -17,7 +17,7 @@ const FilmSection = ({films, genre, genres, page, total, setPage, type}) => {
 
     return (
         <div className="space-y-15">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 {filteredFilms?.map((movie,i)=> (
                     <div className="scroll-mt-15" ref={(el) => cardRefs.current[i] = el} key={i}><MovieCard movie={{...movie, media_type: type}} genre={genres} index={i}/></div>
                 ))}
@@ -37,7 +37,7 @@ export const DiscoverSection = ({films, page, setPage, total}) => {
     const cardRefs = useRef([]);
     return (
         <div className="space-y-15">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
             {films?.map((t,i) => ( <div className="scroll-mt-15" ref={(el) => (cardRefs.current[i] = el)} key={i}><MovieCard3 t={t} k={t.id}/></div>))}
         </div>
         <SmartPagination currentPage={page}
@@ -97,7 +97,7 @@ export const SearchResultSection = ({ results, page, total, setPage }) => {
                 <>
                 <p className="my-5 text-lg md:text-2xl">Film</p>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                     {films.map((f, i) => (
                     <MovieCard3 key={i} t={f} k={i} />
                     ))}

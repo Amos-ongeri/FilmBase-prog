@@ -401,7 +401,7 @@ const Details = () => {
           <h2 className="text-2xl md:text-3xl font-bold">More Like This</h2>
           {similarNullFilter?.length > 5 && (<a className="text-sm dark:text-muted-foreground hover:text-primary flex items-center gap-1 transition" onClick={() => setMoreRecommendations(prev => !prev)}>{moreRecommendations  ? "View less" : "View all"} <ChevronRight className="w-4 h-4" /></a>)}
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
           {similarNullFilter?.slice(0,moreRecommendations ? similarNullFilter?.length : 5)?.map((r, i) => (
             <div id={`item${i}`} key={i} className="group scroll-mt-3">
               <div onClick={() => navigate(r)} className="relative overflow-hidden rounded-2xl mb-3 shadow-card">
