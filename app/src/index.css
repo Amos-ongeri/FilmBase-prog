@@ -133,17 +133,13 @@ dialog::backdrop {
 
 @layer utilities {
   .glass {
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    background: hsl(0 0% 100% / 0.8);
+    background: hsl(0 0% 100%);
     border: 1px solid hsl(0 0% 0% / 0.4);
     box-shadow: 1px 5px 6px rgba(0, 0, 0, 0.08);
   }
 
   .dark .glass {
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    background: hsl(0 0% 4% / 0.6);
+    background: hsl(0 0% 4%);
     border: 1px solid hsl(0 0% 100% / 0.08);
   }
   .scrollbar-hide::-webkit-scrollbar { display: none; }

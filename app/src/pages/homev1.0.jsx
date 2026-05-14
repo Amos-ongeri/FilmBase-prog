@@ -78,7 +78,7 @@ const HomePage = () => {
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <Button asChild size="lg" className="bg-primary hover:opacity-90 text-primary-foreground rounded-full px-7 h-12 shadow-glow font-semibold">
+              <Button asChild size="lg" className="bg-primary hover:opacity-90 text-foreground rounded-full px-7 h-12 shadow-glow font-semibold">
                 <Link to={`/details/${featured?.id}/movie`}>
                   <Play className="w-4 h-4 fill-current" /> View Details
                 </Link>
@@ -95,7 +95,7 @@ const HomePage = () => {
             <Link
               key={g}
               to={`/movies?genre=${g?.name}`}
-              className="glass rounded-full px-5 py-2.5 text-sm whitespace-nowrap hover:border-primary hover:text-primary transition"
+              className="glass rounded-full px-5 py-2.5 text-sm whitespace-nowrap hover:border-primary hover:dark:border-primary hover:text-primary transition"
             >
               {g?.name}
             </Link>
