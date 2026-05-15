@@ -40,7 +40,7 @@ import { useNavigate } from "react-router-dom";
         {/* Bookmark */}
         <button
           aria-label="Save to list"
-          className="absolute top-3 right-3 h-8 w-8 grid place-items-center rounded-full glass-card text-muted-foreground hover:text-primary transition-colors"
+          className="absolute top-3 right-3  grid place-items-center rounded-full glass-card text-muted-foreground hover:text-primary transition-colors"
         >
           <Bookmark className="h-4.5 w-4.5" />
         </button>

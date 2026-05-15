@@ -18,9 +18,9 @@ export const MovieCard3 = ({ t, k}) => {
       />
       <button
           aria-label="Save to list"
-          className="absolute top-3 right-3 h-8 w-8 grid place-items-center rounded-full glass-card text-muted-foreground hover:text-primary transition-colors"
+          className="absolute top-3 right-3 grid place-items-center rounded-full glass-card text-muted-foreground hover:text-primary transition-colors"
         >
-          <Bookmark className="h-3.5 w-3.5" />
+          <Bookmark className="h-4.5 w-4.5" />
         </button>
       <div className="absolute inset-0 bg-linear-to-t from-background via-background/0 to-background/0 opacity-80" />
       <div className="absolute top-3 left-3 glass dark:text-foreground text-background rounded-full px-2.5 py-1 flex items-center gap-1 text-xs">

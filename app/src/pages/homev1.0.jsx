@@ -44,12 +44,12 @@ const HomePage = () => {
 
     const trending = [...(movies || [])].sort((a, b) => b.rating - a.rating);
 
-    const newSeries = tv?.airing_today?.results?.slice(0, 6);
+    const newSeries = tv?.popular?.results?.slice(0, 10);
   return (
     <main className="min-h-screen dark:bg-background dark:text-foreground text-background bg-foreground">
 
       {/* HERO */}
-      <section className="relative h-[88vh] min-h-150 w-full overflow-hidden">
+      <section className="relative h-[85vh] w-full overflow-hidden">
         <img src={featured?.backdrop_path ? `https://image.tmdb.org/t/p/${getBackdropSize()}${featured?.backdrop_path}` : ""} alt="Featured" className="absolute inset-0 w-full h-full object-cover object-center" />
         <div className="absolute inset-0 bg-gradient-hero" />
         <div className="relative z-10 h-full flex items-end pb-20 px-6 md:px-12">
@@ -89,23 +89,8 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* CATEGORY PILLS */}
-      <section className="px-6 md:px-12 -mt-12 relative z-20">
-        <div className="flex gap-3 flex-wrap overflow-x-auto scrollbar-hide pb-2">
-          {genres.map((g) => (
-            <Link
-              key={g}
-              to={`/movies?genre=${g?.name}`}
-              className="glass rounded-full px-5 py-2.5 text-sm whitespace-nowrap hover:border-primary hover:text-primary transition"
-            >
-              {g?.name}
-            </Link>
-          ))}
-        </div>
-      </section>
-
       {/* TRENDING */}
-      <section className="px-6 md:px-12 mt-16 grid grid-cols-1 place-items-center">
+      <section className="px-6 md:px-12 mt-3 grid grid-cols-1 place-items-center">
         <div className="flex items-end justify-between mb-6 w-full md:w-[80%]">
           <h2 className="text-2xl md:text-3xl font-bold flex items-center gap-3">
             <TrendingUp className="w-6 h-6 text-primary" /> Trending Movies
@@ -119,18 +104,16 @@ const HomePage = () => {
         )}
       </section>
 
-      {/* NEW SERIES */}
+      {/* POPULAR SERIES */}
       <section className="px-6 md:px-12 mt-20 mb-24 grid grid-cols-1 place-items-center">
         <div className="flex items-end justify-between mb-6 w-full md:w-[80%]">
-          <h2 className="text-2xl md:text-3xl font-bold">New Series</h2>
-          <Link to="/tv" className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 transition">
+          <h2 className="text-2xl md:text-3xl font-bold">Popular Series</h2>
+          <Link to={`/tv?category=${"popular"}`} className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 transition">
             Browse series <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
         {!newSeries ? (<div className="flex items-center justify-center"><Spinner /></div>) : (
-            <div className="md:w-[80%] w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
-                {newSeries?.map((t) => <MovieCard3 key={t.id} t={{...t, media_type: "tv"}} />)}
-            </div>
+            <MovieScroller data={newSeries?.map(s => ({...s, media_type: 'tv'}))} />
         )}
       </section>
 

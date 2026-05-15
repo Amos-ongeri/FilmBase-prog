@@ -116,7 +116,7 @@ const MovieScroller = ({ data = [] }) => {
           <div
             key={item.id}
             className="
-              w-20 md:w-40 shrink-0 snap-start
+              w-30 md:w-40 shrink-0 snap-start
               cursor-pointer
               transition-transform duration-300
               hover:scale-105

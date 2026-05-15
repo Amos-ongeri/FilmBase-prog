@@ -118,11 +118,11 @@ const TopBar = ({toggleSidebar}) => {
                     <AvatarBadge className="bg-green-600 dark:bg-green-800" />
                 </Avatar>
                 <div onClick={toggleTheme} className="glass rounded-full p-1 flex items-center">
-                    <button className={`h-9 w-9 rounded-full flex items-center justify-center transition ${theme === "dark" ? "bg-primary text-primary-foreground shadow-glow" : "text-muted/50 hover:text-background"}`}
+                    <button className={`h-9 w-9 rounded-full flex items-center justify-center transition ${theme === "dark" ? "bg-primary text-primary-foreground shadow-glow transition-colors duration-300" : "text-muted/50 hover:text-background"}`}
                     >
                         <MoonIcon className="w-4 h-4" />
                     </button>
-                    <button className={`h-9 w-9 rounded-full flex items-center justify-center transition ${theme === "light" ? "bg-primary text-primary-foreground shadow-glow transition-colors duration-700" : "text-muted-foreground hover:text-foreground"}`}
+                    <button className={`h-9 w-9 rounded-full flex items-center justify-center transition ${theme === "light" ? "bg-primary text-primary-foreground shadow-glow transition-colors duration-300" : "text-muted-foreground hover:text-foreground"}`}
                     >
                         <SunIcon className="w-4 h-4" />
                     </button>
