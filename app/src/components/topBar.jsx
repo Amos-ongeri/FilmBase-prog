@@ -13,6 +13,13 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+
 import { GoHome } from "react-icons/go";
 import { BiDetail } from "react-icons/bi";
 import { useTheme } from "@/contexts/Theme";
@@ -42,12 +49,17 @@ const TopBar = ({toggleSidebar}) => {
             <div className="flex items-center space-x-3">
                 <div className="md:hidden rounded-md glass text-background dark:text-foreground p-1 h-[10%]"><HiBars3 onClick={toggleSidebar} size={30}/></div>
                 <div className="flex items-center justify-center rounded-md p-1 w-full text-2xl h-[10%] glass transition duration-150">
-                    <div  onClick={()=> navigateTo('/')} title="Home Page" className="flex items-center  justify-center cursor-pointer">
-                        <p className="dark:text-white text-background "><span>Film</span>
-                            <span className="text-primary drop-shadow-sm font-extrabold">Base</span>
-                        </p>
-                        <p><CiPlay1 className="text-primary" /></p>
-                    </div>
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <div  onClick={()=> navigateTo('/')} className="flex items-center  justify-center cursor-pointer">
+                                <p className="dark:text-white text-background "><span>Film</span>
+                                    <span className="text-primary drop-shadow-sm font-extrabold">Base</span>
+                                </p>
+                                <p><CiPlay1 className="text-primary" /></p>
+                            </div>
+                        </TooltipTrigger>
+                        <TooltipContent>Home Page</TooltipContent>
+                    </Tooltip>
                 </div>
                 <NavigationMenu>
                     <NavigationMenuList>

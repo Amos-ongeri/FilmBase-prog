@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
       className="group relative animate-fade-up"
       style={{ animationDelay: `${Math.min(index * 40, 400)}ms` }}
     >
-      <div className="relative aspect-2/3 overflow-hidden rounded-2xl bg-surface shadow-card transition-all duration-500 group-hover:scale-[1.04] group-hover:shadow-glow">
+      <div onClick={navigate} className="relative aspect-2/3 overflow-hidden rounded-2xl bg-surface shadow-card transition-all duration-500 group-hover:scale-[1.04] group-hover:shadow-glow">
         <img
           src={movie?.poster_path ? `https://image.tmdb.org/t/p/${getPosterSize()}${movie?.poster_path}` : ''} 
           alt={`${movie?.title} poster`}
@@ -46,7 +46,7 @@ import { useNavigate } from "react-router-dom";
         </button>
 
         {/* Play overlay on hover */}
-        <div onClick={navigate} className="absolute inset-0 grid place-items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="absolute inset-0 grid place-items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <div className="h-14 w-14 rounded-full bg-primary/95 grid place-items-center shadow-glow scale-90 group-hover:scale-100 transition-transform duration-300">
             <Play className="h-5 w-5 text-foreground fill-current ml-0.5" />
           </div>

@@ -105,8 +105,8 @@ const HomePage = () => {
       </section>
 
       {/* TRENDING */}
-      <section className="px-6 md:px-12 mt-16">
-        <div className="flex items-end justify-between mb-6">
+      <section className="px-6 md:px-12 mt-16 grid grid-cols-1 place-items-center">
+        <div className="flex items-end justify-between mb-6 w-full md:w-[80%]">
           <h2 className="text-2xl md:text-3xl font-bold flex items-center gap-3">
             <TrendingUp className="w-6 h-6 text-primary" /> Trending Movies
           </h2>
@@ -114,24 +114,21 @@ const HomePage = () => {
             View all <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
-        <MovieScroller data={trending} />
-        {/* {!trending ? (<div className="flex items-center justify-center"><Spinner /></div>) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
-                {trending?.map((t) => <MovieCard3 key={t.id} t={{...t, media_type: "movie"}} />)}
-            </div>
-        )} */}
+        {!trending ? (<div className="flex items-center justify-center"><Spinner /></div>) : (
+          <MovieScroller data={trending} />
+        )}
       </section>
 
       {/* NEW SERIES */}
-      <section className="px-6 md:px-12 mt-20 mb-24">
-        <div className="flex items-end justify-between mb-6">
+      <section className="px-6 md:px-12 mt-20 mb-24 grid grid-cols-1 place-items-center">
+        <div className="flex items-end justify-between mb-6 w-full md:w-[80%]">
           <h2 className="text-2xl md:text-3xl font-bold">New Series</h2>
           <Link to="/tv" className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 transition">
             Browse series <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
         {!newSeries ? (<div className="flex items-center justify-center"><Spinner /></div>) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
+            <div className="md:w-[80%] w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
                 {newSeries?.map((t) => <MovieCard3 key={t.id} t={{...t, media_type: "tv"}} />)}
             </div>
         )}
