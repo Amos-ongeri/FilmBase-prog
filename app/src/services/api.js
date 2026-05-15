@@ -395,6 +395,31 @@ const getConfigs = async () => {
     return configurations;
 }
 
+const providersMap = new Map();
+const getProviders = async (media_type, tmdb_id) => {
+    try{
+        let providers = null;
+
+        if(providersMap.has("providers")){
+            providers = providersMap.get("providers");
+        } else {
+            const res =  await fetch(`${serverUrl}/api/${media_type}/${tmdb_id}/providers`);
+
+            const data = await res.json();
+
+            providersMap.set("providers", data);
+
+            providers = data;
+
+            console.log("p", providers);
+            
+            return providers;
+        }
+    } catch(e) {
+        console.log("ERROR", e.message);
+    }
+}
+
 export {
     getDetails, getDiscover, getMovies,
     getTv, getGenres, getTrending,
@@ -402,5 +427,6 @@ export {
     getTvGenres, getVideos, getCredits,
     getSimilar, getReviews, getCategoryMovies,
     getCategoryTv, getTypeDiscover,
-    getImages, getConfigs
+    getImages, getConfigs,
+    getProviders
 }

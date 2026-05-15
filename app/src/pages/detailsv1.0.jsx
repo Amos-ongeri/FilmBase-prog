@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate, useParams} from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import avatar from '../assets/user-avatar.png';
-import { getConfigs, getCredits, getDetails, getImages, getReviews, getSimilar, getVideos } from "@/services/api";
+import { getConfigs, getCredits, getDetails, getImages, getProviders, getReviews, getSimilar, getVideos } from "@/services/api";
 import { formatNumber } from "@/utils/formatLargeNo";
 import Autoplay from "../../node_modules/embla-carousel-autoplay"
 
@@ -28,11 +28,15 @@ const Details = () => {
   const [similar,setSimilar] = useState();
   const [reviews,setReviews] = useState();
   const [configs, setConfigs] = useState({});
+  const [providers, setProviders] = useState({});
   const [YT, setYT] = useState(false);
   const [moreRecommendations, setMoreRecommendations] = useState(false);
   const topRef = useRef();
   const cast = useRef();
   const crew = useRef();
+
+  console.log("providers", providers);
+  
 
   useEffect(() => {
     topRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -81,10 +85,16 @@ const Details = () => {
       setConfigs(conf);
     }
 
+    const initProviders = async () => {
+      const providers = await getProviders(media_type, tmdb_id);
+
+      setProviders(providers)
+    }
+
     const loadData = async () => {
       await Promise.all([initDetails(), initVideos(),
           initCredits(), initSimilar(), initReviews(),
-          initImages(), initConfigs()]);
+          initImages(), initConfigs(), initProviders()]);
     }
 
     loadData();

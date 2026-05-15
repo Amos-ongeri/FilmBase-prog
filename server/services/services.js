@@ -56,10 +56,15 @@ const getConfigs = async () => {
     return configs;
 }
 
+const getWatchProviders = async (media, id) => {
+    const providers = await client.request(`/${media}/${id}/watch/providers`);
+    return providers;
+}
+
 module.exports = { getMovies, getDetails,
      getVideos, getCredits,
       getSimilar, getGenres,
        getReviews, getTrending,
         getDiscover, getImages,
-        getConfigs
+        getConfigs, getWatchProviders
 };

@@ -3,7 +3,8 @@ const {getMovies, getGenres,
     getCredits, getSimilar,
     getReviews, getTrending,
     getDiscover, getImages,
-    getConfigs
+    getConfigs,
+    getWatchProviders
 } = require('../services/services')
 
 const moviesCon = async (req, res)=>{
@@ -129,10 +130,21 @@ const configsCon = async (req, res) =>{
     }
 }
 
+const providersCon = async (req, res) => {
+    try{
+        const {media, id} = req.params;
+        const data = await getWatchProviders(media, id);
+
+        res.json(data);
+    } catch (e) {
+        res.status(500).json({error: "server error"});
+    }
+}
+
 module.exports = { moviesCon, detailsCon,
     videosCon, creditsCon,
     similarCon, genreCon,
     reviewsCon, trendingCon,
     discoverCon, imagesCon,
-    configsCon
+    configsCon, providersCon
 }
