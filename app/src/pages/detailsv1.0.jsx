@@ -1,18 +1,18 @@
-import { Play, Plus, Share2, Heart, Star, Clock, Calendar, ChevronRight, Volume2, X } from "lucide-react";
+import { Play, Plus, Share2, Heart, Star, Clock, Calendar, ChevronRight, X, MessageCircle, ThumbsUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams} from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import avatar from '../assets/user-avatar.png';
 import { getConfigs, getCredits, getDetails, getImages, getProviders, getReviews, getSimilar, getVideos } from "@/services/api";
 import { formatNumber } from "@/utils/formatLargeNo";
-import Autoplay from "../../node_modules/embla-carousel-autoplay"
 
 //maps language codes to original language e.g en - English
 import ISO6391 from "iso-639-1";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+
 import { BackdropsCarousel, PostersCarousel } from "@/components/imageCarousel";
 import { Spinner } from "@/components/ui/spinner";
 import { getPosterSize } from "@/utils/imageSizes";
+import { getRelativeTime } from "@/utils/RTF";
 
 
 const platforms = ["Netflix", "Prime Video", "Disney+", "Apple TV+", "Max", "Hulu"];
@@ -35,8 +35,7 @@ const Details = () => {
   const cast = useRef();
   const crew = useRef();
 
-  console.log("providers", providers);
-  
+  // console.log("reviews", reviews);
 
   useEffect(() => {
     topRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -430,6 +429,39 @@ const Details = () => {
           ))}
         </div>
       </section>
+
+      {/* REVIEWS */}
+      {reviews?.length !== 0 && (
+        <section className="px-6 md:px-12 mb-24">
+        <div className="flex items-end justify-between mb-8">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold mb-1">User Reviews</h2>
+            <p className="text-sm text-muted-foreground">{reviews?.length} reviews from the community</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {reviews  ?.map((r) => (
+            <div key={r.id} className="glass overflow-y-auto rounded-2xl p-6 hover:border-primary/30 transition group">
+              <div className="flex items-start gap-4 mb-4">
+                <img src={r?.author_details?.avatar_path !== null ? `https://image.tmdb.org/t/p/w500${r?.author_details?.avatar_path}` : avatar} alt={r.author} className="w-12 h-12 rounded-full object-cover border border-border" />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-semibold text-sm">{r.author}</span>
+                    <span className="text-xs text-muted-foreground">{getRelativeTime(r?.updated_at)}</span>
+                  </div>
+                  <div className="flex items-center gap-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className={`w-3.5 h-3.5 ${i < ((r?.author_details?.rating *5 ) / 10).toFixed(1) ? "fill-primary text-primary" : "text-muted-foreground/30"}`} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5 line-clamp-5">{r?.content}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+      )}
 
       <footer className="border-t border-border py-8 px-6 md:px-12 text-center text-xs text-muted-foreground">
         © {new Date().getFullYear()} FilmBase · Built for cinema.

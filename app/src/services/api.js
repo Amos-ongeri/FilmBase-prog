@@ -410,8 +410,6 @@ const getProviders = async (media_type, tmdb_id) => {
             providersMap.set("providers", data);
 
             providers = data;
-
-            console.log("p", providers);
             
             return providers;
         }
