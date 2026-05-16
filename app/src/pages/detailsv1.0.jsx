@@ -40,6 +40,41 @@ const Details = () => {
   // console.log("configs", configs);
   // console.log("similar", similarNullFilter);
 
+  const contentRefs = useRef({});
+  const [expandedMap, setExpandedMap] = useState({});
+  const [clampedMap, setClampedMap] = useState({});
+
+  const toggleExpanded = (id) => {
+    setExpandedMap((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  const measureClamps = () => {
+    const newMap = {};
+
+    Object.entries(contentRefs.current).forEach(([id, el]) => {
+      if (!el) return;
+
+      newMap[id] = el.scrollHeight > el.clientHeight;
+    });
+
+    setClampedMap(newMap);
+  };
+
+  useEffect(() => {
+    if (!reviews?.length) return;
+
+    const id = requestAnimationFrame(() => {
+      measureClamps();
+    });
+
+    return () => cancelAnimationFrame(id);
+  }, [reviews]);
+
+  const isExpanded = (id) => expandedMap[id];
+
   useEffect(() => {
     topRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" })
   },[tmdb_id])
@@ -488,7 +523,15 @@ const Details = () => {
                   </div>
                 </div>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-5 line-clamp-5">{r?.content}</p>
+              <p ref={(el) => (contentRefs.current[r.id] = el)} className={`text-sm text-muted-foreground leading-relaxed mb-5 ${!isExpanded(r.id) ? "line-clamp-5" : ""}`}>{r?.content}</p>
+              {clampedMap[r.id] && (
+                <button
+                  onClick={() => toggleExpanded(r.id)}
+                  className="text-xs text-primary hover:underline"
+                >
+                  {isExpanded(r.id) ? "Show less" : "Read more"}
+                </button>
+              )}
             </div>
           ))}
         </div>
