@@ -70,15 +70,17 @@ export const SearchResultSection = ({ results, page, total, setPage }) => {
                 <div className="flex gap-5 overflow-auto">
                     {persons.map((p, i) => (
                     <div key={i} className="w-28 h-fit mb-3 shrink-0 group">
-                        <img
-                        src={
-                            p.profile_path
-                            ? `https://image.tmdb.org/t/p/w500${p.profile_path}`
-                            : user_avatar
-                        }
-                        className="w-28 h-28 rounded-full object-cover border-2 border-border           group-hover:border-primary transition"
-                        alt=""
-                        />
+                        {p.profile_path ? (
+                            <img
+                                src={`https://image.tmdb.org/t/p/w500${p.profile_path}`}
+                                className="w-28 h-28 rounded-full object-cover border-2 border-border group-hover:border-primary transition"
+                                alt=""
+                            />
+                        ) : (
+                            <div className="w-28 h-28 rounded-full bg-gradient-orange/20 border border-border flex items-center justify-center font-bold text-primary group-hover:border-primary transition">
+                                {p.name[0]}
+                            </div>
+                        )}
 
                         <p className="text-center">{p.name}</p>
                     </div>

@@ -10,7 +10,7 @@ import Autoplay from "../../node_modules/embla-carousel-autoplay"
 import { Star } from "lucide-react";
 import { getBackdropSize, getPosterSize } from "@/utils/imageSizes";
 
-const CarouselComponent = ({data,genres, variant = "movies" })=>{
+const CarouselComponent = ({data,genres})=>{
 
     const navigate = useNavigate()
 
@@ -18,27 +18,7 @@ const CarouselComponent = ({data,genres, variant = "movies" })=>{
         navigate(`/details/${d?.id}/${d?.media_type}`)
     }
 
-    const variants = {
-  trending: {
-    card: "w-[220px] md:w-[280px] scale-[1.02] hover:scale-105",
-    glow: "shadow-[0_0_40px_rgba(255,0,80,0.25)]",
-    overlay: "bg-gradient-to-t from-black/80 via-black/20",
-  },
 
-  movies: {
-    card: "w-[160px] md:w-[180px] hover:scale-105",
-    glow: "hover:shadow-xl",
-    overlay: "bg-black/40",
-  },
-
-  tv: {
-    card: "w-[140px] md:w-[160px] rounded-xl hover:scale-105",
-    glow: "hover:shadow-md",
-    overlay: "bg-gradient-to-b from-black/60",
-  },
-};
-
-const style = variants[variant];
 
     return(
         <Carousel
@@ -142,11 +122,11 @@ export const BackdropsCarousel = ({backdrops}) => {
         >
             <CarouselContent>
             {backdrops?.map((b,i) => (
-                <CarouselItem className="basis-1/1 md:basis-1/3" key={i}><img loading="lazy" className="h-full object-cover" src={`https://image.tmdb.org/t/p/${getBackdropSize()}${b.file_path}`} alt="image" /></CarouselItem>
+                <CarouselItem className="basis-1/2 md:basis-1/3" key={i}><img loading="lazy" className="h-full object-cover" src={`https://image.tmdb.org/t/p/${getBackdropSize()}${b.file_path}`} alt="image" /></CarouselItem>
             ))}
             </CarouselContent>
-            <CarouselPrevious variant="newVar" className="absolute top-1/2 left-1 -translate-y-1/2"/>
-            <CarouselNext variant="newVar" className="absolute top-1/2 right-1 -translate-y-1/2"/>
+            <CarouselPrevious variant="newVar" className="visible md:invisible absolute top-1/2 left-1 -translate-y-1/2"/>
+            <CarouselNext variant="newVar" className="visible md:invisible absolute top-1/2 right-1 -translate-y-1/2"/>
         </Carousel>
     )
 }
@@ -168,8 +148,6 @@ export const PostersCarousel = ({posters}) => {
                 <CarouselItem className="basis-1/2 md:basis-1/4" key={i}><div className="h-full"><img loading="lazy" className="h-full object-cover" src={`https://image.tmdb.org/t/p/${getPosterSize()}${b.file_path}`} alt="image" /></div></CarouselItem>
             ))}
             </CarouselContent>
-            <CarouselPrevious variant="newVar" className="absolute top-1/2 left-1 -translate-y-1/2"/>
-            <CarouselNext variant="newVar" className="absolute top-1/2 right-1 -translate-y-1/2"/>
         </Carousel>
     )
 }

@@ -346,7 +346,7 @@ const getReviews = async (tmdb_id, media_type)=>{
         }else{
             const revius = await fetch(`${serverUrl}/api/${tmdb_id}/${media_type}/reviews`)
             const reviewsData = await revius.json();
-            reviewsMap.set(tmdb_id,reviewsData);
+            reviewsMap.set(tmdb_id,reviewsData?.results);
             reviews = reviewsData.results;
 
             return reviews;
@@ -396,27 +396,29 @@ const getConfigs = async () => {
 }
 
 const providersMap = new Map();
+
 const getProviders = async (media_type, tmdb_id) => {
-    try{
-        let providers = null;
+  try {
+    const key = `${media_type}-${tmdb_id}`;
 
-        if(providersMap.has("providers")){
-            providers = providersMap.get("providers");
-        } else {
-            const res =  await fetch(`${serverUrl}/api/${media_type}/${tmdb_id}/providers`);
-
-            const data = await res.json();
-
-            providersMap.set("providers", data);
-
-            providers = data;
-            
-            return providers;
-        }
-    } catch(e) {
-        console.log("ERROR", e.message);
+    if (providersMap.has(key)) {
+      return providersMap.get(key);
     }
-}
+
+    const res = await fetch(
+      `${serverUrl}/api/${media_type}/${tmdb_id}/providers`
+    );
+
+    const data = await res.json();
+
+    providersMap.set(key, data);
+
+    return data;
+  } catch (e) {
+    console.log("ERROR", e.message);
+    return null;
+  }
+};
 
 export {
     getDetails, getDiscover, getMovies,

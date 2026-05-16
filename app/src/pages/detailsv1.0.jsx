@@ -11,12 +11,8 @@ import ISO6391 from "iso-639-1";
 
 import { BackdropsCarousel, PostersCarousel } from "@/components/imageCarousel";
 import { Spinner } from "@/components/ui/spinner";
-import { getPosterSize } from "@/utils/imageSizes";
+import { getLogoSize, getPosterSize } from "@/utils/imageSizes";
 import { getRelativeTime } from "@/utils/RTF";
-
-
-const platforms = ["Netflix", "Prime Video", "Disney+", "Apple TV+", "Max", "Hulu"];
-let similarNullFilter = []
 
 const Details = () => {
   const {tmdb_id, media_type} = useParams();
@@ -30,12 +26,19 @@ const Details = () => {
   const [configs, setConfigs] = useState({});
   const [providers, setProviders] = useState({});
   const [YT, setYT] = useState(false);
+  const [similarNullFilter, setSimilarNullFilter] = useState([]);
+  const providerCode = navigator.language.split('-')[1];
+  // console.log(typeof providerCode);
+  
   const [moreRecommendations, setMoreRecommendations] = useState(false);
   const topRef = useRef();
   const cast = useRef();
   const crew = useRef();
 
+  // console.log("providers", providers);
   // console.log("reviews", reviews);
+  // console.log("configs", configs);
+  // console.log("similar", similarNullFilter);
 
   useEffect(() => {
     topRef?.current?.scrollIntoView({ behavior: "smooth", block: "start" })
@@ -100,9 +103,12 @@ const Details = () => {
   },[media_type, tmdb_id])
 
   useEffect(() => {
-    if(similar){
-      similarNullFilter = similar?.filter(m=> m.poster_path !== null)
+    const filter = () => {
+      if(similar){
+        setSimilarNullFilter(similar?.filter(m=> m.poster_path !== null));
+      }
     }
+    filter();
   },[similar])
 
   const navigation = useNavigate();
@@ -126,6 +132,8 @@ const Details = () => {
       modal.current.close();
     }
   }
+
+  const hasProviders = providers?.results?.[providerCode] && providers?.results?.[providerCode]?.flatrate &&  Object.keys(providers.results[providerCode]).length > 0;
 
   return (
     <main ref={topRef} className="min-h-50 min-w-full bg-foreground dark:bg-background dark:text-foreground text-background">
@@ -248,14 +256,17 @@ const Details = () => {
             <div key={i} className="flex items-center gap-5">
               <div className="relative w-20 h-20 md:w-28 md:h-28 mb-3 group">
                 <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xs transition" />
-                <img
-                  src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar}
-                  alt={c.name}
-                  width={512}
-                  height={512}
-                  loading="lazy"
-                  className="relative w-full h-full rounded-full object-cover border-2 border-border group-hover:border-primary transition"
-                />
+                {c.profile_path ? (
+                    <img
+                        src={`https://image.tmdb.org/t/p/w500${c.profile_path}`}
+                        className="w-28 h-28 rounded-full object-cover border-2 border-border group-hover:border-primary transition"
+                        alt=""
+                    />
+                ) : (
+                    <div className="w-28 h-28 rounded-full bg-gradient-orange/20 border border-border flex items-center justify-center font-bold text-primary group-hover:border-primary transition">
+                      {c.name[0]}
+                    </div>
+                )}
               </div>
               <div>
                 <p className="md:text-2xl">{c?.name}</p>
@@ -276,14 +287,17 @@ const Details = () => {
             <div key={i} className="shrink-0 w-32 text-center group cursor-pointer">
               <div className="relative w-28 h-28 mx-auto mb-3">
                 <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xs transition" />
-                <img
-                  src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar}
-                  alt={c.name}
-                  width={512}
-                  height={512}
-                  loading="lazy"
-                  className="relative w-full h-full rounded-full object-cover border-2 border-border group-hover:border-primary transition"
-                />
+                {c.profile_path ? (
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${c.profile_path}`}
+                    className="w-28 h-28 rounded-full object-cover border-2 border-border group-hover:border-primary transition"
+                      alt=""
+                    />
+                ) : (
+                  <div className="w-28 h-28 rounded-full bg-gradient-orange/20 border border-border flex items-center justify-center font-bold text-primary group-hover:border-primary transition">
+                    {c.name[0]}
+                  </div>
+                )}
               </div>
               <div className="text-sm font-semibold truncate">{c.name}</div>
               <div className="text-xs text-muted-foreground truncate">{c.role}</div>
@@ -303,14 +317,17 @@ const Details = () => {
             <div key={i} className="flex items-center gap-5">
               <div className="relative w-20 h-20 md:w-28 md:h-28 mb-3 group">
                 <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xs transition" />
-                <img
-                  src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar}
-                  alt={c.name}
-                  width={512}
-                  height={512}
-                  loading="lazy"
-                  className="relative w-full h-full rounded-full object-cover border-2 border-border group-hover:border-primary transition"
-                />
+                {c.profile_path ? (
+                    <img
+                        src={`https://image.tmdb.org/t/p/w500${c.profile_path}`}
+                        className="w-28 h-28 rounded-full object-cover border-2 border-border group-hover:border-primary transition"
+                        alt=""
+                    />
+                ) : (
+                    <div className="w-28 h-28 rounded-full bg-gradient-orange/20 border border-border flex items-center justify-center font-bold text-primary group-hover:border-primary transition">
+                      {c.name[0]}
+                    </div>
+                )}
               </div>
               <div>
                 <p className="md:text-2xl">{c?.name}</p>
@@ -331,14 +348,17 @@ const Details = () => {
             <div key={i} className="shrink-0 w-32 text-center group cursor-pointer">
               <div className="relative w-28 h-28 mx-auto mb-3">
                 <div className="absolute inset-0 rounded-full bg-gradient-orange opacity-0 group-hover:opacity-60 blur-xs transition" />
-                <img
-                  src={c.profile_path !== null ? `https://image.tmdb.org/t/p/w500${c.profile_path}` : avatar}
-                  alt={c.name}
-                  width={512}
-                  height={512}
-                  loading="lazy"
-                  className="relative w-full h-full rounded-full object-cover border-2 border-border group-hover:border-primary transition"
-                />
+                {c.profile_path ? (
+                  <img
+                      src={`https://image.tmdb.org/t/p/w500${c.profile_path}`}
+                      className="w-28 h-28 rounded-full object-cover border-2 border-border group-hover:border-primary transition"
+                              alt=""
+                    />
+                ) : (
+                  <div className="w-28 h-28 rounded-full bg-gradient-orange/20 border border-border flex items-center justify-center font-bold text-primary group-hover:border-primary transition">
+                              {c.name[0]}
+                  </div>
+                )}
               </div>
               <div className="text-sm font-semibold truncate">{c.name}</div>
               <div className="text-xs text-muted-foreground truncate">{c.role}</div>
@@ -387,22 +407,28 @@ const Details = () => {
       </section>
 
       {/* WHERE TO WATCH */}
-      <section className="px-6 md:px-12 mt-24">
+      {hasProviders  && (
+        <section className="px-6 md:px-12 mt-24">
         <h2 className="text-2xl md:text-3xl font-bold mb-6">Where to Watch</h2>
         <div className="flex flex-wrap gap-3">
-          {platforms.map((p) => (
+          {providers?.results?.[providerCode]?.flatrate?.map((p) => (
             <button key={p} className="glass rounded-2xl px-5 py-4 flex items-center gap-3 hover:border-primary hover:bg-white/5 transition group">
-              <div className="h-10 w-10 rounded-xl bg-gradient-orange/20 border border-primary/30 flex items-center justify-center text-primary font-bold text-sm group-hover:bg-gradient-orange group-hover:text-primary-foreground transition">
-                {p[0]}
-              </div>
+              {p?.logo_path ? (
+                  <img src={p?.logo_path !== null ? `https://image.tmdb.org/t/p/${getLogoSize()}${p?.logo_path}` : avatar} alt={p?.provider_name} className="w-12 h-12 rounded-xl object-cover border border-border" />
+                ) : (
+                  <div className="h-10 w-10 rounded-xl bg-gradient-orange/20 border border-primary/30 flex items-center justify-center text-primary font-bold text-sm group-hover:bg-gradient-orange group-hover:text-primary-foreground transition">
+                    {p?.provider_name[0]}
+                  </div>
+                )}
               <div className="text-left">
-                <div className="font-semibold text-sm">{p}</div>
+                <div className="font-semibold text-sm">{p?.provider_name}</div>
                 <div className="text-xs text-muted/60 dark:text-muted-foreground">Stream now</div>
               </div>
             </button>
           ))}
         </div>
       </section>
+      )}
 
       {/* SIMILAR TITLES */}
       <section className="px-2 md:px-12 mt-24 mb-24">
@@ -440,10 +466,16 @@ const Details = () => {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {reviews  ?.map((r) => (
-            <div key={r.id} className="glass overflow-y-auto rounded-2xl p-6 hover:border-primary/30 transition group">
+          {reviews?.map((r) => (
+            <div key={r.id} className="glass rounded-2xl p-6 hover:border-primary/30 transition group">
               <div className="flex items-start gap-4 mb-4">
-                <img src={r?.author_details?.avatar_path !== null ? `https://image.tmdb.org/t/p/w500${r?.author_details?.avatar_path}` : avatar} alt={r.author} className="w-12 h-12 rounded-full object-cover border border-border" />
+                {r?.author_details?.avatar_path ? (
+                  <img src={r?.author_details?.avatar_path !== null ? `https://image.tmdb.org/t/p/w500${r?.author_details?.avatar_path}` : avatar} alt={r.author} className="w-12 h-12 rounded-full object-cover border border-border" />
+                ) : (
+                  <div className="w-12 h-12 rounded-full bg-gradient-orange/20 border border-border flex items-center justify-center font-bold text-primary">
+                    {r?.author[0]}
+                  </div>
+                )}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-semibold text-sm">{r.author}</span>
