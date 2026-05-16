@@ -471,7 +471,7 @@ const Details = () => {
           <h2 className="text-2xl md:text-3xl font-bold">More Like This</h2>
           {similarNullFilter?.length > 5 && (<a className="text-sm dark:text-muted-foreground hover:text-primary flex items-center gap-1 transition" onClick={() => setMoreRecommendations(prev => !prev)}>{moreRecommendations  ? "View less" : "View all"} <ChevronRight className="w-4 h-4" /></a>)}
         </div>
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
           {similarNullFilter?.slice(0,moreRecommendations ? similarNullFilter?.length : 5)?.map((r, i) => (
             <div id={`item${i}`} key={i} className="group scroll-mt-3">
               <div onClick={() => navigate(r)} className="relative overflow-hidden rounded-2xl mb-3 shadow-card">
@@ -497,12 +497,12 @@ const Details = () => {
         <div className="flex items-end justify-between mb-8">
           <div>
             <h2 className="text-2xl md:text-3xl font-bold mb-1">User Reviews</h2>
-            <p className="text-sm text-muted-foreground">{reviews?.length} reviews from the community</p>
+            <p className="text-sm dark:text-muted-foreground">{reviews?.length} reviews from the community</p>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {reviews?.map((r) => (
-            <div key={r.id} className="glass rounded-2xl p-6 hover:border-primary/30 transition group">
+            <div key={r.id} className="glass rounded-2xl p-6 hover:border-primary/30 dark:hover:border-primary/30 transition group">
               <div className="flex items-start gap-4 mb-4">
                 {r?.author_details?.avatar_path ? (
                   <img src={r?.author_details?.avatar_path !== null ? `https://image.tmdb.org/t/p/w500${r?.author_details?.avatar_path}` : avatar} alt={r.author} className="w-12 h-12 rounded-full object-cover border border-border" />
@@ -514,16 +514,16 @@ const Details = () => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
                     <span className="font-semibold text-sm">{r.author}</span>
-                    <span className="text-xs text-muted-foreground">{getRelativeTime(r?.updated_at)}</span>
+                    <span className="text-xs dark:text-muted-foreground">{getRelativeTime(r?.updated_at)}</span>
                   </div>
                   <div className="flex items-center gap-0.5">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className={`w-3.5 h-3.5 ${i < ((r?.author_details?.rating *5 ) / 10).toFixed(1) ? "fill-primary text-primary" : "text-muted-foreground/30"}`} />
+                      <Star key={i} className={`w-3.5 h-3.5 ${i < ((r?.author_details?.rating *5 ) / 10).toFixed(1) ? "fill-primary text-primary" : "dark:text-muted-foreground/30 text-muted/50"}`} />
                     ))}
                   </div>
                 </div>
               </div>
-              <p ref={(el) => (contentRefs.current[r.id] = el)} className={`text-sm text-muted-foreground leading-relaxed mb-5 ${!isExpanded(r.id) ? "line-clamp-5" : ""}`}>{r?.content}</p>
+              <p ref={(el) => (contentRefs.current[r.id] = el)} className={`text-sm dark:text-muted-foreground leading-relaxed mb-5 ${!isExpanded(r.id) ? "line-clamp-5" : ""}`}>{r?.content}</p>
               {clampedMap[r.id] && (
                 <button
                   onClick={() => toggleExpanded(r.id)}
