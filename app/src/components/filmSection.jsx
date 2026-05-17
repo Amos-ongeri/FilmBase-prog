@@ -11,7 +11,11 @@ const FilmSection = ({films, genre, genres, page, total, setPage, type}) => {
     const cardRefs = useRef([]);
 
     useEffect(() => {
-        cardRefs.current[0]?.scrollIntoView({behavior: "smooth"})
+        if(page > 1){
+            cardRefs.current[0]?.scrollIntoView({behavior: "smooth"})
+        } else {
+            window.scrollTo({top: 0, behavior: "smooth"})
+        }
     },[page])
 
     return (
@@ -30,7 +34,11 @@ const FilmSection = ({films, genre, genres, page, total, setPage, type}) => {
 
 export const DiscoverSection = ({films, page, setPage, total}) => {
     useEffect(() => {
-        cardRefs.current[0]?.scrollIntoView({behavior: "smooth"})
+        if(page > 1){
+            cardRefs.current[0]?.scrollIntoView({behavior: "smooth"})
+        } else {
+            window.scrollTo({top: 0, behavior: "smooth"})
+        }
     },[page])
 
     const cardRefs = useRef([]);

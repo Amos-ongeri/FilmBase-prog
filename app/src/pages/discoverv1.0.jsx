@@ -20,7 +20,7 @@ const Discover = () => {
   const page = Number(searchParam.get("page") ?? 1);
   const type = searchParam.get("type") ?? "all";
   const genre = searchParam.get("genre") ?? "All";
-  const query = searchParam.get("query") ?? "";
+  const query = searchParam.get("q") ?? "";
   const search = useRef();
 
   const isSearching = query.length > 0 || genre !== "All" || type !== "all";
@@ -45,7 +45,7 @@ const Discover = () => {
   const changeQuery = (q) => {
     setSearchParam(() => {
       const params = new URLSearchParams();
-      params.set("query", q)
+      params.set("q", q)
       params.set("type", 'all')
 
       return params;
@@ -176,7 +176,7 @@ const Discover = () => {
               {
                 keywords.map((k,i)=>(
                   <div onClick={()=> {
-                      updateParams("query",k.name)
+                      updateParams("q",k.name)
                       setTemporaryQuery('')
                     }} key={i} className="h-fit hover:bg-muted hover:text-white rounded-md p-3 flex items-center text-foreground cursor-pointer gap-3">
                     <MdSearch size={20}/>
