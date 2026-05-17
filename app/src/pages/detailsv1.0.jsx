@@ -218,15 +218,15 @@ const Details = () => {
                 });}} size="lg" className="bg-primary hover:opacity-90 text-popover-foreground rounded-full px-7 h-12 shadow-glow font-semibold">
                 <Play className="w-4 h-4 fill-current" /> Watch Trailer
               </Button>
-              <Button size="lg" variant="outline" className="glass rounded-full px-6 h-12 font-medium hover:bg-white/10 text-primary-foreground">
+              <Button size="lg" className="glass rounded-full px-6 h-12 font-medium hover:bg-white/60 hover:text-muted dark:hover:bg-muted dark:hover:text-foreground text-primary-foreground">
                 <Plus className="w-4 h-4" /> Add to Watchlist
               </Button>
-              <button className="h-12 w-12 rounded-full glass flex items-center justify-center hover:bg-white/10 transition">
+              <Button className="h-12 w-12 rounded-full glass flex items-center justify-center hover:bg-white/60 hover:text-muted dark:hover:bg-muted dark:hover:text-foreground transition">
                 <Heart className="w-4 h-4" />
-              </button>
-              <button className="h-12 w-12 rounded-full glass flex items-center justify-center hover:bg-white/10 transition">
+              </Button>
+              <Button className="h-12 w-12 rounded-full glass flex items-center justify-center hover:bg-white/60 hover:text-muted dark:hover:bg-muted dark:hover:text-foreground transition">
                 <Share2 className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -447,7 +447,7 @@ const Details = () => {
         <h2 className="text-2xl md:text-3xl font-bold mb-6">Where to Watch</h2>
         <div className="flex flex-wrap gap-3">
           {providers?.results?.[providerCode]?.flatrate?.map((p) => (
-            <button key={p} className="glass rounded-2xl px-5 py-4 flex items-center gap-3 hover:border-primary hover:bg-white/5 transition group">
+            <button key={p} className="glass rounded-2xl px-5 py-4 flex items-center gap-3 hover:border-primary dark:hover:border-primary hover:bg-white/5 transition group">
               {p?.logo_path ? (
                   <img src={p?.logo_path !== null ? `https://image.tmdb.org/t/p/${getLogoSize()}${p?.logo_path}` : avatar} alt={p?.provider_name} className="w-12 h-12 rounded-xl object-cover border border-border" />
                 ) : (
@@ -472,7 +472,7 @@ const Details = () => {
           {similarNullFilter?.length > 5 && (<a className="text-sm dark:text-muted-foreground hover:text-primary flex items-center gap-1 transition" onClick={() => setMoreRecommendations(prev => !prev)}>{moreRecommendations  ? "View less" : "View all"} <ChevronRight className="w-4 h-4" /></a>)}
         </div>
         <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-          {similarNullFilter?.slice(0,moreRecommendations ? similarNullFilter?.length : 5)?.map((r, i) => (
+          {similarNullFilter?.slice(0,moreRecommendations ? similarNullFilter?.length : 6)?.map((r, i) => (
             <div id={`item${i}`} key={i} className="group scroll-mt-3">
               <div onClick={() => navigate(r)} className="relative overflow-hidden rounded-2xl mb-3 shadow-card">
                 <img src={r?.poster_path ? `https://image.tmdb.org/t/p/${getPosterSize()}${r?.poster_path}` : ''}  alt={r.title} width={512} height={768} loading="lazy" className="w-full aspect-2/3 object-cover group-hover:scale-105 transition duration-500" />

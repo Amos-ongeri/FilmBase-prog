@@ -62,10 +62,10 @@ const MovieScroller = ({ data = [] }) => {
     <div className="relative w-full md:w-[80%]">
 
       {/* LEFT GRADIENT */}
-      <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-24 bg-linear-to-r dark:from-background from-foreground to-transparent" />
+      {/* <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-24 bg-linear-to-r dark:from-background from-foreground to-transparent" /> */}
 
       {/* RIGHT GRADIENT */}
-      <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-24 bg-linear-to-l dark:from-background from-foreground to-transparent" />
+      {/* <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-24 bg-linear-to-l dark:from-background from-foreground to-transparent" /> */}
 
       {/* LEFT BUTTON */}
       <button

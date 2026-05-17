@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Play, Star, ChevronRight, TrendingUp, Sparkles } from "lucide-react";
+import { Star, ChevronRight, TrendingUp, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { getMovieGenres, getTrending, getTv } from "@/services/api";
@@ -50,7 +50,9 @@ const HomePage = () => {
 
       {/* HERO */}
       <section className="relative h-[85vh] w-full overflow-hidden">
-        <img src={featured?.backdrop_path ? `https://image.tmdb.org/t/p/${getBackdropSize()}${featured?.backdrop_path}` : ""} alt="Featured" className="absolute inset-0 w-full h-full object-cover object-center" />
+        {!featured ? (<div className="flex items-center justify-center w-full h-full"><Spinner /></div>) : (
+          <img src={featured?.backdrop_path ? `https://image.tmdb.org/t/p/${getBackdropSize()}${featured?.backdrop_path}` : ""} alt="Featured" className="absolute inset-0 w-full h-full object-cover object-center" />
+        )}
         <div className="absolute inset-0 bg-gradient-hero" />
         <div className="relative z-10 h-full flex items-end pb-20 px-6 md:px-12">
           <div className="max-w-2xl animate-fade-in">
@@ -81,7 +83,7 @@ const HomePage = () => {
             <div className="flex flex-wrap gap-3">
               <Button asChild size="lg" className="bg-primary hover:opacity-90 text-foreground rounded-full px-7 h-12 shadow-glow font-semibold">
                 <Link to={`/details/${featured?.id}/movie`}>
-                  <Play className="w-4 h-4 fill-current" /> View Details
+                  View Details
                 </Link>
               </Button>
             </div>
@@ -99,7 +101,7 @@ const HomePage = () => {
             View all <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
-        {!trending ? (<div className="flex items-center justify-center"><Spinner /></div>) : (
+        {!trending ? (<div className="flex items-center justify-center w-full h-full"><Spinner /></div>) : (
           <MovieScroller data={trending} />
         )}
       </section>
