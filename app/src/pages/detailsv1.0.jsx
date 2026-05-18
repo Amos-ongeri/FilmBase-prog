@@ -174,7 +174,7 @@ const Details = () => {
     <main ref={topRef} className="min-h-50 min-w-full bg-foreground dark:bg-background dark:text-foreground text-background">
 
       {/* HERO */}
-      <section className="relative h-screen min-h-160 w-full overflow-hidden">
+      <section className="   h-screen min-h-160 w-full overflow-hidden">
         {!details?.backdrop_path ? (<div className="absolute inset-0 w-full h-full flex items-center justify-center"><Spinner /></div>) : (
           <img
           src={`https://image.tmdb.org/t/p/w1280${details?.backdrop_path}`}

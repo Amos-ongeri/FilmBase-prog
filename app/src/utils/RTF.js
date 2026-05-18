@@ -13,6 +13,7 @@ export const getRelativeTime = (dateString) => {
     { numeric: "auto" }
   );
 
+  //in seconds
   const intervals = {
     year: 31536000,
     month: 2592000,

@@ -1,18 +1,16 @@
 import { CiBookmark } from "react-icons/ci";
 // import {  MdStar } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Rating from '../../../node_modules/@mui/material/Rating';
 import { getPosterSize } from "@/utils/imageSizes";
 
 const MovieCard1 = ({data,Key}) => {
-    const navigation = useNavigate();
-    const navigate = ()=>{
-        navigation(`/details/${data?.id}/${data?.media_type}`)
-    }
+    
     const rating = ((data?.vote_average/10)*5).toFixed(1);
     return(
         <div key={Key}  className="lg:w-50 lg:h-80 w-40 h-fit lg:mb-15 rounded-lg transition-shadow duration-200 space-y-2">
-            <div onClick={navigate} className="h-fit w-full relative group perspective-near overflow-hidden rounded-lg">
+            <Link to={`/details/${data?.id}/${data?.media_type}`}>
+            <div className="h-fit w-full relative group perspective-near overflow-hidden rounded-lg">
                 <img loading="lazy" className="rounded-lg w-full h-70 object-cover object-center group-hover:translate-z-3 hover:opacity-70 transition-all duration-200 cursor-pointer" src={data?.poster_path ? `https://image.tmdb.org/t/p/${getPosterSize()}${data?.poster_path}` : ''} />
                 <div className="flex items-center justify-center space-x-1 min-w-12 rounded-lg px-1 absolute bottom-1 left-1 text-gray-300 bg-slate-700">
                     <Rating sx={{
@@ -23,6 +21,7 @@ const MovieCard1 = ({data,Key}) => {
                     <p>{rating}</p>
                 </div>
             </div>
+            </Link>
             <div className="h-fit">
                 <div className="flex justify-between space-x-2 w-full">
                     <p title={data?.title || data?.name} className="line-clamp-1 items-center text-gray-200 w-[80%] font-medium text-lg divide divide-slate-800">{data.title || data?.name}</p>

@@ -48,18 +48,11 @@ const TopBar = ({toggleSidebar}) => {
         <div className={`fixed top-0 flex items-center justify-between text-gray-200 font-sans font-extralight z-30 min-w-full h-15 px-3 ${show ? "translate-y-0" : "-translate-y-full"} transform transition-transform duration-300`}>
             <div className="flex items-center space-x-3">
                 <div className="md:hidden rounded-md glass text-background dark:text-foreground p-1 h-[10%]"><HiBars3 onClick={toggleSidebar} size={30}/></div>
-                <div className="flex items-center justify-center rounded-md p-1 w-full text-2xl h-[10%] glass transition duration-150">
-                    <Tooltip>
-                        <TooltipTrigger>
-                            <div  onClick={()=> navigateTo('/')} className="flex items-center  justify-center cursor-pointer">
-                                <p className="dark:text-white text-background "><span>Film</span>
-                                    <span className="text-primary drop-shadow-sm font-extrabold">Base</span>
-                                </p>
-                                <p><CiPlay1 className="text-primary" /></p>
-                            </div>
-                        </TooltipTrigger>
-                        <TooltipContent>Home Page</TooltipContent>
-                    </Tooltip>
+                <div  onClick={()=> navigateTo('/')} title="HomePage" className="flex items-center justify-center rounded-md p-1 w-full text-2xl h-[10%] glass transition duration-150">
+                    <p className="dark:text-white text-background "><span>Film</span>
+                        <span className="text-primary drop-shadow-sm font-extrabold">Base</span>
+                    </p>
+                    <p><CiPlay1 className="text-primary" /></p>
                 </div>
                 <NavigationMenu>
                     <NavigationMenuList>

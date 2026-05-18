@@ -1,21 +1,18 @@
 import { getPosterSize } from "@/utils/imageSizes";
 import { Bookmark, Play, Star } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
  const MovieCard = ({ movie, genre, index = 0 }) => {
-    const navigation = useNavigate();
-    const navigate = ()=>{
-        navigation(`/details/${movie?.id}/${movie?.media_type}`)
-    }
-
-    const rating = ((movie?.vote_average/10)*5).toFixed(1);
+  
+  const rating = ((movie?.vote_average/10)*5).toFixed(1);
   return (
     <article
       className="group relative animate-fade-up"
       style={{ animationDelay: `${Math.min(index * 40, 400)}ms` }}
     >
-      <div onClick={navigate} className="relative aspect-2/3 overflow-hidden rounded-2xl bg-surface shadow-card transition-all duration-500 group-hover:scale-[1.04] group-hover:shadow-glow">
+      <Link to={`/details/${movie?.id}/${movie?.media_type}`}>
+      <div className="relative aspect-2/3 overflow-hidden rounded-2xl bg-surface shadow-card transition-all duration-500 group-hover:scale-[1.04] group-hover:shadow-glow">
         <img
           src={movie?.poster_path ? `https://image.tmdb.org/t/p/${getPosterSize()}${movie?.poster_path}` : ''} 
           alt={`${movie?.title} poster`}
@@ -59,6 +56,7 @@ import { useNavigate } from "react-router-dom";
           </p>
         </div>
       </div>
+      </Link>
 
       <div className="pt-3 px-1">
         <div className="flex items-baseline justify-between gap-2">

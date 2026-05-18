@@ -1,15 +1,13 @@
 import { getPosterSize } from "@/utils/imageSizes";
 import { Bookmark, Star } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const MovieCard3 = ({ t, k}) => {
-  const navigation = useNavigate();
-    const navigate = ()=>{
-        navigation(`/details/${t?.id}/${t?.media_type}`)
-    }
+
   return (
   <div key={k} className="group block">
-    <div onClick={navigate} className="relative overflow-hidden rounded-2xl mb-3 shadow-card">
+    <Link to={`/details/${t?.id}/${t?.media_type}`}>
+    <div className="relative overflow-hidden rounded-2xl mb-3 shadow-card">
       <img
         src={`https://image.tmdb.org/t/p/${getPosterSize()}${t?.poster_path}`}
         alt={t?.title || t?.name}
@@ -27,6 +25,7 @@ export const MovieCard3 = ({ t, k}) => {
         <Star className="w-3 h-3 fill-primary text-primary" /> {((t?.vote_average/10)*5).toFixed(1)}
       </div>
     </div>
+    </Link>
     <div className="font-semibold text-sm group-hover:text-primary text-background dark:text-foreground transition truncate">{t?.title || t?.name}</div>
     <div className="text-xs text-background dark:text-muted-foreground">
       {t?.release_date?.split("-")[0] || t?.first_air_date?.split("-")[0]}

@@ -1,13 +1,9 @@
 import { getPosterSize } from "@/utils/imageSizes";
 import { MdPlayArrow, MdStar } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const MovieCard2 = ({data})=>{
-    const navigate = useNavigate()
 
-    const navigateTo = ()=>{
-        navigate(`/details/${data?.id}/${data?.media_type}`)
-    }
     return (
         <div className="flex space-x-2 w-80 h-60">
             <img src={`https://image.tmdb.org/t/p/${getPosterSize()}${data.poster_path}`} alt="" className="flex-1 h-60 rounded-2xl"/>
@@ -23,10 +19,12 @@ const MovieCard2 = ({data})=>{
                     </div>
                 </div>
                 <br />
-                <button onClick={navigateTo} className="bg-blue-500 hover:bg-blue-600 p-2 rounded-2xl cursor-pointer transition-all duration-75 flex items-center space-x-1 text-white">
+                <Link to={`/details/${data?.id}/${data?.media_type}`}>
+                <button className="bg-blue-500 hover:bg-blue-600 p-2 rounded-2xl cursor-pointer transition-all duration-75 flex items-center space-x-1 text-white">
                     <p>{<MdPlayArrow/>}</p>
                     <p>watch trailer</p>
                 </button>
+                </Link>
             </div>
         </div>
     )
