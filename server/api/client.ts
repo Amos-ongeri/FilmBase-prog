@@ -1,7 +1,10 @@
-const dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config()
 
-class tmdbClient{
+export class tmdbClient{
+    private Base: string
+    private token: string | undefined
+    private headers
+
     constructor() {
         this.Base = 'https://api.themoviedb.org/3';
         this.token = process.env.TMDB_BEARER_TOKEN;
@@ -12,7 +15,7 @@ class tmdbClient{
         }
     }
 
-    async request(path){
+    async request(path: string){
         const res = await fetch(`${this.Base}${path}`,{
             method: "GET",
             headers: this.headers
@@ -25,5 +28,3 @@ class tmdbClient{
         return res.json();
     }
 }
-
-module.exports = { tmdbClient };

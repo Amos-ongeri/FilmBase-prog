@@ -1,12 +1,15 @@
 import MovieCard1 from "@/components/cards/MovieCard1";
 import { MovieCard3 } from "@/components/cards/MovieCard3";
-import { getDiscover, getGenres, getKeywords, getSearchData, getTypeDiscover } from "@/services/api";
 import { Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { MdSearch } from "react-icons/md";
 import { useSearchParams } from "react-router-dom";
 import { DiscoverSection, SearchResultSection } from "@/components/filmSection";
 import { Spinner } from "@/components/ui/spinner";
+import { getGenres } from "@/api/tmdb.genres/genres";
+import { getKeywords } from "@/api/tmdb.keywords/keywords";
+import { getSearchData } from "@/api/tmdb.search/search";
+import { getDiscover, getTypeDiscover } from "@/api/tmdb.discover/discover";
 
 const Discover = () => {
 

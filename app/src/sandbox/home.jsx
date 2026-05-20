@@ -4,7 +4,7 @@ import CarouselComponent from "../components/imageCarousel";
 import { useEffect, useState } from "react";
 import Banner from "./Banner";
 import HomeSkeleton from "@/components/placeholders/homeSkeleton";
-import { getGenres, getTrending } from "@/services/api";
+import { getGenres, getTrending } from "@/api/api";
 
 
 const MainPage = () => {

@@ -2,12 +2,14 @@ import { Link } from "react-router-dom";
 import { Star, ChevronRight, TrendingUp, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { getMovieGenres, getTrending, getTv } from "@/services/api";
 import { getBackdropSize } from "@/utils/imageSizes";
 import { Spinner } from "@/components/ui/spinner";
 import { MovieCard3 } from "@/components/cards/MovieCard3";
 import { getFeaturedMovie } from "@/utils/featured";
 import MovieScroller from "@/components/movieScrollerv1.0";
+import { getTv } from "@/api/tmdb.film/tvSeries";
+import { getMovieGenres } from "@/api/tmdb.genres/genres";
+import { getTrending } from "@/api/tmdb.trending/trending";
 
 const HomePage = () => {
     const [tv, setTv] = useState({});

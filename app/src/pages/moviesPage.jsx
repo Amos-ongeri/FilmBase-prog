@@ -1,9 +1,10 @@
 import { useEffect,useRef,useState } from "react";
 import CardSkeleton from "@/components/placeholders/cardSkeleton";
-import { getCategoryMovies, getMovieGenres, getMovies } from "@/services/api";
 import FilmSection from "@/components/filmSection";
 import { useSearchParams } from "react-router-dom";
 import { Spinner } from "@/components/ui/spinner";
+import { getMovieGenres } from "@/api/tmdb.genres/genres";
+import { getCategoryMovies, getMovies } from "@/api/tmdb.film/movies";
 
 const Movies = ()=>{
   const [movies, setMovies] = useState({})

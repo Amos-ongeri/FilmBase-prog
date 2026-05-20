@@ -2,8 +2,6 @@ import { Play, Plus, Share2, Heart, Star, Clock, Calendar, ChevronRight, X, Mess
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams} from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import avatar from '../assets/user-avatar.png';
-import { getConfigs, getCredits, getDetails, getImages, getProviders, getReviews, getSimilar, getVideos } from "@/services/api";
 import { formatNumber } from "@/utils/formatLargeNo";
 
 //maps language codes to original language e.g en - English
@@ -13,17 +11,23 @@ import { BackdropsCarousel, PostersCarousel } from "@/components/imageCarousel";
 import { Spinner } from "@/components/ui/spinner";
 import { getLogoSize, getPosterSize } from "@/utils/imageSizes";
 import { getRelativeTime } from "@/utils/RTF";
+import { getDetails } from "@/api/tmdb.details/details";
+import { getVideos } from "@/api/tmdb.videos/videos";
+import { getCredits } from "@/api/tmdb.credits/credits";
+import { getSimilar } from "@/api/tmdb.similar/similar";
+import { getReviews } from "@/api/tmdb.reviews/reviews";
+import { getImages } from "@/api/tmdb.images/images";
+import { getProviders } from "@/api/tmdb.provider/providers";
 
 const Details = () => {
   const {tmdb_id, media_type} = useParams();
 
-  const [details, setDetails] = useState();
+  const [details, setDetails] = useState({});
   const [videos, setVideos] = useState([]);
   const [images, setImages] = useState({});
   const [credits, setCredits] = useState();
   const [similar,setSimilar] = useState();
   const [reviews,setReviews] = useState();
-  const [configs, setConfigs] = useState({});
   const [providers, setProviders] = useState({});
   const [YT, setYT] = useState(false);
   const [similarNullFilter, setSimilarNullFilter] = useState([]);
@@ -116,12 +120,6 @@ const Details = () => {
       setImages(images);
     }
 
-    const initConfigs = async () => {
-      const conf = await getConfigs();
-      
-      setConfigs(conf);
-    }
-
     const initProviders = async () => {
       const providers = await getProviders(media_type, tmdb_id);
 
@@ -131,7 +129,7 @@ const Details = () => {
     const loadData = async () => {
       await Promise.all([initDetails(), initVideos(),
           initCredits(), initSimilar(), initReviews(),
-          initImages(), initConfigs(), initProviders()]);
+          initImages(), initProviders()]);
     }
 
     loadData();
@@ -449,7 +447,7 @@ const Details = () => {
           {providers?.results?.[providerCode]?.flatrate?.map((p) => (
             <button key={p} className="glass rounded-2xl px-5 py-4 flex items-center gap-3 hover:border-primary dark:hover:border-primary hover:bg-white/5 transition group">
               {p?.logo_path ? (
-                  <img src={p?.logo_path !== null ? `https://image.tmdb.org/t/p/${getLogoSize()}${p?.logo_path}` : avatar} alt={p?.provider_name} className="w-12 h-12 rounded-xl object-cover border border-border" />
+                  <img src={p?.logo_path !== null ? `https://image.tmdb.org/t/p/${getLogoSize()}${p?.logo_path}` : ""} alt={p?.provider_name} className="w-12 h-12 rounded-xl object-cover border border-border" />
                 ) : (
                   <div className="h-10 w-10 rounded-xl bg-gradient-orange/20 border border-primary/30 flex items-center justify-center text-primary font-bold text-sm group-hover:bg-gradient-orange group-hover:text-primary-foreground transition">
                     {p?.provider_name[0]}
@@ -505,7 +503,7 @@ const Details = () => {
             <div key={r.id} className="glass rounded-2xl p-6 hover:border-primary/30 dark:hover:border-primary/30 transition group">
               <div className="flex items-start gap-4 mb-4">
                 {r?.author_details?.avatar_path ? (
-                  <img src={r?.author_details?.avatar_path !== null ? `https://image.tmdb.org/t/p/w500${r?.author_details?.avatar_path}` : avatar} alt={r.author} className="w-12 h-12 rounded-full object-cover border border-border" />
+                  <img src={r?.author_details?.avatar_path !== null ? `https://image.tmdb.org/t/p/w500${r?.author_details?.avatar_path}` : ""} alt={r.author} className="w-12 h-12 rounded-full object-cover border border-border" />
                 ) : (
                   <div className="w-12 h-12 rounded-full bg-gradient-orange/20 border border-border flex items-center justify-center font-bold text-primary">
                     {r?.author[0]}

@@ -1,9 +1,10 @@
 import { useState,useEffect, useRef } from "react";
 import CardSkeleton from "@/components/placeholders/cardSkeleton";
-import { getCategoryTv, getTv, getTvGenres } from "@/services/api";
 import FilmSection from "@/components/filmSection";
 import { useSearchParams } from "react-router-dom";
 import { Spinner } from "@/components/ui/spinner";
+import { getCategoryTv, getTv } from "@/api/tmdb.film/tvSeries";
+import { getTvGenres } from "@/api/tmdb.genres/genres";
 
 const TvSeries = ()=>{
     const [tv, setTv] = useState({});

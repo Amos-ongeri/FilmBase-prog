@@ -6,7 +6,7 @@ import user_avatar from '../assets/user-avatar.png'
 import { CiFilter } from "react-icons/ci";
 import { useRef } from "react";
 import CardSkeleton from "@/components/placeholders/cardSkeleton";
-import { getKeywords } from "@/services/api";
+import { getKeywords } from "@/api/api";
 
 const dataMap = new Map();
 const searchResultsMap = new Map()

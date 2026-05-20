@@ -5,7 +5,7 @@ import { PiFilmSlateLight } from "react-icons/pi";
 import { MdLiveTv, MdOutlineWatchLater } from "react-icons/md";
 import { CiPlay1 } from "react-icons/ci";
 import { BiDetail } from "react-icons/bi";
-import { MoonIcon, SunIcon, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useRef } from "react";
 
 const Navigation = ({isOpenSidebar, toggle})=>{
