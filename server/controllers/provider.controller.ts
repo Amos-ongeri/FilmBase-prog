@@ -1,12 +1,9 @@
 import { Request, Response } from "express";
 import { getWatchProviders } from "../services/provider.service";
+import { ProviderParams, ProvidersResponse } from "../types/provider.types";
+import { ErrorResponse } from "../types/error.types";
 
-type providerParams = {
-    media: string
-    id: string
-}
-
-export const providersController = async (req: Request<providerParams>, res: Response) => {
+export const providersController = async (req: Request<ProviderParams>, res: Response<ProvidersResponse | ErrorResponse>) => {
     try{
         const {media, id} = req.params;
         const data = await getWatchProviders(media, id);

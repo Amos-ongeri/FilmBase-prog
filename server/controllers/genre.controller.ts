@@ -1,11 +1,9 @@
 import { Request, Response } from "express";
 import { getGenres } from "../services/genre.service";
+import { GenreParams, GenreResponse } from "../types/genre.types";
+import { ErrorResponse } from "../types/error.types";
 
-type genreParams = {
-    type: string
-}
-
-export  const genreController = async (req: Request<genreParams>, res: Response):Promise<void> =>{
+export  const genreController = async (req: Request<GenreParams>, res: Response<GenreResponse | ErrorResponse>):Promise<void> =>{
     try{
         const { type } = req.params
         const data = await getGenres(type)

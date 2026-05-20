@@ -1,12 +1,9 @@
 import { Request, Response } from "express";
 import { getImages } from "../services/images.service";
+import { ImageParams, ImageResponse } from "../types/image.types";
+import { ErrorResponse } from "../types/error.types";
 
-type imageParams = {
-    media_type: string
-    id: string
-}
-
-export const imagesController = async (req: Request<imageParams>, res: Response): Promise<void> => {
+export const imagesController = async (req: Request<ImageParams>, res: Response<ImageResponse | ErrorResponse>): Promise<void> => {
     try{
         const { media_type, id } = req.params;
         const data = await getImages(media_type, id);

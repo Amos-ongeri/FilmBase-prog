@@ -1,12 +1,9 @@
 import { Request, Response } from "express";
 import { getTrending } from "../services/trending.service";
+import { FilmResponse, TrendingParams } from "../types/film.types";
+import { ErrorResponse } from "../types/error.types";
 
-type trendingParams = {
-    media_type: string
-    time_window: string
-}
-
-export const trendingController = async (req: Request<trendingParams>, res: Response): Promise<void> =>{
+export const trendingController = async (req: Request<TrendingParams>, res: Response<FilmResponse | ErrorResponse>): Promise<void> =>{
     try{
         const { media_type,time_window } = req.params;
         const data = await getTrending(media_type,time_window)

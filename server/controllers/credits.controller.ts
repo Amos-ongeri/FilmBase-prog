@@ -1,12 +1,9 @@
 import { Request, Response } from "express";
 import { getCredits } from "../services/credits.service";
+import { CreditParams, CreditsResponse } from "../types/credit.types";
+import { ErrorResponse } from "../types/error.types";
 
-type creditParams = {
-    id: string
-    media_type: string
-}
-
-export const creditsController = async (req: Request<creditParams>, res: Response): Promise<void> =>{
+export const creditsController = async (req: Request<CreditParams>, res: Response<CreditsResponse | ErrorResponse>): Promise<void> =>{
     try{
         const { id,media_type } = req.params;
         const data = await getCredits(id,media_type)

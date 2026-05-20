@@ -1,12 +1,10 @@
 import { Request, Response } from "express";
 import { getDiscover } from "../services/discover.services";
+import { DiscoverParams } from "../types/discover.types";
+import { FilmResponse } from "../types/film.types";
+import { ErrorResponse } from "../types/error.types";
 
-type discoverParams = {
-    type: string
-    page: string
-}
-
-export const discoverController = async (req: Request<discoverParams>, res: Response) => {
+export const discoverController = async (req: Request<DiscoverParams>, res: Response<FilmResponse | ErrorResponse>) => {
     try{
         const { type, page } = req.params
 

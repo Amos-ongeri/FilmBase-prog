@@ -1,12 +1,9 @@
 import { Request, Response } from "express";
 import { getReviews } from "../services/reviews.service";
+import { ReviewParams, ReviewsResponse } from "../types/reviews.types";
+import { ErrorResponse } from "../types/error.types";
 
-type reviewParams = {
-    id: string
-    media_type: string
-}
-
-export const reviewsController = async (req: Request<reviewParams>, res: Response): Promise<void> =>{
+export const reviewsController = async (req: Request<ReviewParams>, res: Response<ReviewsResponse | ErrorResponse>): Promise<void> =>{
     try{
         const { id,media_type } = req.params;
         const data = await getReviews(id,media_type)

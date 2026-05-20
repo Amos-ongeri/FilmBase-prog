@@ -49,7 +49,6 @@ export const getTypeDiscover = async (type,page) => {
             typeMap.set(`movie:${page}`, movies)
             discoverData = movies;
         }
-        console.log("types", discoverData);
 
         return discoverData;
 

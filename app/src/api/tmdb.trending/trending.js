@@ -11,8 +11,8 @@ export const getTrending = async (media_type, time_window) => {
         }else{
             const res = await fetch(`${serverUrl}/api/${media_type}/${time_window}/trending`)
             const data = await res.json();
-                trendingMap.set('trending', data.results)
-                trending["trending"] = data.results;
+            trendingMap.set('trending', data.results)
+            trending["trending"] = data.results;
         }
     }catch(e){
         console.log('error occurred: ', e.message);

@@ -1,13 +1,9 @@
 import { Request, Response } from "express";
 import { getFilm } from "../services/film.service";
+import { FilmParams, FilmResponse } from "../types/film.types";
+import { ErrorResponse } from "../types/error.types";
 
-type filmParams = {
-    media_type: string
-    category: string
-    page: string
-}
-
-export const filmController = async (req: Request<filmParams>, res: Response): Promise<void> =>{
+export const filmController = async (req: Request<FilmParams>, res: Response<FilmResponse | ErrorResponse>): Promise<void> =>{
     try{
         const { media_type, category, page } = req.params;
         const data = await getFilm(media_type,category,page)

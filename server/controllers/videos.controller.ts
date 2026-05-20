@@ -1,12 +1,9 @@
 import { Request, Response } from "express";
 import { getVideos } from "../services/videos.service";
+import { VideosParams, VideosResponse } from "../types/video.types";
+import { ErrorResponse } from "../types/error.types";
 
-type videosParams = {
-    id: string
-    media_type: string
-}
-
-export const videosController = async (req: Request<videosParams>, res: Response): Promise<void> =>{
+export const videosController = async (req: Request<VideosParams>, res: Response<VideosResponse | ErrorResponse>): Promise<void> =>{
     try{
         const { id,media_type } = req.params;
         const data = await getVideos(id,media_type);

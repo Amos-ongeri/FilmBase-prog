@@ -1,12 +1,10 @@
 import { Request, Response } from "express"
 import { getSearchData } from "../services/search.service"
+import { SearchQueries } from "../types/search.types"
+import { FilmResponse } from "../types/film.types"
+import { ErrorResponse } from "../types/error.types"
 
-type searchQueries = {
-    query: string
-    page: string
-}
-
-export const searchController = async (req: Request<{},{},{},searchQueries>,res: Response)=>{
+export const searchController = async (req: Request<{},{},{},SearchQueries>,res: Response<FilmResponse | ErrorResponse>)=>{
     try{
         const { query, page } = req.query
         const data = await getSearchData(query, page)

@@ -1,12 +1,9 @@
 import { Request, Response } from "express";
 import { getDetails } from "../services/details.service";
+import { DetailsParams, DetailsResponse } from "../types/details.types";
+import { ErrorResponse } from "../types/error.types";
 
-type detailsParams = {
-    id: string
-    media_type: string
-}
-
-export const detailsController = async (req: Request<detailsParams>, res: Response): Promise<void> =>{
+export const detailsController = async (req: Request<DetailsParams>, res: Response<DetailsResponse | ErrorResponse>): Promise<void> =>{
     try{
         const { id,media_type } = req.params;
         const data = await getDetails(id,media_type)
