@@ -78,6 +78,8 @@ const TvSeries = ()=>{
             <section className="px-5 md:px-12 pt-16 mb-8">
                 <div className="flex items-end justify-between mb-6 flex-wrap gap-4">
                     <h2 className="text-2xl md:text-3xl font-bold">All Series</h2>
+
+                    {/* CATEGORY FILTER */}
                     <div className="flex flex-wrap gap-2 text-sm">
                         <span onClick={() => changeCategory("All")} className={`rounded-full px-3.5 py-1.5 transition hover:-translate-y-1 ${category === "All" ? "bg-primary" : "glass"}`}>All</span>
                         {(["airing_today", "top_rated", "popular", "on_the_air"]).map((s) => (
@@ -92,6 +94,7 @@ const TvSeries = ()=>{
                     </div>
                 </div>
 
+                {/* GENRE FILTERS */}
                 <div className="flex gap-2 flex-wrap">
                     {["All", ...(genres?.map(gen => gen?.name)) || []].map((g) => (
                         <button
@@ -104,6 +107,8 @@ const TvSeries = ()=>{
                     ))}
                 </div>
             </section>
+
+            {/* FILM RESULTS */}
             <div className="min-h-0 min-w-full px-2 md:px-12">
             {!hasTv && category === "All" ? (<div className="flex items-center justify-center"><Spinner /></div>) : (
                     <>

@@ -148,6 +148,8 @@ const Discover = () => {
 
   return(
     <main ref={topRef} className="min-h-50 min-w-full text-background dark:text-gray-300 bg-foreground dark:bg-background">
+
+      {/* SEARCH */}
       <section className="px-6 md:px-12 pt-16 pb-8 max-w-4xl mx-auto">
         <h1 className="text-4xl font-extrabold text-center mb-3 md:text-6xl text-background dark:text-foreground">Discover what to <span className="text-primary">watch</span></h1>
         <p className="text-center text-background dark:text-muted-foreground mb-8">Search across thousands of movies and  series.</p>
@@ -190,6 +192,8 @@ const Discover = () => {
             </div>
           )}
         </div>
+
+        {/* FILTER DISCOVER */}
         <div className="flex justify-center gap-2 mt-6">
           {["all", "movie", "tv"].map((t) => (
             <button
@@ -214,6 +218,8 @@ const Discover = () => {
           <div className="space-y-12 max-w-5xl mx-auto">
             <div>
               <h2 className="text-sm uppercase tracking-[0.2em] text-background dark:text-muted-foreground mb-4">Browse by Genre</h2>
+
+              {/* GENRE FILTER */}
               <div className="flex flex-wrap gap-2">
                 {genres?.map((g) => (
                   <button
@@ -226,6 +232,8 @@ const Discover = () => {
                 ))}
               </div>
             </div>
+
+            {/* ALL FILMS */}
             <div>
               <h2 className="text-sm uppercase tracking-[0.2em] text-background dark:text-muted-foreground mb-4">Popular Right Now</h2>
               {genre === "All" && type === 'all' &&
@@ -237,6 +245,8 @@ const Discover = () => {
           </div>
         ) : (
           <div>
+
+            {/* FILTER CLEAR */}
             <div className="flex items-center justify-between mb-6">
               <div className="text-sm text-background dark:text-muted-foreground">
                 {query && <> for "<span className="text-background dark:text-foreground">{query}</span>"</>}
@@ -258,17 +268,23 @@ const Discover = () => {
                 </button>
               )}
             </div>
+
+            {/* MOVIES */}
             {type === "movie" ? (
               (!discover ? (<Spinner />) : (
                 <DiscoverSection films={discover?.results?.map(d => ({...d, media_type: "movie"}))} page={page} total={discover?.total_pages} setPage={(p) => updateParams("page", p)} />
               ))
             ) : (
+
+              // TV
               (type === "tv" && (
                 (!discover ? (<Spinner />) : (
                   <DiscoverSection films={discover?.results?.map(d => ({...d, media_type: "tv"}))} page={page} total={discover?.total_pages} setPage={(p) => updateParams("page", p)} />
                 ))
               ))
             )}
+
+            {/* GENRE FILTER */}
             {genre !== 'All' && (
               <>
               <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -281,6 +297,8 @@ const Discover = () => {
               </div>
               </>
             )}
+
+            {/* SEARCH RESULTS */}
             <SearchResultSection results={searchData?.results} page={page} total={searchData?.total_pages} setPage={(p) => updateParams("page", p)} />
           </div>
         )}

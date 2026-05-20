@@ -9,7 +9,6 @@ import { getCategoryMovies, getMovies } from "@/api/tmdb.film/movies";
 const Movies = ()=>{
   const [movies, setMovies] = useState({})
   const [genres, setGenres] = useState([]);
-  const [platform, setPlatform] = useState("All");
 
   const [searchParam, setSearchParam] = useSearchParams();
 
@@ -68,8 +67,6 @@ const Movies = ()=>{
 
   const allMovies = category === "All" && [...(movies?.["upcoming"]?.results || []),...(movies?.["top_rated"]?.results || []),...(movies?.["popular"]?.results || []),...(movies?.["now_playing"]?.results || [])];
 
-  const PLATFORMS = ["Netflix", "Prime Video", "Disney+", "Apple TV+", "Max", "Hulu"];
-
   const topRef = useRef();
 
   useEffect(() => {
@@ -82,8 +79,9 @@ const Movies = ()=>{
       <section className="px-5 md:px-12 pt-16 mb-8">
         <div className="flex items-end justify-between mb-6 flex-wrap gap-4">
           <h2 className="text-2xl md:text-3xl font-bold">Browse Movies</h2>
+
+          {/* CATEGORY FILTERS */}
           <div className="flex flex-wrap gap-2 text-sm">
-            {/* <span className="text-muted-foreground">Sort:</span> */}
             <span onClick={() => updateParam('category',"All")} className={`rounded-full px-3.5 py-1.5 transition hover:-translate-y-1 ${category === "All" ? "bg-primary" : "glass"}`}>All</span>
             {(["now_playing", "upcoming", "top_rated", "popular"]).map((s) => (
               <button
@@ -97,6 +95,7 @@ const Movies = ()=>{
           </div>
         </div>
 
+        {/* GENRE FILTERS */}
         <div className="space-y-3">
           <div className="flex gap-2 flex-wrap">
             {["All", ...(genres?.map(gen => gen?.name) || [])].map((g) => (
@@ -109,19 +108,10 @@ const Movies = ()=>{
               </button>
             ))}
           </div>
-          <div className="flex gap-2 flex-wrap">
-            {["All", ...PLATFORMS].map((p) => (
-              <button
-                key={p}
-                onClick={() => setPlatform(p)}
-                className={`rounded-full px-3 py-1 text-xs transition  ${p === platform ? "bg-primary" : "border dark:border-border border-muted/50"}`}
-              >
-                {p}
-              </button>
-            ))}
-          </div>
         </div>
       </section>
+
+      {/* FILM RESULTS */}
       <div className="min-h-0 min-w-full px-2 md:px-12">
         {!hasMovies && category === "All" ? (<div className="flex items-center justify-center"><Spinner /></div>) : (
           <>

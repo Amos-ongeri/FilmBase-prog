@@ -81,6 +81,7 @@ const WatchList = () => {
 
   return (
     <main ref={topRef} className="min-h-50 min-w-full text-background dark:text-foreground dark:bg-background bg-foreground">
+      
       {/* Hero / page header */}
       <section className="relative px-6 md:px-12 pt-16 pb-10 overflow-hidden">
         <div
